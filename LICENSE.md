@@ -1,5 +1,5 @@
 Files under "src/main/resources/assets/cfhcore/textures/block/tfc" and
-  "src/main/resources/assets/cfhcore/textures/item/tfc" directory:
+"src/main/resources/assets/cfhcore/textures/item/tfc" directory:
 Licensed under the European Union Public Licence v. 1.2 (EUPL v. 1.2).
 
 === Original License Text ===
@@ -279,7 +279,12 @@ covered Source Code from exclusive appropriation.
 new EUPL version.
 === End of the Original License Text ===
 
+Files under "src/main/resources" other than the directories listed above:
+Copyright (C) OneHumanAwa, 2026
+All Rights Reserved.
+
 All other files in this project, unless otherwise stated:
+Copyright (C) OneHumanAwa, 2026
 Licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0
 International License (CC BY-NC-SA 4.0).
 

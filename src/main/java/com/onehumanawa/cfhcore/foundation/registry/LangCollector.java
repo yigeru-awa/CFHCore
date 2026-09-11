@@ -3,6 +3,7 @@ package com.onehumanawa.cfhcore.foundation.registry;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings({"unused", "UnusedReturnValue"})
 public final class LangCollector {
 
     private final Map<String, LangEntry> entries = new HashMap<>();

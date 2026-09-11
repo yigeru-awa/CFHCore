@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mojang.logging.LogUtils;
 import com.onehumanawa.cfhcore.foundation.ModLangProvider;
+import com.onehumanawa.cfhcore.foundation.RegistryHelper;
 import com.onehumanawa.cfhcore.foundation.TooltipHelper;
 import com.onehumanawa.cfhcore.foundation.registry.LangCollector;
 import com.simibubi.create.foundation.data.CreateRegistrate;
@@ -19,6 +20,7 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
+import net.neoforged.neoforge.registries.RegisterEvent;
 import org.slf4j.Logger;
 
 @Mod(CFHCore.ID)
@@ -46,8 +48,10 @@ public class CFHCore {
         LOGGER.info("{} Initializing!", NAME);
         ModLoadingContext modLoadingContext = ModLoadingContext.get();
         REGISTRATE.registerEventListeners(modEventBus);
+        CFHAllCreativeModeTabs.register(modEventBus);
 
         TooltipHelper.init();
+        RegistryHelper.init();
 
         modEventBus.addListener(this::gatherData);
     }
