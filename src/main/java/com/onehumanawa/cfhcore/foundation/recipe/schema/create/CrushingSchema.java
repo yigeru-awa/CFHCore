@@ -6,31 +6,24 @@ import com.onehumanawa.cfhcore.foundation.recipe.component.impl.ItemComponent;
 import com.onehumanawa.cfhcore.foundation.recipe.schema.RecipeSchema;
 import com.onehumanawa.cfhcore.foundation.recipe.schema.RecipeSchemaType;
 
-/**
- * Schema for Create crushing recipes.
- */
 @RecipeSchemaType("create:crushing")
 public class CrushingSchema {
+
+    public static final RecipeKey<String> INPUT_KEY =
+            RecipeKey.builder(ItemComponent.INSTANCE).names("ingredients", "ingredient").input().alwaysWrite().build();
+    public static final RecipeKey<String[]> RESULTS_KEY =
+            RecipeKey.builder(ItemArrayComponent.INSTANCE).name("results").output().alwaysWrite().build();
 
     public static final RecipeSchema INSTANCE = create();
 
     private static RecipeSchema create() {
         return RecipeSchema.builder()
                 .type("create:crushing")
-                .key(RecipeKey.builder(ItemComponent.INSTANCE)
-                        .name("ingredients")
-                        .name("ingredient")
-                        .input()
-                        .alwaysWrite()
-                        .build())
-                .key(RecipeKey.builder(ItemArrayComponent.INSTANCE)
-                        .name("results")
-                        .output()
-                        .alwaysWrite()
-                        .build())
+                .key(INPUT_KEY)
+                .key(RESULTS_KEY)
                 .idGenerator(recipe -> {
-                    String input = recipe.getValue(RecipeKey.builder(ItemComponent.INSTANCE).name("ingredients").build());
-                    String[] results = recipe.getValue(RecipeKey.builder(ItemArrayComponent.INSTANCE).name("results").build());
+                    String input = recipe.getValue(INPUT_KEY);
+                    String[] results = recipe.getValue(RESULTS_KEY);
                     if (input != null && results != null && results.length > 0) {
                         return "crush_" + input.replace(':', '_') + "_to_" + results[0].replace(':', '_');
                     }

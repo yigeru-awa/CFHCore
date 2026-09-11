@@ -1,7 +1,7 @@
 package com.onehumanawa.cfhcore.foundation.recipe.component;
 
 import com.onehumanawa.cfhcore.foundation.recipe.RecipeContext;
-import com.onehumanawa.cfhcore.foundation.recipe.KubeJavaRecipe;
+import com.onehumanawa.cfhcore.foundation.recipe.RecipeModification;
 import com.onehumanawa.cfhcore.foundation.recipe.RecipeValidationContext;
 import com.google.gson.JsonObject;
 
@@ -9,9 +9,6 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Consumer;
 
-/**
- * A map of component values for a recipe.
- */
 public class RecipeComponentValueMap {
     public static final RecipeComponentValueMap EMPTY = new RecipeComponentValueMap(List.of());
 
@@ -89,7 +86,7 @@ public class RecipeComponentValueMap {
         }
     }
 
-    public void validate(RecipeValidationContext context, KubeJavaRecipe recipe) {
+    public void validate(RecipeValidationContext context, RecipeModification recipe) {
         for (RecipeComponentValue<?> holder : holders) {
             holder.validate(context, recipe);
         }

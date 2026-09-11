@@ -5,9 +5,6 @@ import com.onehumanawa.cfhcore.foundation.recipe.RecipeInfo;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Context for recipe matching operations.
- */
 public class RecipeMatchContext {
     private final Map<String, Object> attributes = new HashMap<>();
     private RecipeInfo currentRecipe;
@@ -27,6 +24,7 @@ public class RecipeMatchContext {
         this.currentRecipe = recipe;
     }
 
+    @SuppressWarnings("unchecked")
     public <T> T getAttribute(String key) {
         return (T) attributes.get(key);
     }

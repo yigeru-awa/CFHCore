@@ -6,11 +6,9 @@ import com.onehumanawa.cfhcore.foundation.recipe.RecipeValidationContext;
 import com.onehumanawa.cfhcore.foundation.recipe.component.RecipeComponent;
 import com.onehumanawa.cfhcore.foundation.recipe.match.ReplacementMatch;
 
+import java.util.Objects;
 import java.util.Set;
 
-/**
- * Component for string values in recipes (group, heat requirement, etc.).
- */
 public class StringComponent implements RecipeComponent<String> {
 
     private final String fieldName;
@@ -33,34 +31,49 @@ public class StringComponent implements RecipeComponent<String> {
 
     @Override
     public String read(JsonObject json, RecipeContext context) {
-        if (json.has(fieldName)) {
-            return json.get(fieldName).getAsString();
+        String field = targetField(json, context);
+        if (field == null || !json.has(field) || !json.get(field).isJsonPrimitive()) {
+            return null;
         }
-        return defaultValue;
+        return json.get(field).getAsString();
     }
 
     @Override
     public void write(JsonObject json, String value, RecipeContext context) {
-        if (value != null && !value.equals(defaultValue)) {
-            json.addProperty(fieldName, value);
+        if (value == null) {
+            return;
         }
+        String field = targetField(json, context);
+        json.addProperty(field != null ? field : fieldName, value);
     }
 
     @Override
     public boolean matches(String value, ReplacementMatch match) {
-        // String components don't typically participate in item matching
         return false;
     }
 
     @Override
     public boolean replace(String value, ReplacementMatch match, Object replacement, RecipeContext context) {
-        // String components don't typically participate in item replacement
         return false;
     }
 
     @Override
     public String defaultValue() {
         return defaultValue;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof StringComponent that)) return false;
+        return fieldName.equals(that.fieldName)
+                && Objects.equals(defaultValue, that.defaultValue)
+                && allowedValues.equals(that.allowedValues);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(fieldName, defaultValue, allowedValues);
     }
 
     @Override

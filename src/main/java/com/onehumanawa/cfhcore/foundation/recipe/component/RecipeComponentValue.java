@@ -3,18 +3,12 @@ package com.onehumanawa.cfhcore.foundation.recipe.component;
 import com.onehumanawa.cfhcore.foundation.recipe.RecipeContext;
 import com.onehumanawa.cfhcore.foundation.recipe.RecipeValidationContext;
 import com.onehumanawa.cfhcore.foundation.recipe.match.ReplacementMatch;
-import com.onehumanawa.cfhcore.foundation.recipe.match.ReplacementMatchInfo;
-import com.onehumanawa.cfhcore.foundation.recipe.KubeJavaRecipe;
+import com.onehumanawa.cfhcore.foundation.recipe.RecipeModification;
 import com.google.gson.JsonObject;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
 
-/**
- * Holds a value for a specific recipe component.
- *
- * @param <T> The Java type of the component value
- */
 public class RecipeComponentValue<T> {
     private final RecipeKey<T> key;
     private T value;
@@ -56,6 +50,9 @@ public class RecipeComponentValue<T> {
     }
 
     public void readFromJson(JsonObject json, RecipeContext context) {
+        if (context != null) {
+            context.bind(this);
+        }
         T readValue = key.component().read(json, context);
         if (readValue != null) {
             this.value = readValue;
@@ -68,6 +65,9 @@ public class RecipeComponentValue<T> {
             throw new IllegalStateException("Cannot write null value for required component: " + key.primaryName());
         }
         if (value != null) {
+            if (context != null) {
+                context.bind(this);
+            }
             key.component().write(json, value, context);
             this.written = true;
             this.dirty = false;
@@ -80,6 +80,9 @@ public class RecipeComponentValue<T> {
 
     public boolean replace(ReplacementMatch match, Object replacement, RecipeContext context) {
         if (value == null) return false;
+        if (context != null) {
+            context.bind(this);
+        }
         boolean result = key.component().replace(value, match, replacement, context);
         if (result) {
             this.dirty = true;
@@ -87,7 +90,7 @@ public class RecipeComponentValue<T> {
         return result;
     }
 
-    public void validate(RecipeValidationContext context, KubeJavaRecipe recipe) {
+    public void validate(RecipeValidationContext context, RecipeModification recipe) {
         if (value != null) {
             key.component().validate(value, context);
         } else if (!key.optional()) {

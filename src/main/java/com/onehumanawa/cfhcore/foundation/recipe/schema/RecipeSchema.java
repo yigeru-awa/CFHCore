@@ -1,6 +1,6 @@
 package com.onehumanawa.cfhcore.foundation.recipe.schema;
 
-import com.onehumanawa.cfhcore.foundation.recipe.KubeJavaRecipe;
+import com.onehumanawa.cfhcore.foundation.recipe.RecipeModification;
 import com.onehumanawa.cfhcore.foundation.recipe.RecipeValidationContext;
 import com.onehumanawa.cfhcore.foundation.recipe.component.RecipeComponent;
 import com.onehumanawa.cfhcore.foundation.recipe.component.RecipeComponentValueMap;
@@ -10,13 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
 
-/**
- * Defines the structure of a recipe type.
- * A schema describes what components a recipe has and how to process them.
- */
 public class RecipeSchema {
     private final List<RecipeKey<?>> keys;
-    private final List<BiConsumer<RecipeValidationContext, KubeJavaRecipe>> postProcessors;
+    private final List<BiConsumer<RecipeValidationContext, RecipeModification>> postProcessors;
     private final IdGenerator idGenerator;
     private final String recipeType;
     private final int inputCount;
@@ -32,7 +28,7 @@ public class RecipeSchema {
     }
 
     public List<RecipeKey<?>> keys() { return keys; }
-    public List<BiConsumer<RecipeValidationContext, KubeJavaRecipe>> postProcessors() { return postProcessors; }
+    public List<BiConsumer<RecipeValidationContext, RecipeModification>> postProcessors() { return postProcessors; }
     public IdGenerator idGenerator() { return idGenerator; }
     public String recipeType() { return recipeType; }
     public int inputCount() { return inputCount; }
@@ -42,13 +38,13 @@ public class RecipeSchema {
         return new RecipeComponentValueMap(keys);
     }
 
-    public void postProcess(RecipeValidationContext context, KubeJavaRecipe recipe) {
+    public void postProcess(RecipeValidationContext context, RecipeModification recipe) {
         for (var processor : postProcessors) {
             processor.accept(context, recipe);
         }
     }
 
-    public String buildUniqueId(KubeJavaRecipe recipe) {
+    public String buildUniqueId(RecipeModification recipe) {
         return idGenerator.apply(recipe);
     }
 
@@ -58,7 +54,7 @@ public class RecipeSchema {
 
     public static class Builder {
         private final List<RecipeKey<?>> keys = new ArrayList<>();
-        private final List<BiConsumer<RecipeValidationContext, KubeJavaRecipe>> postProcessors = new ArrayList<>();
+        private final List<BiConsumer<RecipeValidationContext, RecipeModification>> postProcessors = new ArrayList<>();
         private IdGenerator idGenerator;
         private String recipeType;
         private int inputCount = 0;
@@ -80,13 +76,14 @@ public class RecipeSchema {
             return this;
         }
 
-        public Builder postProcessor(BiConsumer<RecipeValidationContext, KubeJavaRecipe> processor) {
+        public Builder postProcessor(BiConsumer<RecipeValidationContext, RecipeModification> processor) {
             this.postProcessors.add(processor);
             return this;
         }
 
-        public Builder postProcessors(@SuppressWarnings("unchecked") BiConsumer<RecipeValidationContext, KubeJavaRecipe>... processors) {
-            for (var processor : processors) {
+        @SafeVarargs
+        public final Builder postProcessors(BiConsumer<RecipeValidationContext, RecipeModification>... processors) {
+            for (BiConsumer<RecipeValidationContext, RecipeModification> processor : processors) {
                 this.postProcessors.add(processor);
             }
             return this;
@@ -109,6 +106,6 @@ public class RecipeSchema {
 
     @FunctionalInterface
     public interface IdGenerator {
-        String apply(KubeJavaRecipe recipe);
+        String apply(RecipeModification recipe);
     }
 }

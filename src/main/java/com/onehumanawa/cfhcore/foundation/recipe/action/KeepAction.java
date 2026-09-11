@@ -5,9 +5,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 
-/**
- * Action that keeps the ingredient unchanged.
- */
 public class KeepAction implements IngredientAction {
 
     public static final KeepAction INSTANCE = new KeepAction();

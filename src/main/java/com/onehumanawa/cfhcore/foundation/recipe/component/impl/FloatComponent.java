@@ -6,9 +6,8 @@ import com.onehumanawa.cfhcore.foundation.recipe.RecipeValidationContext;
 import com.onehumanawa.cfhcore.foundation.recipe.component.RecipeComponent;
 import com.onehumanawa.cfhcore.foundation.recipe.match.ReplacementMatch;
 
-/**
- * Component for float values in recipes (experience, chance, etc.).
- */
+import java.util.Objects;
+
 public class FloatComponent implements RecipeComponent<Float> {
 
     private final String fieldName;
@@ -33,17 +32,20 @@ public class FloatComponent implements RecipeComponent<Float> {
 
     @Override
     public Float read(JsonObject json, RecipeContext context) {
-        if (json.has(fieldName)) {
-            return json.get(fieldName).getAsFloat();
+        String field = targetField(json, context);
+        if (field == null || !json.has(field) || !json.get(field).isJsonPrimitive()) {
+            return null;
         }
-        return defaultValue;
+        return json.get(field).getAsFloat();
     }
 
     @Override
     public void write(JsonObject json, Float value, RecipeContext context) {
-        if (value != null && !value.equals(defaultValue)) {
-            json.addProperty(fieldName, value);
+        if (value == null) {
+            return;
         }
+        String field = targetField(json, context);
+        json.addProperty(field != null ? field : fieldName, value);
     }
 
     @Override
@@ -59,6 +61,21 @@ public class FloatComponent implements RecipeComponent<Float> {
     @Override
     public Float defaultValue() {
         return defaultValue;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof FloatComponent that)) return false;
+        return Float.compare(minValue, that.minValue) == 0
+                && Float.compare(maxValue, that.maxValue) == 0
+                && Float.compare(defaultValue, that.defaultValue) == 0
+                && fieldName.equals(that.fieldName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(fieldName, minValue, maxValue, defaultValue);
     }
 
     @Override

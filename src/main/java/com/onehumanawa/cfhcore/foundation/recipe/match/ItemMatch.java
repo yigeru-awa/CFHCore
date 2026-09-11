@@ -8,9 +8,6 @@ import net.minecraft.world.item.crafting.Ingredient;
 
 import java.util.Objects;
 
-/**
- * Replacement match that matches a specific item ID.
- */
 public class ItemMatch implements ReplacementMatch {
     private final String itemId;
     private final ResourceLocation location;

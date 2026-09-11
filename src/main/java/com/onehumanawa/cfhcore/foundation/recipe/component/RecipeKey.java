@@ -1,15 +1,11 @@
 package com.onehumanawa.cfhcore.foundation.recipe.component;
 
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 
-/**
- * Uniquely identifies a component within a recipe schema.
- *
- * @param <T> The Java type of the component value
- */
 public class RecipeKey<T> {
     private final RecipeComponent<T> component;
     private final Set<String> names;
@@ -17,14 +13,16 @@ public class RecipeKey<T> {
     private final boolean optional;
     private final T defaultValue;
     private final boolean alwaysWrite;
+    private final boolean stackFormat;
 
     private RecipeKey(Builder<T> builder) {
         this.component = Objects.requireNonNull(builder.component, "component cannot be null");
-        this.names = Set.copyOf(builder.names);
+        this.names = Collections.unmodifiableSet(new LinkedHashSet<>(builder.names));
         this.role = builder.role;
         this.optional = builder.optional;
         this.defaultValue = builder.defaultValue;
         this.alwaysWrite = builder.alwaysWrite;
+        this.stackFormat = builder.stackFormat;
     }
 
     public RecipeComponent<T> component() { return component; }
@@ -33,6 +31,7 @@ public class RecipeKey<T> {
     public boolean optional() { return optional; }
     public T defaultValue() { return defaultValue; }
     public boolean alwaysWrite() { return alwaysWrite; }
+    public boolean stackFormat() { return stackFormat; }
 
     public boolean hasName(String name) {
         return names.contains(name);
@@ -48,11 +47,12 @@ public class RecipeKey<T> {
 
     public static class Builder<T> {
         private final RecipeComponent<T> component;
-        private final Set<String> names = new HashSet<>();
+        private final Set<String> names = new LinkedHashSet<>();
         private RecipeComponent.Role role = RecipeComponent.Role.OTHER;
         private boolean optional = false;
         private T defaultValue = null;
         private boolean alwaysWrite = false;
+        private boolean stackFormat = false;
 
         private Builder(RecipeComponent<T> component) {
             this.component = component;
@@ -95,6 +95,11 @@ public class RecipeKey<T> {
 
         public Builder<T> alwaysWrite() {
             this.alwaysWrite = true;
+            return this;
+        }
+
+        public Builder<T> stackFormat() {
+            this.stackFormat = true;
             return this;
         }
 

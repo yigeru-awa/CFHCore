@@ -1,19 +1,27 @@
 package com.onehumanawa.cfhcore.foundation.recipe.filter;
 
+import com.google.gson.JsonObject;
 import com.onehumanawa.cfhcore.foundation.recipe.RecipeFilter;
 import com.onehumanawa.cfhcore.foundation.recipe.RecipeInfo;
 import com.onehumanawa.cfhcore.foundation.recipe.RecipeModificationHandler;
+import com.onehumanawa.cfhcore.foundation.recipe.match.ItemMatch;
+import com.onehumanawa.cfhcore.foundation.recipe.match.ReplacementMatch;
+import com.onehumanawa.cfhcore.foundation.recipe.match.TagMatch;
+import com.onehumanawa.cfhcore.foundation.recipe.util.JsonUtils;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 
-/**
- * Builder for creating complex recipe filters with multiple conditions.
- */
 public class RecipeFilterBuilder {
 
     private final List<Predicate<RecipeInfo>> predicates = new ArrayList<>();
@@ -80,13 +88,49 @@ public class RecipeFilterBuilder {
     }
 
     public RecipeFilterBuilder hasInput(String itemId) {
-        predicates.add(info -> false); // Would check components
-        return this;
+        return contains(RecipeFilter.INPUT_FIELDS, itemId);
     }
 
     public RecipeFilterBuilder hasOutput(String itemId) {
-        predicates.add(info -> false); // Would check components
+        return contains(RecipeFilter.OUTPUT_FIELDS, itemId);
+    }
+
+    private RecipeFilterBuilder contains(Collection<String> fields, String itemId) {
+        ReplacementMatch match = itemId != null && itemId.startsWith("#")
+                ? new TagMatch(itemId)
+                : new ItemMatch(itemId);
+        predicates.add(info -> {
+            JsonObject json = RecipeModificationHandler.getRecipeJson(info.id()).orElse(null);
+            if (json == null) {
+                return false;
+            }
+            for (String id : JsonUtils.collectIds(json, fields)) {
+                if (idMatches(id, match)) {
+                    return true;
+                }
+            }
+            return false;
+        });
         return this;
+    }
+
+    private static boolean idMatches(String id, ReplacementMatch match) {
+        if (match.matches(id)) {
+            return true;
+        }
+        if (!id.startsWith("#") || !(match instanceof ItemMatch itemMatch)) {
+            return false;
+        }
+        Item item = itemMatch.item();
+        if (item == null || item == Items.AIR) {
+            return false;
+        }
+        try {
+            TagKey<Item> tag = TagKey.create(Registries.ITEM, ResourceLocation.parse(id.substring(1)));
+            return BuiltInRegistries.ITEM.wrapAsHolder(item).is(tag);
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public RecipeFilter build() {

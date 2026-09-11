@@ -1,17 +1,8 @@
 package com.onehumanawa.cfhcore.foundation.recipe.schema.create;
 
-import com.onehumanawa.cfhcore.foundation.recipe.component.RecipeKey;
-import com.onehumanawa.cfhcore.foundation.recipe.component.impl.IntegerComponent;
-import com.onehumanawa.cfhcore.foundation.recipe.component.impl.StringComponent;
 import com.onehumanawa.cfhcore.foundation.recipe.schema.RecipeSchema;
 import com.onehumanawa.cfhcore.foundation.recipe.schema.RecipeSchemaType;
 
-import java.util.Set;
-
-/**
- * Schema for Create compacting recipes.
- * Reuses MixingSchema's components but with different type.
- */
 @RecipeSchemaType("create:compacting")
 public class CompactingSchema {
 
@@ -20,29 +11,23 @@ public class CompactingSchema {
     private static RecipeSchema create() {
         return RecipeSchema.builder()
                 .type("create:compacting")
-                .key(RecipeKey.builder(MixingSchema.MixingIngredientComponent.class.cast(new MixingSchema.MixingIngredientComponent()))
-                        .name("ingredients")
-                        .input()
-                        .alwaysWrite()
-                        .build())
-                .key(RecipeKey.builder(MixingSchema.MixingResultComponent.class.cast(new MixingSchema.MixingResultComponent()))
-                        .name("results")
-                        .output()
-                        .alwaysWrite()
-                        .build())
-                .key(RecipeKey.builder(new IntegerComponent("processing_time", 1, 36000, 100))
-                        .name("processing_time")
-                        .optional()
-                        .defaultValue(100)
-                        .build())
-                .key(RecipeKey.builder(new StringComponent("heat_requirement", "", Set.of("none", "heated", "superheated")))
-                        .name("heat_requirement")
-                        .optional()
-                        .defaultValue("none")
-                        .build())
+                .key(MixingSchema.INGREDIENT_KEY)
+                .key(MixingSchema.RESULT_KEY)
+                .key(MixingSchema.PROCESSING_TIME_KEY)
+                .key(MixingSchema.HEAT_REQUIREMENT_KEY)
+                .postProcessor((ctx, recipe) -> {
+                    var ingredients = recipe.getValue(MixingSchema.INGREDIENT_KEY);
+                    var results = recipe.getValue(MixingSchema.RESULT_KEY);
+                    if (ingredients == null || ingredients.isEmpty()) {
+                        ctx.error("Compacting recipe has no ingredients");
+                    }
+                    if (results == null || results.isEmpty()) {
+                        ctx.error("Compacting recipe has no results");
+                    }
+                })
                 .idGenerator(recipe -> {
-                    var ingredients = recipe.getValue(RecipeKey.builder(MixingSchema.MixingIngredientComponent.class.cast(new MixingSchema.MixingIngredientComponent())).name("ingredients").build());
-                    var results = recipe.getValue(RecipeKey.builder(MixingSchema.MixingResultComponent.class.cast(new MixingSchema.MixingResultComponent())).name("results").build());
+                    var ingredients = recipe.getValue(MixingSchema.INGREDIENT_KEY);
+                    var results = recipe.getValue(MixingSchema.RESULT_KEY);
                     StringBuilder sb = new StringBuilder("compact");
                     if (ingredients != null && !ingredients.items.isEmpty()) {
                         sb.append("_").append(ingredients.items.get(0).replace(':', '_'));

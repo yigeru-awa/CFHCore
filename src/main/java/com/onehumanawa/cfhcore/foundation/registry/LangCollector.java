@@ -1,20 +1,12 @@
 package com.onehumanawa.cfhcore.foundation.registry;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-/**
- * Collects language entries for items, blocks and KubeJava declarations
- * (item/block translations, block crafting feedback, ...). Consumed by
- * ModLangProvider during data generation.
- */
 public final class LangCollector {
 
     private final Map<String, LangEntry> entries = new HashMap<>();
 
-    /** Registers (or overwrites) the bilingual translation of one key. */
     public void add(String key, String en, String zh) {
         entries.put(key, new LangEntry(en, zh));
     }
@@ -25,10 +17,6 @@ public final class LangCollector {
 
     public record LangEntry(String en, String zh) {}
 
-    /**
-     * Generates all language entries for ModLangProvider.
-     * Returns a map of locale -> (key -> value).
-     */
     public Map<String, Map<String, String>> generateAll() {
         Map<String, Map<String, String>> result = new HashMap<>();
         Map<String, String> enMap = new HashMap<>();

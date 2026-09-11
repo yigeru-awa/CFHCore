@@ -4,9 +4,6 @@ import com.onehumanawa.cfhcore.foundation.recipe.component.RecipeComponentValue;
 
 import javax.annotation.Nullable;
 
-/**
- * Thrown when a recipe component fails to read or write.
- */
 public class RecipeModifyComponentException extends RecipeModifyRuntimeException {
     private final RecipeComponentValue<?> componentValue;
 

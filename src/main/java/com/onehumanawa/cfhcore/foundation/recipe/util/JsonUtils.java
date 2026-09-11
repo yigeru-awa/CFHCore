@@ -3,14 +3,19 @@ package com.onehumanawa.cfhcore.foundation.recipe.util;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 
+import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Predicate;
 
-/**
- * Utility class for JSON operations.
- */
 public final class JsonUtils {
+
+    private static final List<String> ID_FIELDS = List.of("item", "id", "tag", "fluid", "fluidTag");
+    private static final Set<String> TAG_FIELDS = Set.of("tag", "fluidTag");
 
     private JsonUtils() {}
 
@@ -26,6 +31,7 @@ public final class JsonUtils {
         return obj.has("fluid") || obj.has("fluidTag");
     }
 
+    @Nullable
     public static String getItemId(JsonObject obj) {
         if (obj.has("item")) {
             return obj.get("item").getAsString();
@@ -47,6 +53,73 @@ public final class JsonUtils {
         } else {
             obj.remove("tag");
             obj.addProperty("item", id);
+        }
+    }
+
+    public static Set<String> collectIds(@Nullable JsonElement element, Collection<String> fields) {
+        Set<String> ids = new LinkedHashSet<>();
+        collect(element, fields, ids);
+        return ids;
+    }
+
+    private static void collect(@Nullable JsonElement element, Collection<String> fields, Set<String> ids) {
+        if (element == null || element.isJsonNull()) {
+            return;
+        }
+
+        if (element.isJsonObject()) {
+            for (Map.Entry<String, JsonElement> entry : element.getAsJsonObject().entrySet()) {
+                if (fields.contains(entry.getKey())) {
+                    extract(entry.getValue(), ids);
+                } else {
+                    collect(entry.getValue(), fields, ids);
+                }
+            }
+            return;
+        }
+
+        if (element.isJsonArray()) {
+            for (JsonElement child : element.getAsJsonArray()) {
+                collect(child, fields, ids);
+            }
+        }
+    }
+
+    private static void extract(@Nullable JsonElement element, Set<String> ids) {
+        if (element == null || element.isJsonNull()) {
+            return;
+        }
+
+        if (element.isJsonPrimitive()) {
+            ids.add(element.getAsString());
+            return;
+        }
+
+        if (element.isJsonArray()) {
+            for (JsonElement child : element.getAsJsonArray()) {
+                extract(child, ids);
+            }
+            return;
+        }
+
+        JsonObject object = element.getAsJsonObject();
+        boolean found = false;
+        for (String field : ID_FIELDS) {
+            JsonElement child = object.get(field);
+            if (child == null || !child.isJsonPrimitive()) {
+                continue;
+            }
+            String value = child.getAsString();
+            ids.add(TAG_FIELDS.contains(field) ? "#" + value : value);
+            found = true;
+        }
+
+        if (found) {
+            return;
+        }
+
+        for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
+            extract(entry.getValue(), ids);
         }
     }
 

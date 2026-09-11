@@ -1,8 +1,5 @@
 package com.onehumanawa.cfhcore.foundation.recipe;
 
-/**
- * Runtime exception thrown by the KubeJava recipe system.
- */
 public class RecipeModifyRuntimeException extends RuntimeException {
     private String sourceLine = "unknown";
 

@@ -2,53 +2,59 @@ package com.onehumanawa.cfhcore.foundation.recipe.schema.create;
 
 import com.onehumanawa.cfhcore.foundation.ingredient.FluidSpec;
 import com.onehumanawa.cfhcore.foundation.recipe.component.RecipeKey;
-import com.onehumanawa.cfhcore.foundation.recipe.component.impl.FluidComponent;
-import com.onehumanawa.cfhcore.foundation.recipe.component.impl.ItemComponent;
 import com.onehumanawa.cfhcore.foundation.recipe.schema.RecipeSchema;
 import com.onehumanawa.cfhcore.foundation.recipe.schema.RecipeSchemaType;
 
-/**
- * Schema for Create filling recipes.
- */
 @RecipeSchemaType("create:filling")
 public class FillingSchema {
+
+    public static final RecipeKey<MixingSchema.MixingList> INGREDIENT_KEY = MixingSchema.INGREDIENT_KEY;
+    public static final RecipeKey<MixingSchema.MixingList> RESULT_KEY = MixingSchema.RESULT_KEY;
 
     public static final RecipeSchema INSTANCE = create();
 
     private static RecipeSchema create() {
         return RecipeSchema.builder()
                 .type("create:filling")
-                .key(RecipeKey.builder(ItemComponent.INSTANCE)
-                        .name("ingredients")
-                        .name("ingredient")
-                        .input()
-                        .alwaysWrite()
-                        .build())
-                .key(RecipeKey.builder(FluidComponent.INSTANCE)
-                        .name("fluid")
-                        .input()
-                        .alwaysWrite()
-                        .build())
-                .key(RecipeKey.builder(ItemComponent.INSTANCE)
-                        .name("result")
-                        .output()
-                        .alwaysWrite()
-                        .build())
+                .key(INGREDIENT_KEY)
+                .key(RESULT_KEY)
                 .postProcessor((ctx, recipe) -> {
-                    FluidSpec fluid = recipe.getValue(RecipeKey.builder(FluidComponent.INSTANCE).name("fluid").build());
-                    if (fluid == null || fluid.isEmpty()) {
-                        ctx.error("Filling recipe requires a fluid");
+                    MixingSchema.MixingList ingredients = recipe.getValue(INGREDIENT_KEY);
+                    MixingSchema.MixingList results = recipe.getValue(RESULT_KEY);
+                    if (ingredients == null || ingredients.items.isEmpty()) {
+                        ctx.error("Filling recipe requires an item input");
+                    }
+                    if (firstFluid(ingredients) == null) {
+                        ctx.error("Filling recipe requires a fluid input");
+                    }
+                    if (results == null || results.items.isEmpty()) {
+                        ctx.error("Filling recipe requires an item output");
                     }
                 })
                 .idGenerator(recipe -> {
-                    String input = recipe.getValue(RecipeKey.builder(ItemComponent.INSTANCE).name("ingredients").build());
-                    FluidSpec fluid = recipe.getValue(RecipeKey.builder(FluidComponent.INSTANCE).name("fluid").build());
-                    String result = recipe.getValue(RecipeKey.builder(ItemComponent.INSTANCE).name("result").build());
-                    if (input != null && fluid != null && result != null) {
-                        return "fill_" + input.replace(':', '_') + "_with_" + fluid.id().replace(':', '_') + "_to_" + result.replace(':', '_');
+                    MixingSchema.MixingList ingredients = recipe.getValue(INGREDIENT_KEY);
+                    MixingSchema.MixingList results = recipe.getValue(RESULT_KEY);
+                    FluidSpec fluid = firstFluid(ingredients);
+                    if (ingredients != null && !ingredients.items.isEmpty() && fluid != null
+                            && results != null && !results.items.isEmpty()) {
+                        return "fill_" + ingredients.items.get(0).replace(':', '_')
+                                + "_with_" + fluid.id().replace(':', '_')
+                                + "_to_" + results.items.get(0).replace(':', '_');
                     }
                     return "";
                 })
                 .build();
+    }
+
+    private static FluidSpec firstFluid(MixingSchema.MixingList ingredients) {
+        if (ingredients == null) {
+            return null;
+        }
+        for (FluidSpec fluid : ingredients.fluids) {
+            if (fluid != null && !fluid.isEmpty()) {
+                return fluid;
+            }
+        }
+        return null;
     }
 }

@@ -2,9 +2,6 @@ package com.onehumanawa.cfhcore.foundation.recipe.util;
 
 import net.minecraft.resources.ResourceLocation;
 
-/**
- * Utility class for ResourceLocation operations.
- */
 public final class ResourceLocationUtils {
 
     private static final String DEFAULT_NAMESPACE = "minecraft";

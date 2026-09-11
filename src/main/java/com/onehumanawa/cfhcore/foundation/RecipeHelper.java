@@ -198,7 +198,6 @@ public final class RecipeHelper {
         ingredients.add(ingredient(toolInput));
         json.add("ingredients", ingredients);
 
-        // Deploying recipes use "results" (plural) field
         JsonArray results = new JsonArray();
         results.add(itemStack(itemOutput, count));
         json.add("results", results);
@@ -218,7 +217,6 @@ public final class RecipeHelper {
         }
         json.add("ingredients", ingredients);
 
-        // Deploying recipes use "results" (plural) field
         JsonArray results = new JsonArray();
         for (String spec : itemOutputs) {
             if (spec != null && !spec.isEmpty()) {

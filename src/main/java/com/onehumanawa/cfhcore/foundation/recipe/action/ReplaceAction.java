@@ -1,13 +1,11 @@
 package com.onehumanawa.cfhcore.foundation.recipe.action;
 
 import com.google.gson.JsonObject;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 
-/**
- * Action that replaces an ingredient with a different item.
- */
 public class ReplaceAction implements IngredientAction {
 
     private final ItemStack replacement;
@@ -31,7 +29,7 @@ public class ReplaceAction implements IngredientAction {
         JsonObject json = new JsonObject();
         json.addProperty("type", "replace");
         JsonObject itemJson = new JsonObject();
-        itemJson.addProperty("id", replacement.getItem().getDescriptionId());
+        itemJson.addProperty("id", BuiltInRegistries.ITEM.getKey(replacement.getItem()).toString());
         itemJson.addProperty("count", replacement.getCount());
         json.add("item", itemJson);
         return json;

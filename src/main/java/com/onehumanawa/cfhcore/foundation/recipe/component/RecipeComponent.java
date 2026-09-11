@@ -1,18 +1,14 @@
 package com.onehumanawa.cfhcore.foundation.recipe.component;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.onehumanawa.cfhcore.foundation.recipe.RecipeContext;
 import com.onehumanawa.cfhcore.foundation.recipe.RecipeValidationContext;
 import com.onehumanawa.cfhcore.foundation.recipe.match.ReplacementMatch;
 
-/**
- * Represents a typed component of a recipe (input, output, time, etc.)
- *
- * @param <T> The Java type of the component value
- */
-public interface RecipeComponent<T> {
+import java.util.Set;
 
-    /** Role of the component in a recipe */
+public interface RecipeComponent<T> {
     enum Role {
         INPUT, OUTPUT, OTHER
     }
@@ -41,5 +37,35 @@ public interface RecipeComponent<T> {
                 .names(names)
                 .role(role)
                 .build();
+    }
+
+    default Set<String> fieldNames(RecipeContext context) {
+        return context != null ? context.fieldNames() : Set.of();
+    }
+
+    default boolean isOutput(RecipeContext context) {
+        return context != null && context.isOutput();
+    }
+
+    default boolean useId(RecipeContext context) {
+        return context != null && (context.isOutput() || context.stackFormat());
+    }
+
+    default JsonElement locate(JsonObject json, RecipeContext context) {
+        for (String name : fieldNames(context)) {
+            if (json.has(name)) {
+                return json.get(name);
+            }
+        }
+        return json;
+    }
+
+    default String targetField(JsonObject json, RecipeContext context) {
+        for (String name : fieldNames(context)) {
+            if (json.has(name)) {
+                return name;
+            }
+        }
+        return context != null ? context.fieldName() : null;
     }
 }

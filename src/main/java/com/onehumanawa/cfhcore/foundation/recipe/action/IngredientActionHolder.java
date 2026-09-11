@@ -2,9 +2,6 @@ package com.onehumanawa.cfhcore.foundation.recipe.action;
 
 import com.onehumanawa.cfhcore.foundation.recipe.util.SlotFilter;
 
-/**
- * Holds an ingredient action with its slot filter.
- */
 public class IngredientActionHolder {
 
     private final IngredientAction action;

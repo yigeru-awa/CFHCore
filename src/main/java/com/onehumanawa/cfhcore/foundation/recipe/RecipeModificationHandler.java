@@ -8,6 +8,7 @@ import com.onehumanawa.cfhcore.CFHCore;
 import com.onehumanawa.cfhcore.foundation.data.DatagenSupport;
 import com.onehumanawa.cfhcore.foundation.RecipeHelper;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceLocation;
@@ -22,15 +23,13 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.function.Consumer;
 
-/**
- * Engine for modpack-wide recipe control.
- */
 @SuppressWarnings("unused")
 @EventBusSubscriber(modid = CFHCore.ID)
 public class RecipeModificationHandler {
@@ -39,11 +38,13 @@ public class RecipeModificationHandler {
     private static final List<RecipeFilter> FILTERS = new ArrayList<>();
     private static final List<RecipeFilter> COMPLETED_FILTERS = new ArrayList<>();
 
-    /** Create sequenced assembly recipes do not support input/output replacement. */
     private static final ResourceLocation SEQUENCED_ASSEMBLY_TYPE = ResourceLocation.parse("create:sequenced_assembly");
+
+    private static final Map<ResourceLocation, JsonObject> JSON_CACHE = new HashMap<>();
 
     private static RecipeManager recipeManager;
     private static ResourceManager resourceManager;
+    private static HolderLookup.Provider registries;
 
     static {
         RecipeHelper.init();
@@ -63,17 +64,46 @@ public class RecipeModificationHandler {
         }
     }
 
-    // ================================================================
-    // Public Query API
-    // ================================================================
-
     public static Optional<RecipeHolder<?>> getRecipeById(String recipeId) {
         return recipeManager == null ? Optional.empty() : recipeManager.byKey(parseId(recipeId));
     }
 
+    public static Optional<RecipeHolder<?>> getRecipeById(ResourceLocation recipeId) {
+        return recipeManager == null ? Optional.empty() : recipeManager.byKey(recipeId);
+    }
+
     public static Optional<JsonObject> getRecipeJson(String recipeId) {
+        return getRecipeJson(parseId(recipeId));
+    }
+
+    public static Optional<JsonObject> getRecipeJson(ResourceLocation recipeId) {
         if (resourceManager == null) return Optional.empty();
-        return readRecipeJson(parseId(recipeId), resourceManager);
+        if (JSON_CACHE.containsKey(recipeId)) {
+            return Optional.ofNullable(JSON_CACHE.get(recipeId));
+        }
+        JsonObject json = readRecipeJson(recipeId, resourceManager).orElse(null);
+        JSON_CACHE.put(recipeId, json);
+        return Optional.ofNullable(json);
+    }
+
+    @Nullable
+    public static RecipeManager recipeManager() {
+        return recipeManager;
+    }
+
+    @Nullable
+    public static ResourceManager resourceManager() {
+        return resourceManager;
+    }
+
+    @Nullable
+    public static HolderLookup.Provider registries() {
+        return registries;
+    }
+
+    public static RegistryOps<JsonElement> registryOps() {
+        HolderLookup.Provider provider = registries;
+        return (provider != null ? provider : RegistryAccess.EMPTY).createSerializationContext(JsonOps.INSTANCE);
     }
 
     public static boolean isCompleted(RecipeFilter filter) {
@@ -87,10 +117,6 @@ public class RecipeModificationHandler {
     public static int getCompletedFilterCount() {
         return COMPLETED_FILTERS.size();
     }
-
-    // ================================================================
-    // Reload Handling
-    // ================================================================
 
     @SubscribeEvent
     public static void onAddReloadListeners(AddReloadListenerEvent event) {
@@ -113,13 +139,14 @@ public class RecipeModificationHandler {
 
     @SuppressWarnings("unchecked")
     private static void processRecipes(RecipeManager manager, ResourceManager resources,
-                                       HolderLookup.Provider registries) {
+                                       HolderLookup.Provider registryAccess) {
         recipeManager = manager;
         resourceManager = resources;
+        registries = registryAccess;
+        JSON_CACHE.clear();
 
         Map<ResourceLocation, JsonObject> added = DatagenSupport.getAddedRecipes();
 
-        // ===== Debug Logging =====
         CFHCore.LOGGER.info("=== Recipe Processing Debug ===");
         CFHCore.LOGGER.info("Active filters: {}", FILTERS.size());
         CFHCore.LOGGER.info("Completed filters: {}", COMPLETED_FILTERS.size());
@@ -127,16 +154,15 @@ public class RecipeModificationHandler {
         for (Map.Entry<ResourceLocation, JsonObject> entry : added.entrySet()) {
             CFHCore.LOGGER.info("  - To add: {} -> {}", entry.getKey(), entry.getValue());
         }
-        // ==========================
 
         if (FILTERS.isEmpty() && COMPLETED_FILTERS.isEmpty() && added.isEmpty()) {
             CFHCore.LOGGER.info("No recipe changes to apply");
             return;
         }
 
-        RegistryOps<JsonElement> ops = registries.createSerializationContext(JsonOps.INSTANCE);
+        RegistryOps<JsonElement> ops = registryAccess.createSerializationContext(JsonOps.INSTANCE);
 
-        var typeLookup = registries.lookupOrThrow(Registries.RECIPE_TYPE);
+        var typeLookup = registryAccess.lookupOrThrow(Registries.RECIPE_TYPE);
         Map<RecipeType<?>, ResourceLocation> typeIds = new HashMap<>();
         typeLookup.listElements().forEach(holder ->
                 typeIds.put(holder.value(), holder.key().location()));
@@ -200,7 +226,7 @@ public class RecipeModificationHandler {
             CFHCore.LOGGER.debug("  Input replacements: {}", inputs);
             CFHCore.LOGGER.debug("  Output replacements: {}", outputs);
 
-            RecipeHolder<?> modified = tryModify(holder, resources, ops, inputs, outputs, transformers);
+            RecipeHolder<?> modified = tryModify(holder, ops, inputs, outputs, transformers);
             if (modified != holder) {
                 modifiedCount++;
                 CFHCore.LOGGER.info("Modified recipe: {}", holder.id());
@@ -208,7 +234,6 @@ public class RecipeModificationHandler {
             result.put(modified.id(), modified);
         }
 
-        // Add new recipes
         int addedCount = 0;
         for (Map.Entry<ResourceLocation, JsonObject> entry : added.entrySet()) {
             try {
@@ -241,11 +266,7 @@ public class RecipeModificationHandler {
                 removedCount, modifiedCount, addedCount);
     }
 
-    // ================================================================
-    // Recipe Modification
-    // ================================================================
-
-    private static RecipeHolder<?> tryModify(RecipeHolder<?> holder, ResourceManager resources,
+    private static RecipeHolder<?> tryModify(RecipeHolder<?> holder,
                                              RegistryOps<JsonElement> ops,
                                              Map<String, String> inputReplacements,
                                              Map<String, String> outputReplacements,
@@ -254,13 +275,13 @@ public class RecipeModificationHandler {
             return holder;
         }
 
-        Optional<JsonObject> jsonOpt = readRecipeJson(holder.id(), resources);
+        Optional<JsonObject> jsonOpt = getRecipeJson(holder.id());
         if (jsonOpt.isEmpty()) {
             CFHCore.LOGGER.warn("Could not read JSON of {}, leaving unchanged", holder.id());
             return holder;
         }
 
-        JsonObject json = jsonOpt.get();
+        JsonObject json = jsonOpt.get().deepCopy();
         boolean changed = false;
 
         if (!inputReplacements.isEmpty()) {
@@ -295,10 +316,6 @@ public class RecipeModificationHandler {
 
         return holder;
     }
-
-    // ================================================================
-    // JSON Helpers
-    // ================================================================
 
     private static boolean applyReplacements(JsonObject root, String field,
                                              Map<String, String> replacements, boolean input) {

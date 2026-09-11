@@ -1,12 +1,10 @@
 package com.onehumanawa.cfhcore.foundation.recipe;
 
 import com.onehumanawa.cfhcore.foundation.recipe.schema.RecipeSchema;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 
-/**
- * Defines a recipe type with its schema and serializer information.
- */
 public class RecipeType {
     private final ResourceLocation id;
     private final RecipeSchema schema;
@@ -29,8 +27,7 @@ public class RecipeType {
     @SuppressWarnings("unchecked")
     public <T extends RecipeSerializer<?>> T kjsGetSerializer() {
         if (cachedSerializer == null) {
-            // Would need to look up from registry
-            // This is a placeholder - actual implementation would use BuiltInRegistries.RECIPE_SERIALIZER
+            cachedSerializer = BuiltInRegistries.RECIPE_SERIALIZER.get(serializerKey);
         }
         return (T) cachedSerializer;
     }

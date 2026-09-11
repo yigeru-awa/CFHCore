@@ -3,14 +3,6 @@ package com.onehumanawa.cfhcore.foundation.recipe;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeHolder;
 
-/**
- * Recipe metadata record providing context for filtering decisions.
- *
- * @param id     Full recipe identifier (e.g., "create:mixing/tea")
- * @param modId  Namespace/mod ID from the recipe ID (e.g., "create")
- * @param typeId Registered recipe type identifier (e.g., "create:mixing"),
- *               may be {@code null} if the recipe type is not registered
- */
 public record RecipeInfo(ResourceLocation id, String modId, ResourceLocation typeId) {
 
     public RecipeInfo(ResourceLocation id) {

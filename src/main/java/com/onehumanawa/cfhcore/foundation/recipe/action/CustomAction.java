@@ -7,9 +7,6 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 
 import java.util.function.BiFunction;
 
-/**
- * Custom action that uses a lambda for behavior.
- */
 public class CustomAction implements IngredientAction {
 
     private final String id;

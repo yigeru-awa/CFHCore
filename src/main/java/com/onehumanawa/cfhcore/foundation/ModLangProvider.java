@@ -25,12 +25,6 @@ public class ModLangProvider extends LanguageProvider {
     }
     @Override
     protected void addTranslations() {
-        if (locale.equals("en_us")) {
-            generateEnUs();
-        } else if (locale.equals("zh_cn")) {
-            generateZhCn();
-        }
-
         for (TooltipHelper.Entry entry : TooltipHelper.entries()) {
             entry.translations(locale).forEach(this::add);
         }
@@ -38,14 +32,5 @@ public class ModLangProvider extends LanguageProvider {
         boolean zh = locale.equals("zh_cn");
         CFHCore.langCollector().getEntries().forEach((key, entry) ->
                 add(key, zh ? entry.zh() : entry.en()));
-    }
-
-    private void generateEnUs() {
-    }
-    private void generateZhCn() {
-    }
-
-    private void generateLang(String key, String value) {
-        add(key, value);
     }
 }

@@ -6,9 +6,8 @@ import com.onehumanawa.cfhcore.foundation.recipe.RecipeValidationContext;
 import com.onehumanawa.cfhcore.foundation.recipe.component.RecipeComponent;
 import com.onehumanawa.cfhcore.foundation.recipe.match.ReplacementMatch;
 
-/**
- * Component for integer values in recipes (processing time, count, etc.).
- */
+import java.util.Objects;
+
 public class IntegerComponent implements RecipeComponent<Integer> {
 
     private final String fieldName;
@@ -33,34 +32,50 @@ public class IntegerComponent implements RecipeComponent<Integer> {
 
     @Override
     public Integer read(JsonObject json, RecipeContext context) {
-        if (json.has(fieldName)) {
-            return json.get(fieldName).getAsInt();
+        String field = targetField(json, context);
+        if (field == null || !json.has(field) || !json.get(field).isJsonPrimitive()) {
+            return null;
         }
-        return defaultValue;
+        return json.get(field).getAsInt();
     }
 
     @Override
     public void write(JsonObject json, Integer value, RecipeContext context) {
-        if (value != null && value != defaultValue) {
-            json.addProperty(fieldName, value);
+        if (value == null) {
+            return;
         }
+        String field = targetField(json, context);
+        json.addProperty(field != null ? field : fieldName, value);
     }
 
     @Override
     public boolean matches(Integer value, ReplacementMatch match) {
-        // Integer components don't typically participate in item matching
         return false;
     }
 
     @Override
     public boolean replace(Integer value, ReplacementMatch match, Object replacement, RecipeContext context) {
-        // Integer components don't typically participate in item replacement
         return false;
     }
 
     @Override
     public Integer defaultValue() {
         return defaultValue;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof IntegerComponent that)) return false;
+        return minValue == that.minValue
+                && maxValue == that.maxValue
+                && defaultValue == that.defaultValue
+                && fieldName.equals(that.fieldName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(fieldName, minValue, maxValue, defaultValue);
     }
 
     @Override

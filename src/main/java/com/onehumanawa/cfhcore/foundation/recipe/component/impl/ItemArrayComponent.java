@@ -1,48 +1,38 @@
 package com.onehumanawa.cfhcore.foundation.recipe.component.impl;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import com.onehumanawa.cfhcore.foundation.recipe.RecipeContext;
 import com.onehumanawa.cfhcore.foundation.recipe.RecipeValidationContext;
 import com.onehumanawa.cfhcore.foundation.recipe.component.RecipeComponent;
-import com.onehumanawa.cfhcore.foundation.recipe.component.RecipeKey;
 import com.onehumanawa.cfhcore.foundation.recipe.match.ReplacementMatch;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Component for arrays of item values in recipes.
- */
 public class ItemArrayComponent implements RecipeComponent<String[]> {
 
     public static final ItemArrayComponent INSTANCE = new ItemArrayComponent();
 
     @Override
     public String[] read(JsonObject json, RecipeContext context) {
-        if (!json.has("ingredients") && !json.has("items")) {
-            return new String[0];
-        }
-
-        JsonArray array = json.has("ingredients") ? json.get("ingredients").getAsJsonArray() : json.get("items").getAsJsonArray();
+        JsonElement element = locate(json, context);
         List<String> items = new ArrayList<>();
-
-        for (int i = 0; i < array.size(); i++) {
-            var element = array.get(i);
-            if (element.isJsonPrimitive()) {
-                items.add(element.getAsString());
-            } else if (element.isJsonObject()) {
-                JsonObject obj = element.getAsJsonObject();
-                if (obj.has("item")) {
-                    items.add(obj.get("item").getAsString());
-                } else if (obj.has("tag")) {
-                    items.add("#" + obj.get("tag").getAsString());
-                } else if (obj.has("id")) {
-                    items.add(obj.get("id").getAsString());
+        if (element != null && element.isJsonArray()) {
+            for (JsonElement entry : element.getAsJsonArray()) {
+                String id = ItemComponent.readId(entry);
+                if (id != null) {
+                    items.add(id);
                 }
             }
+        } else {
+            String id = ItemComponent.readId(element);
+            if (id != null) {
+                items.add(id);
+            }
         }
-
         return items.toArray(new String[0]);
     }
 
@@ -50,20 +40,43 @@ public class ItemArrayComponent implements RecipeComponent<String[]> {
     public void write(JsonObject json, String[] value, RecipeContext context) {
         if (value == null || value.length == 0) return;
 
-        JsonArray array = new JsonArray();
-        for (String item : value) {
-            if (item.startsWith("#")) {
-                JsonObject obj = new JsonObject();
-                obj.addProperty("tag", item.substring(1));
-                array.add(obj);
-            } else {
-                JsonObject obj = new JsonObject();
-                obj.addProperty("item", item);
-                array.add(obj);
+        boolean useId = useId(context);
+        String field = targetField(json, context);
+        if (field == null) {
+            field = "ingredients";
+        }
+
+        JsonElement existing = json.get(field);
+        if (existing != null && existing.isJsonArray()) {
+            JsonArray array = existing.getAsJsonArray();
+            if (array.size() == value.length) {
+                for (int i = 0; i < value.length; i++) {
+                    String item = value[i];
+                    if (item == null || item.isEmpty()) continue;
+                    JsonElement entry = array.get(i);
+                    if (entry != null && entry.isJsonPrimitive()) {
+                        array.set(i, new JsonPrimitive(item));
+                        continue;
+                    }
+                    JsonObject target = ItemComponent.firstObject(entry);
+                    if (target != null) {
+                        ItemComponent.applyTo(target, item, useId);
+                    } else {
+                        array.set(i, ItemComponent.createEntry(item, useId));
+                    }
+                }
+                return;
             }
         }
 
-        json.add("ingredients", array);
+        JsonArray array = new JsonArray();
+        for (String item : value) {
+            if (item == null || item.isEmpty()) continue;
+            array.add(ItemComponent.createEntry(item, useId));
+        }
+        if (array.isEmpty()) return;
+
+        json.add(field, array);
     }
 
     @Override
@@ -80,19 +93,20 @@ public class ItemArrayComponent implements RecipeComponent<String[]> {
         if (value == null) return false;
 
         boolean replaced = false;
-        List<String> newItems = new ArrayList<>();
+        List<String> newItems = new ArrayList<>(value.length);
 
         for (String item : value) {
-            if (match.matches(item) && replacement instanceof String replacementStr) {
-                newItems.add(replacementStr);
+            String replacementId = match.matches(item) ? ItemComponent.toId(replacement) : null;
+            if (replacementId != null) {
+                newItems.add(replacementId);
                 replaced = true;
             } else {
                 newItems.add(item);
             }
         }
 
-        if (replaced) {
-            context.recipe().setValue(RecipeKey.builder(INSTANCE).name("ingredients").build(), newItems.toArray(new String[0]));
+        if (replaced && context != null) {
+            context.setValue(newItems.toArray(new String[0]));
         }
 
         return replaced;
@@ -111,9 +125,11 @@ public class ItemArrayComponent implements RecipeComponent<String[]> {
         }
 
         for (int i = 0; i < value.length; i++) {
-            context.push("[" + i + "]");
+            context.push(i);
             if (value[i] == null || value[i].isEmpty()) {
                 context.error("Item cannot be null or empty");
+            } else {
+                ItemComponent.INSTANCE.validate(value[i], context);
             }
             context.pop();
         }

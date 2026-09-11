@@ -5,9 +5,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 
-/**
- * Action that consumes the ingredient (default behavior).
- */
 public class ConsumeAction implements IngredientAction {
 
     public static final ConsumeAction INSTANCE = new ConsumeAction();
@@ -16,7 +13,6 @@ public class ConsumeAction implements IngredientAction {
 
     @Override
     public ItemStack apply(ItemStack stack, Player player, RecipeHolder<?> recipe) {
-        // Default consumption behavior - shrink by 1
         ItemStack result = stack.copy();
         result.shrink(1);
         return result.isEmpty() ? ItemStack.EMPTY : result;

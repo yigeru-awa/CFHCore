@@ -1,40 +1,40 @@
 package com.onehumanawa.cfhcore.foundation.recipe.component.impl;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.onehumanawa.cfhcore.foundation.ingredient.FluidSpec;
 import com.onehumanawa.cfhcore.foundation.recipe.RecipeContext;
 import com.onehumanawa.cfhcore.foundation.recipe.RecipeValidationContext;
 import com.onehumanawa.cfhcore.foundation.recipe.component.RecipeComponent;
-import com.onehumanawa.cfhcore.foundation.recipe.component.RecipeKey;
 import com.onehumanawa.cfhcore.foundation.recipe.match.ReplacementMatch;
 
-/**
- * Component for fluid values in recipes.
- * Supports both individual fluids and fluid tags.
- */
 public class FluidComponent implements RecipeComponent<FluidSpec> {
 
     public static final FluidComponent INSTANCE = new FluidComponent();
 
     @Override
     public FluidSpec read(JsonObject json, RecipeContext context) {
-        if (!json.has("fluid") && !json.has("fluidTag")) {
+        JsonElement element = locate(json, context);
+        if (!element.isJsonObject()) {
             return FluidSpec.empty();
         }
 
-        if (json.has("fluid")) {
-            JsonObject fluidObj = json.get("fluid").getAsJsonObject();
-            String id = fluidObj.has("id") ? fluidObj.get("id").getAsString() : fluidObj.get("fluid").getAsString();
-            int amount = fluidObj.has("amount") ? fluidObj.get("amount").getAsInt() : 1000;
-            return FluidSpec.of(id, amount);
-        }
+        JsonObject object = element.getAsJsonObject();
+        int amount = object.has("amount") ? object.get("amount").getAsInt() : 1000;
 
-        if (json.has("fluidTag")) {
-            String tag = json.get("fluidTag").getAsString();
-            int amount = json.has("amount") ? json.get("amount").getAsInt() : 1000;
-            return FluidSpec.tag(tag, amount);
+        if (object.has("fluidTag")) {
+            return FluidSpec.tag(object.get("fluidTag").getAsString(), amount);
         }
-
+        if (object.has("tag")) {
+            return FluidSpec.tag(object.get("tag").getAsString(), amount);
+        }
+        if (object.has("fluid")) {
+            String id = ItemComponent.readId(object.get("fluid"));
+            return id != null ? FluidSpec.of(id, amount) : FluidSpec.empty();
+        }
+        if (object.has("id")) {
+            return FluidSpec.of(object.get("id").getAsString(), amount);
+        }
         return FluidSpec.empty();
     }
 
@@ -42,21 +42,33 @@ public class FluidComponent implements RecipeComponent<FluidSpec> {
     public void write(JsonObject json, FluidSpec value, RecipeContext context) {
         if (value == null || value.isEmpty()) return;
 
-        if (value.isTag()) {
-            json.addProperty("fluidTag", value.id());
-        } else {
-            JsonObject fluidObj = new JsonObject();
-            fluidObj.addProperty("id", value.id());
-            json.add("fluid", fluidObj);
+        String field = targetField(json, context);
+        if (field == null || "fluid".equals(field) || "fluidTag".equals(field)) {
+            if (value.isTag()) {
+                json.addProperty("fluidTag", value.id());
+            } else {
+                JsonObject fluidObject = new JsonObject();
+                fluidObject.addProperty("id", value.id());
+                json.add("fluid", fluidObject);
+            }
+            json.addProperty("amount", value.amount());
+            return;
         }
-        json.addProperty("amount", value.amount());
+
+        JsonObject element = new JsonObject();
+        if (value.isTag()) {
+            element.addProperty("fluidTag", value.id());
+        } else {
+            element.addProperty("fluid", value.id());
+        }
+        element.addProperty("amount", value.amount());
+        json.add(field, element);
     }
 
     @Override
     public boolean matches(FluidSpec value, ReplacementMatch match) {
         if (value == null || value.isEmpty()) return false;
 
-        // For tag fluids, match against both "#tag" and "tag"
         if (value.isTag()) {
             return match.matches("#" + value.id()) || match.matches(value.id());
         }
@@ -68,22 +80,12 @@ public class FluidComponent implements RecipeComponent<FluidSpec> {
     public boolean replace(FluidSpec value, ReplacementMatch match, Object replacement, RecipeContext context) {
         if (value == null || !matches(value, match)) return false;
 
-        if (replacement instanceof String replacementStr) {
-            FluidSpec newFluid;
-            if (replacementStr.startsWith("#")) {
-                newFluid = FluidSpec.tag(replacementStr.substring(1), value.amount());
-            } else {
-                newFluid = FluidSpec.of(replacementStr, value.amount());
-            }
-            context.recipe().setValue(RecipeKey.builder(INSTANCE).name("fluid").build(), newFluid);
-            return true;
+        FluidSpec replacementFluid = toFluidSpec(replacement, value.amount());
+        if (replacementFluid == null) return false;
+        if (context != null) {
+            context.setValue(replacementFluid);
         }
-
-        if (replacement instanceof FluidSpec replacementFluid) {
-            context.recipe().setValue(RecipeKey.builder(INSTANCE).name("fluid").build(), replacementFluid);
-            return true;
-        }
-        return false;
+        return true;
     }
 
     @Override
@@ -103,5 +105,16 @@ public class FluidComponent implements RecipeComponent<FluidSpec> {
         if (value.amount() <= 0) {
             context.warning("Fluid amount should be positive, got: {}", value.amount());
         }
+    }
+
+    public static FluidSpec toFluidSpec(Object replacement, int fallbackAmount) {
+        if (replacement instanceof FluidSpec spec) {
+            return spec;
+        }
+        if (replacement instanceof String id) {
+            if (id.isEmpty()) return null;
+            return id.startsWith("#") ? FluidSpec.tag(id.substring(1), fallbackAmount) : FluidSpec.of(id, fallbackAmount);
+        }
+        return null;
     }
 }

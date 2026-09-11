@@ -16,30 +16,12 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-/**
- * Registry for recipe schemas by recipe type ID.
- */
 public class RecipeSchemaRegistry {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     private static final Map<ResourceLocation, RecipeSchema> SCHEMAS = new HashMap<>();
     private static final Map<ResourceLocation, ResourceLocation> TYPE_TO_SCHEMA = new HashMap<>();
 
-    // ================================================================
-    // Annotation-driven auto discovery
-    // ================================================================
-
-    /**
-     * Discovers and registers every schema annotated with {@link RecipeSchemaType}
-     * across all loaded mod files.
-     * <p>
-     * Discovery relies on NeoForge's {@link ModFileScanData}, which works both in a
-     * development environment and inside a production jar. A class-level annotation
-     * registers all {@code static RecipeSchema} fields of that class, while a
-     * field-level annotation registers a single field.
-     *
-     * @return the number of schemas registered by this call
-     */
     public static int autoDiscover() {
         int count = 0;
         for (ModFileScanData scanData : ModList.get().getAllScanData()) {

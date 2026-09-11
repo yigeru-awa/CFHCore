@@ -1,45 +1,37 @@
 package com.onehumanawa.cfhcore.foundation.recipe.schema.create;
 
 import com.onehumanawa.cfhcore.foundation.recipe.component.RecipeKey;
-import com.onehumanawa.cfhcore.foundation.recipe.component.impl.ItemArrayComponent;
-import com.onehumanawa.cfhcore.foundation.recipe.component.impl.ItemComponent;
 import com.onehumanawa.cfhcore.foundation.recipe.schema.RecipeSchema;
 import com.onehumanawa.cfhcore.foundation.recipe.schema.RecipeSchemaType;
 
-/**
- * Schema for Create sandpaper polishing recipes.
- * Single ingredient, single output, no processing time.
- */
 @RecipeSchemaType("create:sandpaper_polishing")
 public class SandpaperPolishingSchema {
+
+    public static final RecipeKey<String[]> INGREDIENTS_KEY = DeployingSchema.INGREDIENTS_KEY;
+    public static final RecipeKey<String[]> RESULTS_KEY = DeployingSchema.RESULTS_KEY;
 
     public static final RecipeSchema INSTANCE = create();
 
     private static RecipeSchema create() {
         return RecipeSchema.builder()
                 .type("create:sandpaper_polishing")
-                .key(RecipeKey.builder(ItemArrayComponent.INSTANCE)
-                        .name("ingredients")
-                        .input()
-                        .alwaysWrite()
-                        .build())
-                .key(RecipeKey.builder(ItemComponent.INSTANCE)
-                        .name("results")
-                        .name("result")
-                        .output()
-                        .alwaysWrite()
-                        .build())
+                .key(INGREDIENTS_KEY)
+                .key(RESULTS_KEY)
                 .postProcessor((ctx, recipe) -> {
-                    String[] ingredients = recipe.getValue(RecipeKey.builder(ItemArrayComponent.INSTANCE).name("ingredients").build());
+                    String[] ingredients = recipe.getValue(INGREDIENTS_KEY);
                     if (ingredients == null || ingredients.length != 1) {
                         ctx.warning("Sandpaper polishing recipe expects exactly 1 ingredient");
                     }
+                    String[] results = recipe.getValue(RESULTS_KEY);
+                    if (results == null || results.length == 0) {
+                        ctx.error("Sandpaper polishing recipe requires at least one result");
+                    }
                 })
                 .idGenerator(recipe -> {
-                    String[] ingredients = recipe.getValue(RecipeKey.builder(ItemArrayComponent.INSTANCE).name("ingredients").build());
-                    String result = recipe.getValue(RecipeKey.builder(ItemComponent.INSTANCE).name("results").build());
-                    if (ingredients != null && ingredients.length > 0 && result != null) {
-                        return "sandpaper_polish_" + ingredients[0].replace(':', '_') + "_to_" + result.replace(':', '_');
+                    String[] ingredients = recipe.getValue(INGREDIENTS_KEY);
+                    String[] results = recipe.getValue(RESULTS_KEY);
+                    if (ingredients != null && ingredients.length > 0 && results != null && results.length > 0) {
+                        return "sandpaper_polish_" + ingredients[0].replace(':', '_') + "_to_" + results[0].replace(':', '_');
                     }
                     return "";
                 })

@@ -3,9 +3,6 @@ package com.onehumanawa.cfhcore.foundation.recipe.util;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * Filter for matching specific slots in a recipe.
- */
 public class SlotFilter {
 
     private final Set<Integer> slots = new HashSet<>();

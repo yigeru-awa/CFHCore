@@ -4,9 +4,6 @@ import com.onehumanawa.cfhcore.foundation.recipe.component.RecipeKey;
 
 import javax.annotation.Nullable;
 
-/**
- * Thrown when a required recipe component is missing.
- */
 public class RecipeModifyMissingComponentException extends RecipeModifyRuntimeException {
     private final String componentName;
     private final RecipeKey<?> key;

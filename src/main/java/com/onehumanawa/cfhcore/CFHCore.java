@@ -29,12 +29,10 @@ public class CFHCore {
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting()
             .disableHtmlEscaping()
             .create();
-    /** Collects bilingual language entries; consumed by {@link ModLangProvider} during datagen. */
     private static final LangCollector LANG_COLLECTOR = new LangCollector();
 
     private static final CreateRegistrate REGISTRATE = CreateRegistrate.create(ID)
             .defaultCreativeTab((ResourceKey<CreativeModeTab>) null)
-            // Create-style "Hold [Shift] for summary" tooltips (see TooltipHelper), plus kinetic stats
             .setTooltipModifierFactory(item ->
                     TooltipHelper.modifierFor(item)
                             .andThen(TooltipModifier.mapNull(KineticStats.create(item)))
@@ -49,10 +47,8 @@ public class CFHCore {
         ModLoadingContext modLoadingContext = ModLoadingContext.get();
         REGISTRATE.registerEventListeners(modEventBus);
 
-        // Declare item tooltips (the recipe engine self-initializes via RecipeModificationHandler)
         TooltipHelper.init();
 
-        // Data generation (language files)
         modEventBus.addListener(this::gatherData);
     }
 

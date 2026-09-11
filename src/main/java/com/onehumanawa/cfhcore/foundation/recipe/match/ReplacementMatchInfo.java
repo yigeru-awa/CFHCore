@@ -3,9 +3,6 @@ package com.onehumanawa.cfhcore.foundation.recipe.match;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 
-/**
- * Container for replacement match information with the replacement value.
- */
 public class ReplacementMatchInfo {
     private final ReplacementMatch match;
     private final Object replacement;

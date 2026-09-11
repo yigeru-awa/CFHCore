@@ -1,26 +1,21 @@
 package com.onehumanawa.cfhcore.foundation.recipe;
 
 import com.onehumanawa.cfhcore.foundation.recipe.schema.RecipeSchema;
-import net.minecraft.resources.ResourceLocation;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Context for recipe validation.
- */
 public class RecipeValidationContext {
-    private final KubeJavaRecipe recipe;
+    private final RecipeModification recipe;
     private final List<String> errors = new ArrayList<>();
     private final List<String> warnings = new ArrayList<>();
     private String currentPath = "";
 
-    public RecipeValidationContext(KubeJavaRecipe recipe) {
+    public RecipeValidationContext(RecipeModification recipe) {
         this.recipe = recipe;
     }
 
-    public KubeJavaRecipe recipe() {
+    public RecipeModification recipe() {
         return recipe;
     }
 
@@ -56,7 +51,7 @@ public class RecipeValidationContext {
     }
 
     public void error(String message, Object... args) {
-        errors.add(currentPath + ": " + String.format(message, args));
+        errors.add(currentPath + ": " + format(message, args));
     }
 
     public void warning(String message) {
@@ -64,7 +59,7 @@ public class RecipeValidationContext {
     }
 
     public void warning(String message, Object... args) {
-        warnings.add(currentPath + ": " + String.format(message, args));
+        warnings.add(currentPath + ": " + format(message, args));
     }
 
     public boolean hasErrors() {
@@ -94,5 +89,25 @@ public class RecipeValidationContext {
 
     public void setKey(String name) {
         push(name);
+    }
+
+    private static String format(String message, Object... args) {
+        if (message == null || args == null || args.length == 0) {
+            return String.valueOf(message);
+        }
+        StringBuilder builder = new StringBuilder(message.length() + 32);
+        int argIndex = 0;
+        int cursor = 0;
+        while (cursor < message.length()) {
+            int placeholder = message.indexOf("{}", cursor);
+            if (placeholder < 0 || argIndex >= args.length) {
+                builder.append(message, cursor, message.length());
+                break;
+            }
+            builder.append(message, cursor, placeholder);
+            builder.append(args[argIndex++]);
+            cursor = placeholder + 2;
+        }
+        return builder.toString();
     }
 }

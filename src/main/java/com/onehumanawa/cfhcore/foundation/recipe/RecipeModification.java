@@ -1,8 +1,14 @@
 package com.onehumanawa.cfhcore.foundation.recipe;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
+import com.onehumanawa.cfhcore.foundation.recipe.action.ConsumeAction;
+import com.onehumanawa.cfhcore.foundation.recipe.action.DamageAction;
 import com.onehumanawa.cfhcore.foundation.recipe.action.IngredientAction;
 import com.onehumanawa.cfhcore.foundation.recipe.action.IngredientActionHolder;
+import com.onehumanawa.cfhcore.foundation.recipe.action.KeepAction;
+import com.onehumanawa.cfhcore.foundation.recipe.action.ReplaceAction;
 import com.onehumanawa.cfhcore.foundation.recipe.component.RecipeComponent;
 import com.onehumanawa.cfhcore.foundation.recipe.component.RecipeComponentValue;
 import com.onehumanawa.cfhcore.foundation.recipe.component.RecipeComponentValueMap;
@@ -10,6 +16,9 @@ import com.onehumanawa.cfhcore.foundation.recipe.component.RecipeKey;
 import com.onehumanawa.cfhcore.foundation.recipe.match.ReplacementMatch;
 import com.onehumanawa.cfhcore.foundation.recipe.match.ReplacementMatchInfo;
 import com.onehumanawa.cfhcore.foundation.recipe.util.SlotFilter;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -23,14 +32,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-/**
- * Core recipe representation - equivalent to KubeJS's KubeRecipe.
- */
 @SuppressWarnings({"unused", "UnusedReturnValue"})
-public class KubeJavaRecipe {
-    private static final Logger LOGGER = LoggerFactory.getLogger("KubeJavaRecipe");
+public class RecipeModification {
+    private static final Logger LOGGER = LoggerFactory.getLogger("RecipeModification");
 
-    public static final String CHANGED_MARKER = "_kubejava_changed_marker";
+    public static final String CHANGED_MARKER = "_changed_marker";
+    public static final String MODIFY_RESULT_KEY = "_modify_result";
+    public static final String INGREDIENT_ACTIONS_KEY = "_ingredient_actions";
 
     public ResourceLocation id;
     public RecipeType type;
@@ -47,9 +55,8 @@ public class KubeJavaRecipe {
     private RecipeComponentValue<?>[] inputValues;
     private RecipeComponentValue<?>[] outputValues;
     private List<IngredientActionHolder> ingredientActions;
-    private Recipe<?> originalRecipe;
 
-    public KubeJavaRecipe(ResourceLocation id, RecipeType type, JsonObject json) {
+    public RecipeModification(ResourceLocation id, RecipeType type, JsonObject json) {
         this.id = Objects.requireNonNull(id, "id cannot be null");
         this.type = Objects.requireNonNull(type, "type cannot be null");
         this.json = json != null ? json.deepCopy() : new JsonObject();
@@ -57,13 +64,9 @@ public class KubeJavaRecipe {
         initValues(true);
     }
 
-    public KubeJavaRecipe(String id, RecipeType type, JsonObject json) {
+    public RecipeModification(String id, RecipeType type, JsonObject json) {
         this(ResourceLocation.parse(id), type, json);
     }
-
-    // ================================================================
-    // Component Access
-    // ================================================================
 
     @Nullable
     public <T> T getValue(RecipeKey<T> key) {
@@ -77,7 +80,7 @@ public class KubeJavaRecipe {
         return holder.value();
     }
 
-    public <T> KubeJavaRecipe setValue(RecipeKey<T> key, T value) {
+    public <T> RecipeModification setValue(RecipeKey<T> key, T value) {
         RecipeComponentValue<T> holder = valueMap.getHolder(key);
         if (holder == null) {
             throw new RecipeModifyMissingComponentException(key.primaryName(), key);
@@ -98,7 +101,7 @@ public class KubeJavaRecipe {
         return null;
     }
 
-    public KubeJavaRecipe set(String name, Object value) {
+    public RecipeModification set(String name, Object value) {
         for (RecipeComponentValue<?> holder : valueMap.holders()) {
             if (holder.key().hasName(name)) {
                 @SuppressWarnings("unchecked")
@@ -110,10 +113,6 @@ public class KubeJavaRecipe {
         throw new RecipeModifyMissingComponentException(name);
     }
 
-    // ================================================================
-    // Input/Output Access
-    // ================================================================
-
     public RecipeComponentValue<?>[] inputValues() {
         if (inputValues == null) {
             List<RecipeComponentValue<?>> list = new ArrayList<>();
@@ -122,7 +121,7 @@ public class KubeJavaRecipe {
                     list.add(holder);
                 }
             }
-            inputValues = list.toArray(new RecipeComponentValue[0]);
+            inputValues = list.toArray(new RecipeComponentValue<?>[0]);
         }
         return inputValues;
     }
@@ -135,7 +134,7 @@ public class KubeJavaRecipe {
                     list.add(holder);
                 }
             }
-            outputValues = list.toArray(new RecipeComponentValue[0]);
+            outputValues = list.toArray(new RecipeComponentValue<?>[0]);
         }
         return outputValues;
     }
@@ -202,11 +201,7 @@ public class KubeJavaRecipe {
         return replaceOutput(match.match(), match.replacement());
     }
 
-    // ================================================================
-    // Ingredient Actions
-    // ================================================================
-
-    public KubeJavaRecipe ingredientAction(SlotFilter filter, IngredientAction action) {
+    public RecipeModification ingredientAction(SlotFilter filter, IngredientAction action) {
         if (ingredientActions == null) {
             ingredientActions = new ArrayList<>();
         }
@@ -215,27 +210,27 @@ public class KubeJavaRecipe {
         return this;
     }
 
-    public KubeJavaRecipe damageIngredient(SlotFilter filter, int damage) {
-        return ingredientAction(filter, new com.onehumanawa.cfhcore.foundation.recipe.action.DamageAction(damage));
+    public RecipeModification damageIngredient(SlotFilter filter, int damage) {
+        return ingredientAction(filter, new DamageAction(damage));
     }
 
-    public KubeJavaRecipe damageIngredient(SlotFilter filter) {
+    public RecipeModification damageIngredient(SlotFilter filter) {
         return damageIngredient(filter, 1);
     }
 
-    public KubeJavaRecipe replaceIngredient(SlotFilter filter, ItemStack item) {
-        return ingredientAction(filter, new com.onehumanawa.cfhcore.foundation.recipe.action.ReplaceAction(item));
+    public RecipeModification replaceIngredient(SlotFilter filter, ItemStack item) {
+        return ingredientAction(filter, new ReplaceAction(item));
     }
 
-    public KubeJavaRecipe keepIngredient(SlotFilter filter) {
-        return ingredientAction(filter, com.onehumanawa.cfhcore.foundation.recipe.action.KeepAction.INSTANCE);
+    public RecipeModification keepIngredient(SlotFilter filter) {
+        return ingredientAction(filter, KeepAction.INSTANCE);
     }
 
-    public KubeJavaRecipe consumeIngredient(SlotFilter filter) {
-        return ingredientAction(filter, com.onehumanawa.cfhcore.foundation.recipe.action.ConsumeAction.INSTANCE);
+    public RecipeModification consumeIngredient(SlotFilter filter) {
+        return ingredientAction(filter, ConsumeAction.INSTANCE);
     }
 
-    public KubeJavaRecipe modifyResult(String id) {
+    public RecipeModification modifyResult(String id) {
         this.modifyResult = id;
         save();
         return this;
@@ -245,10 +240,6 @@ public class KubeJavaRecipe {
     public List<IngredientActionHolder> getIngredientActions() {
         return ingredientActions;
     }
-
-    // ================================================================
-    // Serialization / Deserialization
-    // ================================================================
 
     public void initValues(boolean save) {
         if (save) {
@@ -260,11 +251,6 @@ public class KubeJavaRecipe {
 
             if (save) {
                 for (RecipeComponentValue<?> holder : valueMap.holders()) {
-                    if (holder.key().optional()) {
-                        @SuppressWarnings("unchecked")
-                        Object defaultValue = holder.key().defaultValue();
-                        ((RecipeComponentValue<Object>) holder).value(defaultValue);
-                    }
                     if (holder.key().alwaysWrite()) {
                         holder.written(true);
                     }
@@ -314,37 +300,33 @@ public class KubeJavaRecipe {
         }
     }
 
-    public KubeJavaRecipe serializeChanges() {
+    public RecipeModification serializeChanges() {
         if (newRecipe || hasChanged()) {
             serialize();
 
             if (!modifyResult.isEmpty()) {
-                json.addProperty("_kubejava_modify_result", modifyResult);
+                json.addProperty(MODIFY_RESULT_KEY, modifyResult);
             }
 
             if (ingredientActions != null && !ingredientActions.isEmpty()) {
-                var actionsArray = new com.google.gson.JsonArray();
+                JsonArray actionsArray = new JsonArray();
                 for (IngredientActionHolder holder : ingredientActions) {
-                    var actionJson = holder.action().toJson();
+                    JsonObject actionJson = holder.action().toJson();
                     actionJson.addProperty("slot", holder.filter().toString());
                     actionsArray.add(actionJson);
                 }
-                json.add("_kubejava_ingredient_actions", actionsArray);
+                json.add(INGREDIENT_ACTIONS_KEY, actionsArray);
             }
 
-            if (newRecipe) {
+            if (!json.has("type")) {
                 json.addProperty("type", type.serializerType());
             }
 
-            json.add(CHANGED_MARKER, new com.google.gson.JsonPrimitive(sourceLine));
+            json.add(CHANGED_MARKER, new JsonPrimitive(sourceLine));
         }
 
         return this;
     }
-
-    // ================================================================
-    // State Management
-    // ================================================================
 
     public void save() {
         this.changed = true;
@@ -375,50 +357,41 @@ public class KubeJavaRecipe {
         return valueMap;
     }
 
-    // ================================================================
-    // Original Recipe Access (simplified)
-    // ================================================================
-
     @Nullable
     public Recipe<?> getOriginalRecipe() {
-        // Simplified - returns null to avoid codec issues
-        return null;
+        return RecipeModificationHandler.getRecipeById(id).map(RecipeHolder::value).orElse(null);
     }
 
     public ItemStack getOriginalRecipeResult() {
-        return ItemStack.EMPTY;
+        Recipe<?> recipe = getOriginalRecipe();
+        if (recipe == null) {
+            return ItemStack.EMPTY;
+        }
+        HolderLookup.Provider registries = RecipeModificationHandler.registries();
+        return recipe.getResultItem(registries != null ? registries : RegistryAccess.EMPTY);
     }
 
     public List<Ingredient> getOriginalRecipeIngredients() {
-        return List.of();
+        Recipe<?> recipe = getOriginalRecipe();
+        if (recipe == null) {
+            return List.of();
+        }
+        NonNullList<Ingredient> ingredients = recipe.getIngredients();
+        return ingredients == null ? List.of() : List.copyOf(ingredients);
     }
-
-    // ================================================================
-    // Validation
-    // ================================================================
 
     public void validate(RecipeValidationContext context) {
         context.push(id.toString());
 
         for (RecipeComponentValue<?> holder : valueMap.holders()) {
             context.push(holder.key().primaryName());
-            if (holder.value() != null) {
-                @SuppressWarnings("unchecked")
-                Object value = holder.value();
-                ((RecipeComponent<Object>) holder.key().component()).validate(value, context);
-            } else if (!holder.key().optional()) {
-                context.error("Missing required component");
-            }
+            holder.validate(context, this);
             context.pop();
         }
 
         type.schema().postProcess(context, this);
         context.pop();
     }
-
-    // ================================================================
-    // Utility Methods
-    // ================================================================
 
     public String getId() {
         return id.toString();
@@ -440,17 +413,28 @@ public class KubeJavaRecipe {
     public RecipeHolder<?> toRecipeHolder() {
         try {
             serializeChanges();
-            // Simplified - returns null to avoid codec issues
+
+            JsonObject payload = json.deepCopy();
+            payload.remove(CHANGED_MARKER);
+            payload.remove(MODIFY_RESULT_KEY);
+            payload.remove(INGREDIENT_ACTIONS_KEY);
+            if (!payload.has("type")) {
+                payload.addProperty("type", type.serializerType());
+            }
+
+            var parsed = Recipe.CODEC.parse(RecipeModificationHandler.registryOps(), payload);
+            if (parsed.result().isPresent()) {
+                return new RecipeHolder<>(id, parsed.result().get());
+            }
+
+            LOGGER.warn("Failed to parse recipe {}: {}", id,
+                    parsed.error().map(err -> err.message()).orElse("unknown error"));
             return null;
         } catch (Exception e) {
             LOGGER.error("Failed to create RecipeHolder from JSON for: {}", id, e);
             return null;
         }
     }
-
-    // ================================================================
-    // Builder
-    // ================================================================
 
     public static Builder builder(RecipeType type) {
         return new Builder(type);
@@ -492,21 +476,17 @@ public class KubeJavaRecipe {
             return this;
         }
 
-        public KubeJavaRecipe build() {
+        public RecipeModification build() {
             if (id == null) {
                 id = ResourceLocation.fromNamespaceAndPath("kubejava", "auto_" + System.currentTimeMillis());
             }
-            KubeJavaRecipe recipe = new KubeJavaRecipe(id, type, json);
+            RecipeModification recipe = new RecipeModification(id, type, json);
             recipe.newRecipe = newRecipe;
             recipe.sourceLine = sourceLine;
             recipe.deserialize(false);
             return recipe;
         }
     }
-
-    // ================================================================
-    // Object Overrides
-    // ================================================================
 
     @Override
     public String toString() {
@@ -519,7 +499,7 @@ public class KubeJavaRecipe {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof KubeJavaRecipe that)) return false;
+        if (!(o instanceof RecipeModification that)) return false;
         return Objects.equals(id, that.id) &&
                 Objects.equals(type, that.type) &&
                 Objects.equals(json, that.json);
