@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "package": "com.onehumanawa.cfhcore.content.world.neoforge.mixin",
+  "minVersion": "0.8",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "MixinBiomeGenerationSettingsPlainsBuilder",
+    "MixinChunkStatusTasks",
+    "MixinMinecraftServer"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -1,0 +1,29 @@
+package com.onehumanawa.cfhcore.content.world.worldgen.noise.function;
+
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.onehumanawa.cfhcore.content.world.worldgen.noise.NoiseUtil;
+
+record SCurveFunction(float lower, float upper) implements CurveFunction {
+   public static final MapCodec<SCurveFunction> CODEC = RecordCodecBuilder.mapCodec(
+      instance -> instance.group(Codec.FLOAT.fieldOf("lower").forGetter(SCurveFunction::lower), Codec.FLOAT.fieldOf("upper").forGetter(SCurveFunction::upper))
+            .apply(instance, SCurveFunction::new)
+   );
+
+   public SCurveFunction(float lower, float upper) {
+      upper = upper < 0.0F ? Math.max(-lower, upper) : upper;
+      this.lower = lower;
+      this.upper = upper;
+   }
+
+   @Override
+   public float apply(float f) {
+      return NoiseUtil.pow(f, this.lower + this.upper * f);
+   }
+
+   @Override
+   public MapCodec<SCurveFunction> codec() {
+      return CODEC;
+   }
+}

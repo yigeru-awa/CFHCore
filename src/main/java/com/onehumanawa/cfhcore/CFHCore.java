@@ -3,6 +3,7 @@ package com.onehumanawa.cfhcore;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mojang.logging.LogUtils;
+import com.onehumanawa.cfhcore.content.world.neoforge.CFHWorldGenNeoForge;
 import com.onehumanawa.cfhcore.foundation.ModLangProvider;
 import com.onehumanawa.cfhcore.foundation.ModificationHelper;
 import com.onehumanawa.cfhcore.foundation.RegistryHelper;
@@ -21,7 +22,6 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
-import net.neoforged.neoforge.registries.RegisterEvent;
 import org.slf4j.Logger;
 
 @Mod(CFHCore.ID)
@@ -56,6 +56,8 @@ public class CFHCore {
         ModificationHelper.register(modEventBus);
         ModificationHelper.init();
 
+        CFHWorldGenNeoForge.register(modEventBus);
+
         modEventBus.addListener(this::gatherData);
     }
 
@@ -66,6 +68,7 @@ public class CFHCore {
             generator.addProvider(true, new ModLangProvider(output, "en_us"));
             generator.addProvider(true, new ModLangProvider(output, "zh_cn"));
         }
+        CFHWorldGenNeoForge.gatherData(event);
     }
 
     public static ResourceLocation asResource(String path) {
