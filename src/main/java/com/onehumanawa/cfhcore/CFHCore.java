@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mojang.logging.LogUtils;
 import com.onehumanawa.cfhcore.foundation.ModLangProvider;
+import com.onehumanawa.cfhcore.foundation.ModificationHelper;
 import com.onehumanawa.cfhcore.foundation.RegistryHelper;
 import com.onehumanawa.cfhcore.foundation.TooltipHelper;
 import com.onehumanawa.cfhcore.foundation.registry.LangCollector;
@@ -52,6 +53,8 @@ public class CFHCore {
 
         TooltipHelper.init();
         RegistryHelper.init();
+        ModificationHelper.register(modEventBus);
+        ModificationHelper.init();
 
         modEventBus.addListener(this::gatherData);
     }

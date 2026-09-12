@@ -14,7 +14,7 @@ public final class FoodRegistrar {
     private final FoodProperties.Builder builder = new FoodProperties.Builder();
     private Supplier<? extends ItemLike> remainder;
 
-    FoodRegistrar() {}
+    public FoodRegistrar() {}
 
     public FoodRegistrar nutrition(int nutrition) {
         builder.nutrition(nutrition);
@@ -74,7 +74,7 @@ public final class FoodRegistrar {
         return this;
     }
 
-    FoodProperties build() {
+    public FoodProperties build() {
         if (remainder != null) {
             builder.usingConvertsTo(remainder.get());
         }

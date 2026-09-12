@@ -27,6 +27,8 @@ public final class RecipeHelper {
 
         registerSchemas();
 
+        all().remove();
+
         CFHCore.LOGGER.info("RecipeHelper initialized with {} registered schemas",
                 RecipeSchemaRegistry.registeredTypes().size());
     }
