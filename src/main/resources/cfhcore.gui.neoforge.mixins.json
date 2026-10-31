@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.onehumanawa.cfhcore.content.gui.core.neoforge.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [],
+  "client": [
+    "NeoTooltipRenderUtilMixin",
+    "NeoContainerSlotHighlightMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

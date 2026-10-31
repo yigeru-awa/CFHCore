@@ -1,0 +1,23 @@
+{
+  "required": false,
+  "minVersion": "0.8",
+  "package": "com.onehumanawa.cfhcore.content.gui.core.compat.xaero.mixin",
+  "plugin": "com.onehumanawa.cfhcore.content.gui.core.compat.xaero.XaeroMixinPlugin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [],
+  "client": [
+    "XaeroMinimapRendererMixin",
+    "XaeroCompassRendererMixin",
+    "XaeroInfoDisplayRendererMixin",
+    "XaeroWaypointWorldRendererMixin",
+    "XaeroTooltipMixin",
+    "XaeroDropDownWidgetMixin",
+    "XaeroTexturedButtonMixin",
+    "XaeroMapRenderHelperMixin",
+    "XaeroMapElementMenuRendererMixin",
+    "XaeroMessageBoxRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 0
+  }
+}

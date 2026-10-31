@@ -1,0 +1,83 @@
+{
+  "__comment": "WorkShop in a jar, by Joea42 (createmod.com): a Create factory of three floors, 32 x 32 x 32, open on every side. Not shipped: the build is its author's, createmod.com states no licence for it and asks that uploads not be passed on, so the player downloads it from its page; Slate picks the file up wherever it lands (the Downloads folder, config/slate/scenes, or dropped onto the window), under the site's name for it (workshop_jar_complete.nbt) or any other, a file under another name known by what is in it ('download': 'names', 'match'). Until then the scene shows its sky and the chests on their terrace, and a card under the picker asks for it. The build stands turned 45 degrees ('yaw'), its south-west corner to the camera and its floor four blocks under the chests' deepslate terrace ('at'), so the camera looks along two of its sides and up into its floors. Besides Create the build uses blocks of several of Create's add-ons (Create Deco's catwalks for its floors, Vibrant Vaults, Petrol's Parts and others): without them the scene stands in blocks of Create's and the game's own for the ones that show ('standins'), and leaves the rest out.",
+  "background": { "top": "#0B1016", "bottom": "#2A2624" },
+  "camera": {
+    "fov": 36,
+    "near": 0.5,
+    "far": 2800,
+    "pose": { "position": [0.0, 1.9, 8.0], "target": [0.0, 1.9, 0.0] },
+    "intro": [
+      { "type": "spline", "duration": 3400, "ease": "inOutCubic",
+        "points": [
+          { "position": [-6.0, 14.0, 34.0], "target": [0.0, 8.0, -16.0], "fov": 42 },
+          { "position": [-2.0, 5.0, 18.0], "target": [0.0, 3.0, -10.0], "fov": 39 },
+          { "position": [0.0, 1.9, 8.0], "target": [0.0, 1.9, 0.0], "fov": 36 }
+        ] }
+    ],
+    "idle": { "type": "sway", "period": 18000, "yaw": 1.4, "pitch": 0.45, "bob": 0.015 }
+  },
+  "light": { "sun": [0.3, 1.0, 0.75], "ambient": 0.5, "blockLight": 15, "skyLight": 15,
+             "fog": { "start": 260, "end": 2400, "color": "#2A2624" } },
+  "resolution": 1.0,
+  "anchors": {
+    "chest_profile": { "pos": [-1.0, 0.0, 0.0], "rot": [0, 0, 0] },
+    "chest_play":    { "pos": [0.0, 0.0, 0.0],  "rot": [0, 0, 0] },
+    "chest_options": { "pos": [1.0, 0.0, 0.0],  "rot": [0, 0, 0] }
+  },
+  "sky": { "colors": ["#2A2624", "#8A5A3C", "#4A3A40", "#1A1C2C", "#080A12"],
+           "sun": { "yaw": 30, "elevation": 4, "color": "#FFB878", "glow": 0.8, "disc": 3.5, "reach": 34 }, "stars": 0.3, "seed": 23 },
+  "rig": { "key": [5.0, 6.0, 8.0], "keyColor": [0.6, 0.5, 0.38], "fill": { "dir": [-1.0, 0.3, 0.2], "color": [0.1, 0.12, 0.18] },
+           "ambient": [0.2, 0.17, 0.17], "rim": { "color": [1.0, 0.76, 0.5], "strength": 0.22 }, "wrap": 0.5 },
+  "lamps": [ { "at": [0.0, 2.6, 2.6], "color": [0.8, 0.6, 0.38], "reach": 7.5, "flicker": 0.06 } ],
+  "finish": { "bloom": 0.58, "vignette": 0.42, "warmth": 0.014, "contrast": 1.08, "saturation": 1.1, "grain": 1.4,
+              "shadows": [0.002, 0.0, 0.014], "highlights": [0.018, 0.01, -0.006] },
+  "build": {
+    "file": "builds/workshop-in-a-jar",
+    "rotate": 0,
+    "yaw": 45,
+    "at": [-22, -5, -40],
+    "land": { "level": -1, "hills": [5, 240], "mountains": [150, 800, 700], "trees": 0.3, "seed": 21 },
+    "light": true,
+    "requires": ["create"],
+    "entities": { "max": 4096, "reach": 160, "tint": "#D8C8B8" },
+    "standins": {
+      "createdeco:copper_catwalk": ["minecraft:copper_trapdoor[half=top]", "minecraft:iron_trapdoor[half=top]"],
+      "createdeco:andesite_catwalk": ["minecraft:iron_trapdoor[half=top]"],
+      "createdeco:copper_catwalk_stairs": ["minecraft:cut_copper_stairs", "minecraft:stone_brick_stairs"],
+      "create_vibrant_vaults:vertical_item_vault": ["create:item_vault[axis=x]"],
+      "create_vibrant_vaults:gray_vertical_item_vault": ["create:item_vault[axis=x]"],
+      "create_vibrant_vaults:green_vertical_item_vault": ["create:item_vault[axis=x]"],
+      "create_vibrant_vaults:light_blue_vertical_item_vault": ["create:item_vault[axis=x]"],
+      "create_vibrant_vaults:light_gray_vertical_item_vault": ["create:item_vault[axis=x]"],
+      "create_vibrant_vaults:lime_vertical_item_vault": ["create:item_vault[axis=x]"],
+      "create_vibrant_vaults:orange_vertical_item_vault": ["create:item_vault[axis=x]"],
+      "create_vibrant_vaults:red_vertical_item_vault": ["create:item_vault[axis=x]"],
+      "create_vibrant_vaults:yellow_vertical_item_vault": ["create:item_vault[axis=x]"],
+      "sophisticatedstorage:copper_barrel": ["minecraft:barrel"],
+      "petrolsparts:andesite_encased_corner_shaft": ["create:andesite_casing"],
+      "createluminous:brass_lantern_1": ["minecraft:lantern"],
+      "amendments:wall_lantern": ["minecraft:lantern"],
+      "dndecor:large_metal_girder": ["create:metal_girder"],
+      "create_connected:inverted_gearshift": ["create:gearshift"],
+      "repackaged:fluid_packager": ["create:packager"],
+      "supplementaries:cog_block": ["create:brass_casing"],
+      "unusual_furniture:carved_acacia": ["minecraft:stripped_acacia_wood"],
+      "refurbished_furniture:dark_oak_desk": ["minecraft:dark_oak_slab[type=top]"]
+    },
+    "credit": { "title": "WorkShop in a jar", "author": "Joea42", "url": "https://createmod.com/schematics/workshop-in-a-jar",
+                "license": "none stated; not shipped" },
+    "download": { "page": "https://createmod.com/schematics/workshop-in-a-jar",
+                  "names": ["workshop_jar_complete", "workshop-in-a-jar"],
+                  "match": { "size": [32, 32, 32], "blocks": 7921,
+                             "has": ["create:package_frogport", "create:crushing_wheel", "create:mechanical_crafter", "create:packager",
+                                     "ars_nouveau:dim_boundary", "createdeco:copper_catwalk", "create_vibrant_vaults:vertical_item_vault"] } }
+  },
+  "title": { "pool": "#2EFFD8A8", "dust": "#40FFDCB0",
+             "blocks": [ { "from": [-4, -5, -2], "to": [4, -2, 3], "block": "minecraft:deepslate_bricks" },
+                         { "from": [-4, -1, -2], "to": [4, -1, 3], "block": "create:cut_deepslate_bricks" },
+                         { "from": [-3, -1, -1], "to": [3, -1, 2], "block": "create:polished_cut_deepslate" },
+                         { "at": [-4, 0, -2], "block": "minecraft:deepslate_brick_wall" },
+                         { "at": [4, 0, -2], "block": "minecraft:deepslate_brick_wall" },
+                         { "at": [-4, 1, -2], "block": "minecraft:lantern" },
+                         { "at": [4, 1, -2], "block": "minecraft:lantern" } ] }
+}

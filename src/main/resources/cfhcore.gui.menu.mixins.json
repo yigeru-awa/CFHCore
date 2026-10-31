@@ -1,0 +1,43 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.onehumanawa.cfhcore.content.gui.menu.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [],
+  "client": [
+    "AbstractDebugChartMixin",
+    "BetterInventorySwapMixin",
+    "InventoryPointerMixin",
+    "MouseHandlerPosAccessor",
+    "BossHealthOverlayAccessor",
+    "ConnectScreenAccessor",
+    "ConnectScreenMixin",
+    "CreateWorldScreenAccess",
+    "CreativeScreenAccessor",
+    "CreativeScreenPagesMixin",
+    "DeathScreenAccessor",
+    "DebugScreenOverlayMixin",
+    "DisconnectedScreenAccessor",
+    "GenericMessageScreenMixin",
+    "JoinMultiplayerScreenAccessor",
+    "LevelLoadingScreenAccessor",
+    "LevelLoadingScreenMixin",
+    "LoadingOverlayMixin",
+    "MinecraftDeathScreenMixin",
+    "MinecraftJourneyMixin",
+    "MinecraftOnboardingMixin",
+    "OptionsScreenAccessor",
+    "PingDebugMonitorMixin",
+    "PlayerTabOverlayMixin",
+    "ProgressScreenMixin",
+    "ReceivingLevelScreenMixin",
+    "ScreenRenderablesAccessor",
+    "SelectWorldScreenAccessor",
+    "SlotPositionAccessor",
+    "SplashRendererAccessor",
+    "StatsScreenAccessor"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

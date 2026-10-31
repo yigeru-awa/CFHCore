@@ -14,13 +14,17 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.registries.RegistriesDatapackGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.world.BiomeModifier;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
+import com.onehumanawa.cfhcore.content.gui.client.CFHClient;
+import com.onehumanawa.cfhcore.content.gui.core.neoforge.CFHGuiNeoForge;
 import com.onehumanawa.cfhcore.content.worldgen.biome.modifier.BiomeModifiers;
 import com.onehumanawa.cfhcore.content.worldgen.biome.modifier.AddModifier;
 import com.onehumanawa.cfhcore.content.worldgen.biome.modifier.ReplaceModifier;
@@ -70,6 +74,11 @@ public class CFHCore {
 
 		modEventBus.addListener(CFHCore::gatherData);
 		RegistryUtilImpl.register(modEventBus);
+		CFHGuiNeoForge.register(modEventBus);
+
+		if (FMLEnvironment.dist == Dist.CLIENT) {
+			CFHClient.init(modEventBus, container);
+		}
 	}
 
 	/**

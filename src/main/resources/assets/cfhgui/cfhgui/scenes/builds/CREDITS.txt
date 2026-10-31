@@ -1,0 +1,44 @@
+The builds in this folder are other people's work, shipped with Slate on their authors' terms (see docs/scene-credits.md
+in Slate's repository for the full story). Each file is the part of the build the main menu's camera shows, cut from the
+author's download; blocks no one can see are filled with stone, and in Red rose city the builders' scaffolds floating in
+the sky are left out; nothing else is changed.
+
+red_rose_city.schem    Red rose city, by Dominic_de_Vos (vintageblocks) and the Red rose city team.
+                       https://www.planetminecraft.com/project/lma-cathedral/
+                       "You can use the map for any purposes, modify it, or use parts of it as basis for whatever you want
+                       to create."
+
+rungholt.schem         Neu Rungholt, by kescha.
+                       https://www.planetminecraft.com/project/neu-rungholt/
+                       "Feel free to use the map or parts of it for you own projects."
+
+sky_fortress.litematic Sky Island Elven Fortress, by Mafia, Cloudax and Laoevpes.
+                       https://www.planetminecraft.com/project/beautiful-sky-island-mega-base-elvin-fortress/
+                       "If you decide to use the build, just make sure to credit the above. Other then that, feel free to
+                       use it as your own and to make changes, as long as you do not re-upload it on this site."
+
+island_city.schem      European island city, by IsiAurinkoinen.
+                       https://www.planetminecraft.com/project/european-victorian-style-city-kingdom-island/
+                       "You can use it freely on servers etc, have fun with the map. [...] But please if you use it on a
+                       server, give credit."
+
+port_city.schem        Medieval Port City, by ForgiaDeiBuilder.
+                       https://www.curseforge.com/minecraft/worlds/medieval-port-city
+                       Licensed under the MIT License:
+
+MIT License
+
+Copyright (c) 2024 ForgiaDeiBuilder
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
+rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit
+persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the
+Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

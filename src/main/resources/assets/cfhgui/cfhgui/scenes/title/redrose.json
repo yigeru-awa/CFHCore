@@ -1,0 +1,54 @@
+{
+  "__comment": "The Overhaul main menu's Red Rose City scene: the great cathedral of Red rose city (Dominic_de_Vos and team; see docs/scene-credits.md) on its terrace above the gardens, three-quarters on from a sandstone balcony high to the south-east, its west tower crowned with stained glass, in the last of the evening light. The build stands as it does in its world (its box from (3300, 0, -1560), turned so the camera looks north-west); the chests stand at (3927, 178, -887) of that world.",
+  "background": { "top": "#1A2340", "bottom": "#D8A07A" },
+  "camera": {
+    "fov": 36,
+    "near": 0.5,
+    "far": 3700,
+    "pose": { "position": [0.0, 1.9, 8.0], "target": [0.0, 1.9, 0.0] },
+    "intro": [
+      { "type": "spline", "duration": 4200, "ease": "inOutCubic",
+        "points": [
+          { "position": [-3.0, 6.0, 28.0], "target": [-8.0, 6.0, -300.0], "fov": 42 },
+          { "position": [-1.0, 3.0, 15.0], "target": [-3.0, 3.0, -200.0], "fov": 39 },
+          { "position": [0.0, 1.9, 8.0], "target": [0.0, 1.9, 0.0], "fov": 36 }
+        ] }
+    ],
+    "idle": { "type": "sway", "period": 22000, "yaw": 1.4, "pitch": 0.4, "bob": 0.015 }
+  },
+  "light": { "sun": [0.3, 1.0, 0.75], "ambient": 0.5, "blockLight": 15, "skyLight": 15,
+             "fog": { "start": 640, "end": 3300, "color": "#C8987E" } },
+  "resolution": 1.0,
+  "anchors": {
+    "chest_profile": { "pos": [-1.0, 0.0, 0.0], "rot": [0, 0, 0] },
+    "chest_play":    { "pos": [0.0, 0.0, 0.0],  "rot": [0, 0, 0] },
+    "chest_options": { "pos": [1.0, 0.0, 0.0],  "rot": [0, 0, 0] }
+  },
+  "sky": { "colors": ["#C8987E", "#F0B888", "#B8889C", "#3E4E86", "#151C38"],
+           "sun": { "yaw": -70, "elevation": 4, "color": "#FFB878", "glow": 0.8, "disc": 2, "reach": 40 }, "stars": 0.25, "seed": 37 },
+  "rig": { "key": [160.0, 70.0, 110.0], "keyColor": [0.82, 0.62, 0.44], "fill": { "dir": [-1.0, 0.4, -0.3], "color": [0.12, 0.15, 0.27] },
+           "ambient": [0.21, 0.21, 0.28], "rim": { "color": [1.0, 0.76, 0.52], "strength": 0.2 }, "wrap": 0.45 },
+  "lamps": [ { "at": [0.0, 2.4, 2.8], "color": [0.62, 0.48, 0.34], "reach": 7.0, "flicker": 0.03 } ],
+  "finish": { "bloom": 0.28, "vignette": 0.38, "warmth": 0.01, "contrast": 1.12, "saturation": 1.08, "grain": 1.2,
+              "shadows": [0.0, 0.002, 0.018], "highlights": [0.016, 0.008, -0.006] },
+  "build": {
+    "file": "builds/red_rose_city",
+    "yaw": -24,
+    "at": [-299, -178, -870],
+    "land": { "level": 3, "hills": [14, 320], "mountains": [210, 1200, 1100], "snow": 0.6, "trees": 0.3, "rings": [[1, 32], [4, 800], [8, 3600]], "seed": 11 },
+    "light": { "color": "#FFC890", "strength": 0.6 },
+    "entities": { "max": 128, "reach": 220 },
+    "credit": { "title": "Red rose city", "author": "Dominic_de_Vos & team",
+                "url": "https://www.planetminecraft.com/project/lma-cathedral/",
+                "license": "free for any purpose (the author's words on the page)" }
+  },
+  "title": { "pool": "#2AFFD0A0", "dust": "#40FFDCB8",
+             "blocks": [ { "from": [-4, -1, -3], "to": [4, -1, 3], "block": "minecraft:cut_sandstone" },
+                         { "from": [-3, -1, -2], "to": [3, -1, 2], "block": "minecraft:smooth_sandstone" },
+                         { "from": [-4, -2, -3], "to": [4, -2, 3], "block": "minecraft:sandstone" },
+                         { "from": [-3, 0, -3], "to": [3, 0, -3], "block": "minecraft:smooth_sandstone_slab" },
+                         { "at": [-4, 0, -3], "block": "minecraft:sandstone_wall" },
+                         { "at": [4, 0, -3], "block": "minecraft:sandstone_wall" },
+                         { "at": [-4, 1, -3], "block": "minecraft:lantern" },
+                         { "at": [4, 1, -3], "block": "minecraft:lantern" } ] }
+}

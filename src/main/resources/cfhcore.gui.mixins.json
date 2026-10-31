@@ -1,0 +1,39 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.onehumanawa.cfhcore.content.gui.core.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [],
+  "client": [
+    "MinecraftMixin",
+    "MinecraftSetupMixin",
+    "GuiScaleMixin",
+    "ScreenMixin",
+    "MouseHandlerMixin",
+    "MouseHandlerAccessor",
+    "KeyboardHandlerMixin",
+    "AbstractWidgetMixin",
+    "AbstractButtonMixin",
+    "AbstractSliderButtonMixin",
+    "EditBoxMixin",
+    "CheckboxMixin",
+    "AbstractSelectionListMixin",
+    "ContainerScreenAccessor",
+    "ContainerScreenMixin",
+    "GuiGraphicsMixin",
+    "ScreenBackgroundMixin",
+    "TooltipRenderUtilMixin",
+    "TabButtonMixin",
+    "TabNavigationBarMixin",
+    "TitleScreenMixin",
+    "ScreenLayoutMixin",
+    "GameRendererMixin",
+    "SpriteContentsAccessor",
+    "ItemBlockRenderTypesAccessor",
+    "ToastComponentAccessor",
+    "CameraAccessor"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -8,6 +8,8 @@ version = mod_version
 group = mod_group_id
 repositories {
     clear()
+    mavenLocal()
+    mavenCentral()
     maven {
         name = "NeoForged CDN Releases"
         url = "https://neoforged.forgecdn.net/releases"
@@ -20,10 +22,18 @@ repositories {
         name = "Minecraft Libraries"
         url = "https://libraries.minecraft.net/"
     }
-    mavenLocal()
-    mavenCentral()
     maven { url = "https://maven.createmod.net" }
     maven { url = "https://maven.ithundxr.dev/snapshots" }
+    exclusiveContent {
+        forRepository {
+            maven {
+                url "https://cursemaven.com"
+            }
+        }
+        filter {
+            includeGroup "curse.maven"
+        }
+    }
 }
 base {
     archivesName = mod_id
@@ -31,6 +41,7 @@ base {
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
+    options.compilerArgs << '-Xmaxerrs' << '1000'
 }
 neoForge {
     version = project.neo_version
@@ -65,11 +76,18 @@ neoForge {
 }
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 dependencies {
+    // Create
     implementation("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
     implementation("net.createmod.ponder:ponder-neoforge:${ponder_version}+mc${minecraft_version}")
     compileOnly("dev.engine-room.flywheel:flywheel-neoforge-api-${minecraft_version}:${flywheel_version}")
     runtimeOnly("dev.engine-room.flywheel:flywheel-neoforge-${minecraft_version}:${flywheel_version}")
     implementation("com.tterrag.registrate:Registrate:${registrate_version}")
+
+    // Modern UI
+    implementation("curse.maven:modern-ui-352491:8206075")
+
+    // XAero Compat (compileOnly)
+    compileOnly fileTree(dir: "libs/xaero", include: ["*.jar"])
 }
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
     var replaceProperties = [minecraft_version      : minecraft_version,

@@ -1,0 +1,53 @@
+{
+  "__comment": "The Overhaul main menu's Rungholt scene: kescha's walled medieval town round its great cathedral (see docs/scene-credits.md), seen at nightfall from the top of a watchtower on the hill south of its walls, its torches and lanterns coming on. The build is the town as kescha left it in 2013, brought up to this game by the game itself and cut to what the camera sees; it stands where it stood, the chests on the tower at (110, 125, 215) of the old world.",
+  "background": { "top": "#0E1230", "bottom": "#7A5A6E" },
+  "camera": {
+    "fov": 36,
+    "near": 0.5,
+    "far": 3300,
+    "pose": { "position": [0.0, 2.6, 8.0], "target": [0.0, 1.5, 0.0] },
+    "intro": [
+      { "type": "spline", "duration": 4200, "ease": "inOutCubic",
+        "points": [
+          { "position": [-40.0, 40.0, -180.0], "target": [40.0, -20.0, -330.0], "fov": 50 },
+          { "position": [-14.0, 18.0, -40.0], "target": [10.0, -10.0, -220.0], "fov": 44 },
+          { "position": [0.0, 2.6, 8.0], "target": [0.0, 1.5, 0.0], "fov": 36 }
+        ] }
+    ],
+    "idle": { "type": "sway", "period": 22000, "yaw": 1.5, "pitch": 0.45, "bob": 0.015 }
+  },
+  "light": { "sun": [0.3, 1.0, 0.75], "ambient": 0.5, "blockLight": 15, "skyLight": 15,
+             "fog": { "start": 420, "end": 2900, "color": "#6A4E64" } },
+  "resolution": 1.0,
+  "anchors": {
+    "chest_profile": { "pos": [-1.0, 0.0, 0.0], "rot": [0, 0, 0] },
+    "chest_play":    { "pos": [0.0, 0.0, 0.0],  "rot": [0, 0, 0] },
+    "chest_options": { "pos": [1.0, 0.0, 0.0],  "rot": [0, 0, 0] }
+  },
+  "sky": { "colors": ["#6A4E64", "#E0905E", "#9A6A86", "#2E3A6A", "#0C1028"],
+           "sun": { "yaw": -78, "elevation": -1.5, "color": "#FF9A5A", "glow": 0.9, "disc": 0, "reach": 44 }, "stars": 0.55, "seed": 41 },
+  "rig": { "key": [-420.0, 50.0, -120.0], "keyColor": [0.5, 0.36, 0.3], "fill": { "dir": [1.0, 0.35, 0.3], "color": [0.1, 0.13, 0.25] },
+           "ambient": [0.15, 0.15, 0.23], "rim": { "color": [1.0, 0.62, 0.42], "strength": 0.24 }, "wrap": 0.5 },
+  "lamps": [ { "at": [0.0, 2.4, 2.8], "color": [0.72, 0.5, 0.3], "reach": 7.0, "flicker": 0.08 } ],
+  "finish": { "bloom": 0.7, "vignette": 0.44, "warmth": 0.012, "contrast": 1.08, "saturation": 1.1, "grain": 1.4,
+              "shadows": [0.0, 0.004, 0.024], "highlights": [0.02, 0.008, -0.008] },
+  "build": {
+    "file": "builds/rungholt",
+    "at": [-270, -75, -475],
+    "land": { "level": 16, "sea": 13, "hills": [16, 240], "mountains": [170, 700, 900], "snow": 0.6, "trees": 0.42, "seed": 5 },
+    "light": { "color": "#FFB068", "strength": 1.25 },
+    "glow": 1.0,
+    "entities": { "max": 160, "reach": 140, "tint": "#B8A090" },
+    "credit": { "title": "Neu Rungholt", "author": "kescha", "url": "https://www.planetminecraft.com/project/neu-rungholt/",
+                "license": "free to use (the author's words on the page)" }
+  },
+  "title": { "pool": "#30FFC890", "dust": "#38FFD8A8",
+             "blocks": [ { "from": [-4, -1, -4], "to": [4, -1, 3], "block": "minecraft:stone_bricks" },
+                         { "from": [-3, -1, -3], "to": [3, -1, 2], "block": "minecraft:polished_andesite" },
+                         { "from": [-4, 0, -4], "to": [4, 0, -4], "block": "minecraft:stone_brick_wall" },
+                         { "from": [-4, 0, -3], "to": [-4, 0, 3], "block": "minecraft:stone_brick_wall" },
+                         { "from": [4, 0, -3], "to": [4, 0, 3], "block": "minecraft:stone_brick_wall" },
+                         { "at": [-4, 1, -4], "block": "minecraft:lantern" },
+                         { "at": [4, 1, -4], "block": "minecraft:lantern" },
+                         { "from": [-4, -60, -4], "to": [4, -2, 3], "block": "minecraft:stone_bricks" } ] }
+}

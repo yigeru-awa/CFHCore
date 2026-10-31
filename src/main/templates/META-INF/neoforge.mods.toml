@@ -13,6 +13,16 @@ config = "${mod_id}.mixins.json"
 config = "${mod_id}.worldgen.mixins.json"
 [[mixins]]
 config = "${mod_id}.worldgen.neoforge.mixins.json"
+[[mixins]]
+config = "${mod_id}.gui.mixins.json"
+[[mixins]]
+config = "${mod_id}.gui.menu.mixins.json"
+[[mixins]]
+config = "${mod_id}.gui.neoforge.mixins.json"
+[[mixins]]
+config = "${mod_id}.gui.xaero.mixins.json"
+[[mixins]]
+config = "${mod_id}.gui.maps.mixins.json"
 [[accessTransformers]]
 file = "META-INF/accesstransformer.cfg"
 [[dependencies."${mod_id}"]]
@@ -33,3 +43,9 @@ type="required"
 versionRange="[6.0.10,6.1.0)"
 ordering="NONE"
 side="BOTH"
+[[dependencies."${mod_id}"]]
+modId="modernui"
+type="optional"
+versionRange="[3.13,4.0)"
+ordering="AFTER"
+side="CLIENT"

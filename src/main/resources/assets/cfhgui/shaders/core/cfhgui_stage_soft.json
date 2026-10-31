@@ -1,0 +1,352 @@
+{
+    "vertex": "cfhgui:cfhgui_stage_soft",
+    "fragment": "cfhgui:cfhgui_stage_soft",
+    "samplers": [
+        {
+            "name": "Sampler0"
+        }
+    ],
+    "uniforms": [
+        {
+            "name": "ModelViewMat",
+            "type": "matrix4x4",
+            "count": 16,
+            "values": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ]
+        },
+        {
+            "name": "ProjMat",
+            "type": "matrix4x4",
+            "count": 16,
+            "values": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ]
+        },
+        {
+            "name": "ColorModulator",
+            "type": "float",
+            "count": 4,
+            "values": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        {
+            "name": "KeyPos",
+            "type": "float",
+            "count": 3,
+            "values": [
+                0.0,
+                4.0,
+                4.0
+            ]
+        },
+        {
+            "name": "KeyColor",
+            "type": "float",
+            "count": 3,
+            "values": [
+                0.72,
+                0.67,
+                0.6
+            ]
+        },
+        {
+            "name": "FillDir",
+            "type": "float",
+            "count": 3,
+            "values": [
+                -1.0,
+                0.2,
+                0.3
+            ]
+        },
+        {
+            "name": "FillColor",
+            "type": "float",
+            "count": 3,
+            "values": [
+                0.12,
+                0.15,
+                0.2
+            ]
+        },
+        {
+            "name": "Ambient",
+            "type": "float",
+            "count": 3,
+            "values": [
+                0.4,
+                0.38,
+                0.38
+            ]
+        },
+        {
+            "name": "RimColor",
+            "type": "float",
+            "count": 3,
+            "values": [
+                1.0,
+                0.9,
+                0.75
+            ]
+        },
+        {
+            "name": "RimStrength",
+            "type": "float",
+            "count": 1,
+            "values": [
+                0.25
+            ]
+        },
+        {
+            "name": "Wrap",
+            "type": "float",
+            "count": 1,
+            "values": [
+                0.45
+            ]
+        },
+        {
+            "name": "Muted",
+            "type": "float",
+            "count": 1,
+            "values": [
+                0.0
+            ]
+        },
+        {
+            "name": "Cast",
+            "type": "float",
+            "count": 4,
+            "values": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        {
+            "name": "Emissive",
+            "type": "float",
+            "count": 1,
+            "values": [
+                0.0
+            ]
+        },
+        {
+            "name": "Gloss",
+            "type": "float",
+            "count": 1,
+            "values": [
+                0.0
+            ]
+        },
+        {
+            "name": "LampPosA",
+            "type": "matrix4x4",
+            "count": 16,
+            "values": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        {
+            "name": "LampPosB",
+            "type": "matrix4x4",
+            "count": 16,
+            "values": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        {
+            "name": "LampColA",
+            "type": "matrix4x4",
+            "count": 16,
+            "values": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        {
+            "name": "LampColB",
+            "type": "matrix4x4",
+            "count": 16,
+            "values": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        {
+            "name": "FogStart",
+            "type": "float",
+            "count": 1,
+            "values": [
+                0.0
+            ]
+        },
+        {
+            "name": "FogEnd",
+            "type": "float",
+            "count": 1,
+            "values": [
+                0.0
+            ]
+        },
+        {
+            "name": "FogColor",
+            "type": "float",
+            "count": 4,
+            "values": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        {
+            "name": "Footprint",
+            "type": "float",
+            "count": 4,
+            "values": [
+                0.0,
+                0.0,
+                1.0,
+                1.0
+            ]
+        },
+        {
+            "name": "FootprintFade",
+            "type": "float",
+            "count": 2,
+            "values": [
+                1.0,
+                0.0
+            ]
+        },
+        {
+            "name": "Stylize",
+            "type": "float",
+            "count": 1,
+            "values": [
+                0.0
+            ]
+        },
+        {
+            "name": "AlphaCutoff",
+            "type": "float",
+            "count": 1,
+            "values": [
+                0.1
+            ]
+        },
+        {
+            "name": "BaseLevel",
+            "type": "float",
+            "count": 1,
+            "values": [
+                0.0
+            ]
+        },
+        {
+            "name": "Received",
+            "type": "float",
+            "count": 3,
+            "values": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        }
+    ]
+}

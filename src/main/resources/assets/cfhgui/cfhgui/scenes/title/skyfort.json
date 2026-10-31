@@ -1,0 +1,54 @@
+{
+  "__comment": "The Overhaul main menu's Sky Fortress scene: the chests on a rock of their own in the sky at sundown, the Elven Fortress (Mafia, Cloudax and Laoevpes; see docs/scene-credits.md) floating off to the left on its island, its waterfalls pouring off into the haze, the sun going down on the right. Shipped as the authors' litematic, turned so the camera sees the palace three-quarters on.",
+  "background": { "top": "#1C2A4A", "bottom": "#E8B48A" },
+  "camera": {
+    "fov": 36,
+    "near": 0.5,
+    "far": 3400,
+    "pose": { "position": [0.0, 1.9, 8.0], "target": [0.0, 1.9, 0.0] },
+    "intro": [
+      { "type": "spline", "duration": 4000, "ease": "inOutCubic",
+        "points": [
+          { "position": [4.0, 7.0, 30.0], "target": [-60.0, 12.0, -320.0], "fov": 42 },
+          { "position": [1.5, 3.5, 16.0], "target": [-24.0, 5.0, -200.0], "fov": 39 },
+          { "position": [0.0, 1.9, 8.0], "target": [0.0, 1.9, 0.0], "fov": 36 }
+        ] }
+    ],
+    "idle": { "type": "sway", "period": 21000, "yaw": 1.5, "pitch": 0.45, "bob": 0.02 }
+  },
+  "light": { "sun": [0.3, 1.0, 0.75], "ambient": 0.5, "blockLight": 15, "skyLight": 15,
+             "fog": { "start": 620, "end": 3000, "color": "#E0A88A" } },
+  "resolution": 1.0,
+  "anchors": {
+    "chest_profile": { "pos": [-1.0, 0.0, 0.0], "rot": [0, 0, 0] },
+    "chest_play":    { "pos": [0.0, 0.0, 0.0],  "rot": [0, 0, 0] },
+    "chest_options": { "pos": [1.0, 0.0, 0.0],  "rot": [0, 0, 0] }
+  },
+  "sky": { "colors": ["#E0A88A", "#F2C08C", "#C890A0", "#4A5A90", "#1C2A4A"],
+           "sun": { "yaw": 26, "elevation": 3, "color": "#FFB46E", "glow": 0.75, "disc": 1.8, "reach": 26 }, "stars": 0.35, "seed": 31 },
+  "rig": { "key": [115.0, 60.0, -115.0], "keyColor": [0.86, 0.6, 0.42], "fill": { "dir": [-1.0, 0.3, 0.6], "color": [0.15, 0.18, 0.31] },
+           "ambient": [0.25, 0.25, 0.34], "rim": { "color": [1.0, 0.72, 0.5], "strength": 0.32 }, "wrap": 0.55 },
+  "lamps": [ { "at": [0.0, 2.4, 2.8], "color": [0.62, 0.48, 0.34], "reach": 7.0, "flicker": 0.04 } ],
+  "finish": { "bloom": 0.5, "vignette": 0.36, "warmth": 0.012, "contrast": 1.06, "saturation": 1.12, "grain": 1.2,
+              "shadows": [0.0, 0.004, 0.02], "highlights": [0.02, 0.008, -0.006] },
+  "build": {
+    "file": "builds/sky_fortress",
+    "yaw": -19,
+    "at": [-185, -70, -499],
+    "land": { "under": true, "level": -330, "sea": -326, "hills": [40, 420], "mountains": [170, 1000, 1500], "snow": 0.75, "trees": 0.4,
+              "rings": [[8, 900], [24, 3600]], "seed": 13 },
+    "light": { "color": "#FFD2A0", "strength": 0.9 },
+    "entities": { "max": 64, "reach": 200 },
+    "credit": { "title": "Sky Island Elven Fortress", "author": "Mafia, Cloudax & Laoevpes",
+                "url": "https://www.planetminecraft.com/project/beautiful-sky-island-mega-base-elvin-fortress/",
+                "license": "free to use with credit (the authors' words on the page)" }
+  },
+  "title": { "pool": "#28FFD8A8", "dust": "#40FFE2C0",
+             "blocks": [ { "from": [-3, -1, -1], "to": [3, -1, 2], "block": "minecraft:grass_block" },
+                         { "from": [-2, -1, -2], "to": [2, -1, -2], "block": "minecraft:grass_block" },
+                         { "from": [-4, -1, 0], "to": [4, -1, 1], "block": "minecraft:grass_block" },
+                         { "from": [-3, -2, -1], "to": [3, -2, 1], "block": "minecraft:dirt" },
+                         { "from": [-2, -3, -1], "to": [2, -3, 0], "block": "minecraft:dirt" },
+                         { "from": [-1, -5, -1], "to": [1, -4, 0], "block": "minecraft:stone" },
+                         { "at": [0, -6, 0], "block": "minecraft:stone" } ] }
+}

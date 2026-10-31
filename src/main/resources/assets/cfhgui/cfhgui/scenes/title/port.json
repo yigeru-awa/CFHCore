@@ -1,0 +1,58 @@
+{
+  "__comment": "The Overhaul main menu's Port City scene: ForgiaDeiBuilder's Medieval Port City (MIT; see docs/scene-credits.md) across its bay at the blue hour, the sun just gone behind the camera, the moon coming up over the hills, its windows and lanterns lit, seen from a pier at the bay's west end. The build stands as it does in its world, turned a quarter so that the camera looks east; the chests stand on the pier at (-460, 65, -16) of that world.",
+  "background": { "top": "#0A1028", "bottom": "#6A6090" },
+  "camera": {
+    "fov": 36,
+    "near": 0.5,
+    "far": 3200,
+    "pose": { "position": [0.0, 1.9, 8.0], "target": [0.0, 1.9, 0.0] },
+    "intro": [
+      { "type": "spline", "duration": 3800, "ease": "inOutCubic",
+        "points": [
+          { "position": [-6.0, 8.0, 34.0], "target": [10.0, 6.0, -140.0], "fov": 42 },
+          { "position": [-2.0, 4.0, 18.0], "target": [3.0, 3.0, -100.0], "fov": 39 },
+          { "position": [0.0, 1.9, 8.0], "target": [0.0, 1.9, 0.0], "fov": 36 }
+        ] }
+    ],
+    "idle": { "type": "sway", "period": 21000, "yaw": 1.5, "pitch": 0.45, "bob": 0.02 }
+  },
+  "light": { "sun": [0.3, 1.0, 0.75], "ambient": 0.5, "blockLight": 15, "skyLight": 15,
+             "fog": { "start": 360, "end": 2700, "color": "#5A5A80" } },
+  "resolution": 1.0,
+  "anchors": {
+    "chest_profile": { "pos": [-1.0, 0.0, 0.0], "rot": [0, 0, 0] },
+    "chest_play":    { "pos": [0.0, 0.0, 0.0],  "rot": [0, 0, 0] },
+    "chest_options": { "pos": [1.0, 0.0, 0.0],  "rot": [0, 0, 0] }
+  },
+  "sky": { "colors": ["#5A5A80", "#8A6E90", "#4E5888", "#202C5C", "#0A1028"],
+           "sun": { "yaw": 24, "elevation": 11, "color": "#E4ECFF", "glow": 0.45, "disc": 1.6, "reach": 16 }, "stars": 0.75, "seed": 47 },
+  "rig": { "key": [-40.0, 50.0, 170.0], "keyColor": [0.5, 0.4, 0.46], "fill": { "dir": [0.6, 0.5, -1.0], "color": [0.12, 0.14, 0.24] },
+           "ambient": [0.15, 0.16, 0.25], "rim": { "color": [0.72, 0.8, 1.0], "strength": 0.2 }, "wrap": 0.5 },
+  "lamps": [ { "at": [0.0, 2.4, 2.8], "color": [0.78, 0.56, 0.34], "reach": 7.5, "flicker": 0.06 },
+             { "at": [-3.6, 1.6, -2.4], "color": [1.0, 0.68, 0.34], "reach": 6.0, "flicker": 0.12 },
+             { "at": [3.6, 1.6, -2.4], "color": [1.0, 0.68, 0.34], "reach": 6.0, "flicker": 0.12 } ],
+  "finish": { "bloom": 0.7, "vignette": 0.42, "warmth": 0.006, "contrast": 1.06, "saturation": 1.12, "grain": 1.4,
+              "shadows": [-0.004, 0.002, 0.024], "highlights": [0.02, 0.01, -0.006] },
+  "build": {
+    "file": "builds/port_city",
+    "yaw": 90,
+    "at": [-192, -15, 10],
+    "land": { "level": 15, "sea": 13, "hills": [18, 220], "mountains": [150, 700, 750], "snow": 0.65, "trees": 0.45, "seed": 9 },
+    "light": { "color": "#FFB060", "strength": 1.4 },
+    "glow": 1.0,
+    "entities": { "max": 200, "reach": 300, "tint": "#9098C0" },
+    "credit": { "title": "Medieval Port City", "author": "ForgiaDeiBuilder", "url": "https://www.curseforge.com/minecraft/worlds/medieval-port-city",
+                "license": "MIT" }
+  },
+  "title": { "pool": "#2AFFB070", "dust": "#30FFD8A8",
+             "blocks": [ { "from": [-3, -1, -3], "to": [3, -1, 2], "block": "minecraft:spruce_planks" },
+                         { "from": [-1, -1, 3], "to": [1, -1, 9], "block": "minecraft:spruce_planks" },
+                         { "from": [-3, -4, -3], "to": [-3, -2, -3], "block": "minecraft:stripped_spruce_log" },
+                         { "from": [3, -4, -3], "to": [3, -2, -3], "block": "minecraft:stripped_spruce_log" },
+                         { "from": [-3, -4, 2], "to": [-3, -2, 2], "block": "minecraft:stripped_spruce_log" },
+                         { "from": [3, -4, 2], "to": [3, -2, 2], "block": "minecraft:stripped_spruce_log" },
+                         { "at": [-3, 0, -3], "block": "minecraft:spruce_fence" },
+                         { "at": [3, 0, -3], "block": "minecraft:spruce_fence" },
+                         { "at": [-3, 1, -3], "block": "minecraft:lantern" },
+                         { "at": [3, 1, -3], "block": "minecraft:lantern" } ] }
+}
