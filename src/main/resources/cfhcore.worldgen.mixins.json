@@ -1,0 +1,31 @@
+{
+  "required": true,
+  "package": "com.onehumanawa.cfhcore.content.worldgen.mixin",
+  "minVersion": "0.8",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "MixinNoiseChunk",
+    "MixinRandomState",
+    "MixinChunkMap",
+    "MixinUtil",
+    "MixinBiomeGenerationSettings",
+    "MixinSurfaceSystem",
+    "MixinStructure",
+    "MixinMinecraftServer",
+    "MixinRegistrySetBuilder$EmptyTagLookup",
+    "MixinSpawnFinder",
+    "MixinClimateSampler",
+    "MixinWorldCarver",
+    "MixinChunkAccess",
+    "MixinLevelChunk",
+    "MixinImposterProtoChunk",
+    "MixinNoiseBasedChunkGenerator",
+    "MixinFloatyBoaty",
+    "MixinC2MECompilerShield",
+    "BeardifierAccessor",
+    "LevelChunkSectionAccessor"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
