@@ -1,7 +1,9 @@
 package com.onehumanawa.cfhcore.content.gui.config.page;
 
 import com.onehumanawa.cfhcore.content.gui.config.option.AdvancedBinding;
+import com.onehumanawa.cfhcore.content.gui.config.option.Binding;
 import com.onehumanawa.cfhcore.content.gui.config.option.OptionBinding;
+import com.onehumanawa.cfhcore.content.gui.config.option.OptionType;
 import com.onehumanawa.cfhcore.content.gui.config.resolver.VanillaOptions;
 import com.onehumanawa.cfhcore.content.gui.config.ui.OptionPageBase;
 import com.onehumanawa.cfhcore.content.gui.config.ui.Section;
@@ -14,6 +16,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Function;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
 public final class VideoPage extends OptionPageBase {
@@ -43,12 +48,34 @@ public final class VideoPage extends OptionPageBase {
    protected List<Section> sections() {
       List<Section> out = new ArrayList();
       boolean sodium = sodium();
+      Optional<Function<Screen, Screen>> sodiumScreen = SodiumScreens.videoSettings();
+      if (sodiumScreen.isPresent()) {
+         out.add(sodiumSection(sodiumScreen).tab("display", VideoTopics.title("display")));
+      }
+
       out.add(vanilla("display", DISPLAY, sodium).tab("display", VideoTopics.title("display")));
       out.add(vanilla("world", GRAPHICS, sodium).tab("graphics", VideoTopics.title("graphics")));
       out.add(vanilla("performance", PERFORMANCE, sodium).tab("performance", VideoTopics.title("performance")));
       out.add(vanilla("effects", EFFECTS, sodium).tab("effects", VideoTopics.title("effects")));
       return out;
    }
+
+   // Sodium takes over a number of vanilla video options, so when it is loaded
+   // the fastest route to them is its own settings screen (opens when clicked).
+   private static Section sodiumSection(Optional<Function<Screen, Screen>> opener) {
+      Section s = Section.of("sodium", Component.translatable("cfhgui_config.video.sodium")).fixed();
+      s.add(Binding.of("video:sodium_open", OptionType.ACTION, Component.translatable("cfhgui_config.video.sodium.title"))
+            .tooltip(Component.translatable("cfhgui_config.video.sodium.tip"))
+            .actionIcon(Icon.BOLT)
+            .action(Component.translatable("cfhgui_config.video.sodium.action"), () -> {
+               Minecraft mc = Minecraft.getInstance();
+               Screen back = mc.screen;
+               opener.ifPresent((f) -> mc.setScreen((Screen)f.apply(back)));
+            })
+            .searchWords("sodium video settings"));
+      return s;
+   }
+
 
    static boolean advancedPage(String pageTitle) {
       String t = pageTitle.toLowerCase(Locale.ROOT);

@@ -25,6 +25,7 @@ import net.minecraft.client.gui.screens.advancements.AdvancementsScreen;
 import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
 import net.minecraft.client.gui.screens.multiplayer.ServerLinksScreen;
 import net.minecraft.client.gui.screens.options.OptionsScreen;
+import net.minecraft.client.gui.screens.packs.PackSelectionScreen;
 import net.minecraft.client.gui.screens.social.SocialInteractionsScreen;
 import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.client.player.LocalPlayer;
@@ -55,6 +56,7 @@ public final class PauseActions {
 
       }));
       out.add(plain(Icon.SETTINGS, Component.translatable("menu.options"), () -> mc.setScreen(new OptionsScreen(self, mc.options))));
+      out.add(plain(Icon.PACK, Component.translatable("options.resourcepack"), () -> mc.setScreen(packs(self))));
       ServerLinks links = mc.player != null ? mc.player.connection.serverLinks() : ServerLinks.EMPTY;
       if (sp) {
          boolean open = mc.getSingleplayerServer().isPublished();
@@ -83,6 +85,16 @@ public final class PauseActions {
    private static Action plain(Icon icon, Component label, Runnable run) {
       return new Action(icon, label, run, PauseActions.Kind.NORMAL, true, (Component)null, (String)null);
    }
+
+   // PackSelectionScreen applies the chosen packs through mc.options and returns here
+   private static Screen packs(Screen back) {
+      Minecraft mc = Minecraft.getInstance();
+      return new PackSelectionScreen(mc.getResourcePackRepository(), (repo) -> {
+         mc.options.updateResourcePacks(repo);
+         mc.setScreen(back);
+      }, mc.getResourcePackDirectory(), Component.translatable("resourcePack.title"));
+   }
+
 
    public static void confirmDisconnect() {
       boolean sp = Minecraft.getInstance().hasSingleplayerServer();

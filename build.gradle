@@ -88,6 +88,9 @@ dependencies {
 
     // XAero Compat (compileOnly)
     compileOnly fileTree(dir: "libs/xaero", include: ["*.jar"])
+
+    // Sodium
+    implementation("curse.maven:sodium-394468:8756580")
 }
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
     var replaceProperties = [minecraft_version      : minecraft_version,
