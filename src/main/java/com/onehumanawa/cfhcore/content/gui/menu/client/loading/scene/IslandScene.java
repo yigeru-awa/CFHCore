@@ -1,5 +1,6 @@
 package com.onehumanawa.cfhcore.content.gui.menu.client.loading.scene;
 
+import com.onehumanawa.cfhcore.content.gui.core.gfx.TitleArt;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
@@ -101,8 +102,8 @@ public final class IslandScene implements StartupScene {
          this.cloudMap = new boolean[0];
       }
 
-      this.logo = Picture.read(assets.read("minecraft", "textures/gui/title/minecraft.png"));
-      this.edition = this.logo == null ? null : Picture.read(assets.read("minecraft", "textures/gui/title/edition.png"));
+      this.logo = Picture.read(assets.read("cfhcore", "textures/gui/title/create.png"));
+      this.edition = this.logo == null ? null : Picture.read(assets.read("cfhcore", "textures/gui/title/forge_of_horizons.png"));
       this.game = GameFont.read(assets);
       this.corners = bounds(this.island);
       this.target[1] = (this.island.top + this.island.bottom) / 2.0F;
@@ -201,7 +202,7 @@ public final class IslandScene implements StartupScene {
          float h = (float)pixelH / scale;
          float[] logoAt = this.logoPlace(w, h);
          float barY = (float)(Math.round(h * 0.8325F) - 5);
-         this.camera(w, h, logoAt[1] + 51.0F * logoAt[2] + 6.0F, barY - 22.0F);
+         this.camera(w, h, logoAt[1] + (float)TitleArt.BLOCK_H * logoAt[2] + 6.0F, barY - 22.0F);
          this.meshes(w / h);
          this.gl.begin(pixelW, pixelH, this.sheet);
          this.gl.load(this.sky, this.clouds, this.land, this.moving, this.bits, this.water, this.movingWater);
@@ -534,10 +535,10 @@ public final class IslandScene implements StartupScene {
             var10000 = new float[]{w / 2.0F, h < 300.0F ? 4.0F : 20.0F, 1.0F};
             break;
          default:
-            float s = Math.max(0.7F, Math.min(4.0F, Math.min(w * 0.51F / 256.0F, h * 0.22F / 51.0F)));
-            int high = Math.round(51.0F * s);
+            float s = Math.max(0.7F, Math.min(4.0F, Math.min(w * 0.51F / (float)TitleArt.TITLE_W, h * 0.22F / (float)TitleArt.BLOCK_H)));
+            int high = Math.round((float)TitleArt.BLOCK_H * s);
             float middle = (float)Math.max(4, Math.round(h * 0.16F - (float)high / 2.0F)) + (float)high / 2.0F;
-            var10000 = new float[]{w / 2.0F, middle - 25.5F * s, s};
+            var10000 = new float[]{w / 2.0F, middle - (float)TitleArt.BLOCK_H / 2.0F * s, s};
       }
 
       return var10000;
@@ -546,12 +547,16 @@ public final class IslandScene implements StartupScene {
    private void logo(float[] at, float scale) {
       float s = at[2];
       float top = at[1];
-      float x = (float)Math.round((at[0] - 128.0F * s) * scale) / scale;
+      float tw = (float)TitleArt.TITLE_W * s;
+      float th = (float)TitleArt.TITLE_H * s;
+      float x = (float)Math.round((at[0] - tw / 2.0F) * scale) / scale;
       float y = (float)Math.round(top * scale) / scale;
-      this.gfx.image(this.logoTexture, x, y, 256.0F * s, 44.0F * s, 0.0F, 0.0F, 1.0F, 0.6875F, -1);
+      this.gfx.image(this.logoTexture, x, y, tw, th, 0.0F, 0.0F, 1.0F, 1.0F, -1);
       if (this.editionTexture != 0) {
-         float ex = (float)Math.round((at[0] - 64.0F * s) * scale) / scale;
-         this.gfx.image(this.editionTexture, ex, y + 37.0F * s, 128.0F * s, 14.0F * s, 0.0F, 0.0F, 1.0F, 0.875F, -1);
+         float sw = (float)TitleArt.SUB_W * s;
+         float sh = (float)TitleArt.SUB_H * s;
+         float ex = (float)Math.round((at[0] - sw / 2.0F) * scale) / scale;
+         this.gfx.image(this.editionTexture, ex, y + ((float)TitleArt.TITLE_H - (float)TitleArt.SUB_OVERLAP) * s, sw, sh, 0.0F, 0.0F, 1.0F, 1.0F, -1);
       }
 
    }

@@ -11,6 +11,7 @@ import com.onehumanawa.cfhcore.content.gui.core.gfx.Ease;
 import com.onehumanawa.cfhcore.content.gui.core.gfx.Fonts;
 import com.onehumanawa.cfhcore.content.gui.core.gfx.Icon;
 import com.onehumanawa.cfhcore.content.gui.core.gfx.CFHGuiDraw;
+import com.onehumanawa.cfhcore.content.gui.core.gfx.TitleArt;
 import com.onehumanawa.cfhcore.content.gui.core.layout.LayoutApplier;
 import com.onehumanawa.cfhcore.content.gui.core.layout.LayoutAware;
 import com.onehumanawa.cfhcore.content.gui.core.layout.LayoutBackground;
@@ -63,7 +64,6 @@ import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.gui.components.LogoRenderer;
 import net.minecraft.client.gui.components.SplashRenderer;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.options.AccessibilityOptionsScreen;
@@ -84,7 +84,6 @@ public final class OverhaulTitleScreen extends CFHGuiScreen implements LayoutAwa
    private static boolean introPlayed;
    private static final int VEIL_OUT_MS = 200;
    private static final int VEIL_IN_MS = 520;
-   private final LogoRenderer logo;
    private final List<ChestButton> chests;
    private final List<CFHGuiIconButton> corner;
    private final Anim logoIn;
@@ -151,7 +150,6 @@ public final class OverhaulTitleScreen extends CFHGuiScreen implements LayoutAwa
 
    public OverhaulTitleScreen(@Nullable TitleScene scene) {
       super(Component.translatable("narrator.screen.title"), (Screen)null);
-      this.logo = new LogoRenderer(false);
       this.chests = new ArrayList();
       this.corner = new ArrayList();
       this.logoIn = new Anim(0.0F, 700, Ease.OUT_CUBIC);
@@ -1027,7 +1025,7 @@ public final class OverhaulTitleScreen extends CFHGuiScreen implements LayoutAwa
          g.pose().scale(s, s, 1.0F);
          g.pose().translate((float)(-this.width) / 2.0F, -25.5F, 0.0F);
          if (CFHGuiMenu.config().showLogo) {
-            this.logo.renderLogo(g, this.width, li, 0);
+            TitleArt.render(g, this.width, li, (51 - TitleArt.BLOCK_H) / 2);
          } else {
             Palette p = t.palette();
             g.pose().pushPose();
@@ -1074,7 +1072,7 @@ public final class OverhaulTitleScreen extends CFHGuiScreen implements LayoutAwa
    private void renderSplash(GuiGraphics g, float alpha) {
       Theme t = Theme.current();
       g.pose().pushPose();
-      g.pose().translate((float)this.width / 2.0F + 123.0F, 39.0F, 0.0F);
+      g.pose().translate((float)this.width / 2.0F + (float)TitleArt.TITLE_W / 2.0F - 5.0F, (float)((51 - TitleArt.BLOCK_H) / 2 + TitleArt.TITLE_H - 5), 0.0F);
       g.pose().mulPose(Axis.ZP.rotationDegrees(-20.0F));
       float s = 1.8F - Mth.abs(Mth.sin((float)(Util.getMillis() % 1000L) / 1000.0F * ((float)Math.PI * 2F)) * 0.1F);
       s = s * 100.0F / (float)(this.font.width(this.splash) + 32);

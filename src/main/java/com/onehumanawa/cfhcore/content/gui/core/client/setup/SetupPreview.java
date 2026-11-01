@@ -5,13 +5,13 @@ import com.onehumanawa.cfhcore.content.gui.core.CFHGui;
 import com.onehumanawa.cfhcore.content.gui.core.gfx.Icon;
 import com.onehumanawa.cfhcore.content.gui.core.gfx.Icons;
 import com.onehumanawa.cfhcore.content.gui.core.gfx.CFHGuiDraw;
+import com.onehumanawa.cfhcore.content.gui.core.gfx.TitleArt;
 import com.onehumanawa.cfhcore.content.gui.core.layout.ui.Rect;
 import com.onehumanawa.cfhcore.content.gui.core.screen.reskin.ReskinDraw;
 import com.onehumanawa.cfhcore.content.gui.core.theme.Colors;
 import com.onehumanawa.cfhcore.content.gui.core.theme.Palette;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.LogoRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -23,7 +23,6 @@ final class SetupPreview {
    private static final int MENU_H = 200;
    static final int INV_W = 176;
    static final int INV_H = 166;
-   private static final LogoRenderer LOGO = new LogoRenderer(false);
    private static final ItemStack[] HOTBAR;
    private static final ItemStack[] ROW;
 
@@ -81,7 +80,7 @@ final class SetupPreview {
    private static void cfhguiTitle(GuiGraphics g, int vw, int vh, boolean customStyle, float alpha) {
       Palette p = dark();
       Font f = font();
-      LOGO.renderLogo(g, vw, alpha, 10);
+      TitleArt.render(g, vw, alpha, 10, 0.6F);
       int navX = 16;
       int navW = 104;
       int top = 72;
@@ -153,7 +152,7 @@ final class SetupPreview {
    private static void vanillaTitle(GuiGraphics g, int vw, int vh, boolean customStyle, float alpha) {
       Palette p = dark();
       Font f = font();
-      LOGO.renderLogo(g, vw, alpha, 12);
+      TitleArt.render(g, vw, alpha, 12, 0.6F);
       int j = vh / 4 + 48;
       int bw = 200;
       int bx = (vw - 200) / 2;

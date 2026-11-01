@@ -8,6 +8,7 @@ import com.onehumanawa.cfhcore.content.gui.core.gfx.Ease;
 import com.onehumanawa.cfhcore.content.gui.core.gfx.Fonts;
 import com.onehumanawa.cfhcore.content.gui.core.gfx.Icon;
 import com.onehumanawa.cfhcore.content.gui.core.gfx.CFHGuiDraw;
+import com.onehumanawa.cfhcore.content.gui.core.gfx.TitleArt;
 import com.onehumanawa.cfhcore.content.gui.core.layout.ElementType;
 import com.onehumanawa.cfhcore.content.gui.core.layout.ElementTypes;
 import com.onehumanawa.cfhcore.content.gui.core.layout.LayoutApplier;
@@ -42,7 +43,6 @@ import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.gui.components.LogoRenderer;
 import net.minecraft.client.gui.components.SplashRenderer;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
@@ -59,7 +59,6 @@ public final class CFHGuiTitleScreen extends CFHGuiScreen implements LayoutAware
    private static final int NAV_W = 176;
    private static final String LOGO = "logo";
    private static final String FOOTER = "footer";
-   private final LogoRenderer logo = new LogoRenderer(false);
    private final long openedMs = Clock.nowMs();
    private @Nullable String splash;
    private @Nullable ContinueCard continueCard;
@@ -105,7 +104,7 @@ public final class CFHGuiTitleScreen extends CFHGuiScreen implements LayoutAware
       boolean compact = this.height < 300;
       this.wide = this.width >= 400;
       this.logoY = compact ? 4 : 20;
-      int top = this.logoY + 51 + (compact ? 8 : 14);
+      int top = this.logoY + TitleArt.BLOCK_H + (compact ? 8 : 14);
       int rowH = compact ? 20 : 24;
       int gap = compact ? 2 : 4;
       int contentW = Math.min(this.width - 24, 560);
@@ -198,7 +197,7 @@ public final class CFHGuiTitleScreen extends CFHGuiScreen implements LayoutAware
 
    public List<LayoutAware.Part> layoutParts() {
       int footerY = this.height - 11;
-      return List.of(new LayoutAware.Part("logo", Component.translatable("cfhgui.layout.part.logo"), Rect.of(this.width / 2 - 128, this.logoY, 256, 51)), new LayoutAware.Part("footer", Component.translatable("cfhgui.layout.part.footer"), Rect.of(12, footerY - 1, Math.max(1, this.width - 24), 10)));
+      return List.of(new LayoutAware.Part("logo", Component.translatable("cfhgui.layout.part.logo"), Rect.of(this.width / 2 - TitleArt.TITLE_W / 2, this.logoY, TitleArt.TITLE_W, TitleArt.BLOCK_H)), new LayoutAware.Part("footer", Component.translatable("cfhgui.layout.part.footer"), Rect.of(12, footerY - 1, Math.max(1, this.width - 24), 10)));
    }
 
    private List<NavButton> navButtons(Minecraft mc, MenuConfig cfg) {
@@ -311,7 +310,7 @@ public final class CFHGuiTitleScreen extends CFHGuiScreen implements LayoutAware
 
    private void renderLogo(GuiGraphics g, float alpha) {
       if (CFHGuiMenu.config().showLogo) {
-         this.logo.renderLogo(g, this.width, alpha, this.logoY);
+         TitleArt.render(g, this.width, alpha, this.logoY);
       } else {
          Palette p = Theme.current().palette();
          g.pose().pushPose();
@@ -355,7 +354,7 @@ public final class CFHGuiTitleScreen extends CFHGuiScreen implements LayoutAware
       float in = t.motion() <= 0.0F ? 1.0F : Ease.OUT_BACK.apply(Mth.clamp((float)(Clock.nowMs() - this.openedMs - 300L) / 400.0F, 0.0F, 1.0F));
       if (!(in <= 0.01F)) {
          g.pose().pushPose();
-         g.pose().translate((float)this.width / 2.0F + 123.0F, (float)this.logoY + 39.0F, 0.0F);
+         g.pose().translate((float)this.width / 2.0F + (float)TitleArt.TITLE_W / 2.0F - 5.0F, (float)this.logoY + (float)TitleArt.TITLE_H - 5.0F, 0.0F);
          g.pose().mulPose(Axis.ZP.rotationDegrees(-20.0F));
          float s = 1.8F - Mth.abs(Mth.sin((float)(Util.getMillis() % 1000L) / 1000.0F * ((float)Math.PI * 2F)) * 0.1F);
          s = s * 100.0F / (float)(this.font.width(this.splash) + 32);

@@ -2,6 +2,7 @@ package com.onehumanawa.cfhcore.content.gui.core.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.onehumanawa.cfhcore.content.gui.core.gfx.TitleArt;
 import com.onehumanawa.cfhcore.content.gui.core.layout.LayoutApplier;
 import com.onehumanawa.cfhcore.content.gui.core.layout.LayoutAware;
 import com.onehumanawa.cfhcore.content.gui.core.layout.LayoutBackground;
@@ -37,7 +38,7 @@ public abstract class TitleScreenMixin extends Screen implements LayoutAware {
    }
 
    public List<LayoutAware.Part> layoutParts() {
-      return List.of(new LayoutAware.Part("logo", Component.translatable("cfhgui.layout.part.logo"), Rect.of(this.width / 2 - 128, 30, 256, 52)));
+      return List.of(new LayoutAware.Part("logo", Component.translatable("cfhgui.layout.part.logo"), Rect.of(this.width / 2 - TitleArt.TITLE_W / 2, 30, TitleArt.TITLE_W, TitleArt.BLOCK_H)));
    }
 
    @Unique
@@ -82,7 +83,7 @@ public abstract class TitleScreenMixin extends Screen implements LayoutAware {
    )
    private void cfhgui$logo(LogoRenderer logo, GuiGraphics g, int width, float alpha, Operation<Void> original) {
       if (!this.cfhgui$logoHidden()) {
-         original.call(new Object[]{logo, g, width, alpha});
+         TitleArt.render(g, width, alpha, 30);
       }
 
    }

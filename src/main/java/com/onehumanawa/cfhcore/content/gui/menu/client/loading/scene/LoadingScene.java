@@ -1,5 +1,6 @@
 package com.onehumanawa.cfhcore.content.gui.menu.client.loading.scene;
 
+import com.onehumanawa.cfhcore.content.gui.core.gfx.TitleArt;
 import java.nio.ByteBuffer;
 import java.util.Locale;
 import java.util.function.LongSupplier;
@@ -70,8 +71,8 @@ public final class LoadingScene implements StartupScene {
       this.start = clock.getAsLong();
       this.last = this.start;
       if (assets != null) {
-         this.logo = Picture.read(assets.read("minecraft", "textures/gui/title/minecraft.png"));
-         this.edition = this.logo == null ? null : Picture.read(assets.read("minecraft", "textures/gui/title/edition.png"));
+         this.logo = Picture.read(assets.read("cfhcore", "textures/gui/title/create.png"));
+         this.edition = this.logo == null ? null : Picture.read(assets.read("cfhcore", "textures/gui/title/forge_of_horizons.png"));
       }
 
       Factory create = CreateFactory.make(assets, this.sheet);
@@ -507,13 +508,18 @@ public final class LoadingScene implements StartupScene {
    }
 
    private void logo(float w, float h, float unit) {
-      float s = Math.max(0.7F, Math.min(4.0F, Math.min(w * 0.51F / 256.0F, h * 0.22F / 51.0F)));
-      int high = Math.round(51.0F * s);
+      float s = Math.max(0.7F, Math.min(4.0F, Math.min(w * 0.51F / (float)TitleArt.TITLE_W, h * 0.22F / (float)TitleArt.BLOCK_H)));
+      int high = Math.round((float)TitleArt.BLOCK_H * s);
       float middle = (float)Math.max(4, Math.round(h * 0.16F - (float)high / 2.0F)) + (float)high / 2.0F;
-      float top = middle - 25.5F * s;
-      this.gfx.image(this.logoTexture, (w / 2.0F - 128.0F * s) * unit, top * unit, 256.0F * s * unit, 44.0F * s * unit, 0.0F, 0.0F, 1.0F, 0.6875F, -1);
+      float top = middle - (float)TitleArt.BLOCK_H / 2.0F * s;
+      float tw = (float)TitleArt.TITLE_W * s;
+      float th = (float)TitleArt.TITLE_H * s;
+      this.gfx.image(this.logoTexture, (w / 2.0F - tw / 2.0F) * unit, top * unit, tw * unit, th * unit, 0.0F, 0.0F, 1.0F, 1.0F, -1);
       if (this.editionTexture != 0) {
-         this.gfx.image(this.editionTexture, (w / 2.0F - 64.0F * s) * unit, (top + 37.0F * s) * unit, 128.0F * s * unit, 14.0F * s * unit, 0.0F, 0.0F, 1.0F, 0.875F, -1);
+         float sw = (float)TitleArt.SUB_W * s;
+         float sh = (float)TitleArt.SUB_H * s;
+         float sy = top + ((float)TitleArt.TITLE_H - (float)TitleArt.SUB_OVERLAP) * s;
+         this.gfx.image(this.editionTexture, (w / 2.0F - sw / 2.0F) * unit, sy * unit, sw * unit, sh * unit, 0.0F, 0.0F, 1.0F, 1.0F, -1);
       }
 
    }
