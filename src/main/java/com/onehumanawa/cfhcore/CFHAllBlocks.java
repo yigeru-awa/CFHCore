@@ -1,7 +1,6 @@
-package com.onehumanawa.cfhcore.content.registries;
+package com.onehumanawa.cfhcore;
 
 import com.onehumanawa.cfhcore.content.burner.BurnerBlock;
-import com.simibubi.create.content.processing.burner.BlazeBurnerBlock.HeatLevel;
 
 import com.tterrag.registrate.Registrate;
 import com.tterrag.registrate.util.entry.BlockEntry;
@@ -13,9 +12,9 @@ import net.minecraft.world.level.material.MapColor;
  * CFHCore's block registry. Assets (blockstate / models) are hand-written, so this class
  * only registers the block and lets the data-generation callbacks reference those files.
  */
-public class CFHBlocks {
+public class CFHAllBlocks {
 
-	private static final Registrate REGISTRATE = CFHContentRegistries.registrate();
+	private static final Registrate REGISTRATE = CFHAllContentRegistries.registrate();
 
 	public static final BlockEntry<BurnerBlock> BURNER = REGISTRATE
 			.block("burner", BurnerBlock::new)
@@ -40,5 +39,5 @@ public class CFHBlocks {
 
 	public static void register() {}
 
-	private CFHBlocks() {}
+	private CFHAllBlocks() {}
 }

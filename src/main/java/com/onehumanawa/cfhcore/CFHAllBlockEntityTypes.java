@@ -1,4 +1,4 @@
-package com.onehumanawa.cfhcore.content.registries;
+package com.onehumanawa.cfhcore;
 
 import com.onehumanawa.cfhcore.content.burner.BurnerBlockEntity;
 import com.onehumanawa.cfhcore.content.burner.BurnerRenderer;
@@ -13,13 +13,13 @@ import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 /**
  * CFHCore's block entity registry.
  */
-public class CFHBlockEntityTypes {
+public class CFHAllBlockEntityTypes {
 
-	private static final Registrate REGISTRATE = CFHContentRegistries.registrate();
+	private static final Registrate REGISTRATE = CFHAllContentRegistries.registrate();
 
 	public static final BlockEntityEntry<BurnerBlockEntity> BURNER = REGISTRATE
 			.blockEntity("burner", BurnerBlockEntity::new)
-			.validBlocks(CFHBlocks.BURNER)
+			.validBlocks(CFHAllBlocks.BURNER)
 			.renderer(() -> BurnerRenderer::new)
 			.register();
 
@@ -33,8 +33,8 @@ public class CFHBlockEntityTypes {
 	}
 
 	public static void register(IEventBus modEventBus) {
-		modEventBus.addListener(CFHBlockEntityTypes::registerCapabilities);
+		modEventBus.addListener(CFHAllBlockEntityTypes::registerCapabilities);
 	}
 
-	private CFHBlockEntityTypes() {}
+	private CFHAllBlockEntityTypes() {}
 }

@@ -25,7 +25,6 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 import com.onehumanawa.cfhcore.content.gui.client.CFHClient;
 import com.onehumanawa.cfhcore.content.gui.core.neoforge.CFHGuiNeoForge;
-import com.onehumanawa.cfhcore.content.registries.CFHContentRegistries;
 import com.onehumanawa.cfhcore.content.worldgen.biome.modifier.BiomeModifiers;
 import com.onehumanawa.cfhcore.content.worldgen.biome.modifier.AddModifier;
 import com.onehumanawa.cfhcore.content.worldgen.biome.modifier.ReplaceModifier;
@@ -76,7 +75,7 @@ public class CFHCore {
 		modEventBus.addListener(CFHCore::gatherData);
 		RegistryUtilImpl.register(modEventBus);
 		CFHGuiNeoForge.register(modEventBus);
-		CFHContentRegistries.register(modEventBus);
+		CFHAllContentRegistries.register(modEventBus);
 
 		if (FMLEnvironment.dist == Dist.CLIENT) {
 			CFHClient.init(modEventBus, container);

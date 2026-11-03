@@ -1,6 +1,6 @@
 package com.onehumanawa.cfhcore.content.burner;
 
-import com.onehumanawa.cfhcore.content.registries.CFHBlockEntityTypes;
+import com.onehumanawa.cfhcore.CFHAllBlockEntityTypes;
 import com.simibubi.create.content.kinetics.base.HorizontalAxisKineticBlock;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock.HeatLevel;
@@ -89,6 +89,6 @@ public class BurnerBlock extends HorizontalAxisKineticBlock implements IBE<Burne
 
 	@Override
 	public BlockEntityType<? extends BurnerBlockEntity> getBlockEntityType() {
-		return CFHBlockEntityTypes.BURNER.get();
+		return CFHAllBlockEntityTypes.BURNER.get();
 	}
 }
