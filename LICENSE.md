@@ -76,11 +76,37 @@ SOFTWARE.
 
 Pursuant to the MIT License, code and assets originating from the Slate series of mods are **not subject to Sections 1 and 2 of this document** and may be freely used, modified, and redistributed under the terms of the MIT License; the above copyright and license notice must be retained upon redistribution.
 
-### 3.2 Minecraft and NeoForge
+### 3.2 Burner Block's model & textures: Create Diesel Generators (MIT)
+
+```
+MIT License
+
+Copyright (c) 2023 George VI
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+
+### 3.3 Minecraft and NeoForge
 
 This project is a Minecraft mod and depends on Minecraft (Mojang Studios) and NeoForge for operation. The relevant code, assets, and trademarks belong to their respective owners and are governed by their respective end-user license agreements (EULA) and license terms, and are not within the scope of the licenses granted in this document.
 
-### 3.3 Other Mods
+### 3.4 Other Mods
 
 This project may reference APIs or optional compatibility logic of other mods. The copyrights and licenses of such components belong to their respective authors, and they are invoked solely through their public interfaces.
 

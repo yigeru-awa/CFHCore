@@ -8,7 +8,6 @@ import com.onehumanawa.cfhcore.content.gui.core.gfx.Icons;
 import com.onehumanawa.cfhcore.content.gui.core.gfx.CFHGuiDraw;
 import com.onehumanawa.cfhcore.content.gui.core.layout.ui.Rect;
 import com.onehumanawa.cfhcore.content.gui.core.module.Features;
-import com.onehumanawa.cfhcore.content.gui.core.module.KnownModules;
 import com.onehumanawa.cfhcore.content.gui.core.screen.CFHGuiScreen;
 import com.onehumanawa.cfhcore.content.gui.core.screen.slot.MenuSlots;
 import com.onehumanawa.cfhcore.content.gui.core.stage.Stage;
@@ -23,7 +22,6 @@ import com.onehumanawa.cfhcore.content.gui.core.theme.Colors;
 import com.onehumanawa.cfhcore.content.gui.core.theme.Palette;
 import com.onehumanawa.cfhcore.content.gui.core.theme.Theme;
 import com.onehumanawa.cfhcore.content.gui.core.widget.CFHGuiButton;
-import com.onehumanawa.cfhcore.content.gui.core.widget.CFHGuiToasts;
 import com.onehumanawa.cfhcore.content.gui.menu.client.pause.PauseActions;
 import com.onehumanawa.cfhcore.content.gui.menu.client.pause.PauseVitals;
 import java.util.List;
@@ -200,7 +198,7 @@ public final class OverhaulPauseScreen extends CFHGuiScreen {
          Component profile = Component.translatable("cfhgui.overhaul.profile");
          self.named(profile).tooltip(profile).onClick(() -> MenuSlots.open("cfhgui_profile:profile", this));
       } else {
-         self.tooltip(Features.lockedTooltip("cfhgui_profile")).onClick(() -> CFHGuiToasts.show(KnownModules.name("cfhgui_profile"), Features.lockedTooltip("cfhgui_profile"), Icon.LOCK));
+         self.tooltip(Features.lockedTooltip("cfhgui_profile"));
       }
 
       ((MotesNode)s.add(new MotesNode(24, 7.0F, 5.0F, 7.0F, 0.03F, 1224730562, 12L))).at(0.0F, 2.2F, -1.0F).attachTo(root);

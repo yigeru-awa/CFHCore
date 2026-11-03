@@ -1,0 +1,44 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "axis": "x"
+      },
+      "apply": {
+        "model": "cfhcore:block/burner/block",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "z"
+      },
+      "apply": {
+        "model": "cfhcore:block/burner/block"
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "blaze": "fading"
+          },
+          {
+            "blaze": "kindled"
+          }
+        ]
+      },
+      "apply": {
+        "model": "cfhcore:block/burner/fire"
+      }
+    },
+    {
+      "when": {
+        "blaze": "seething"
+      },
+      "apply": {
+        "model": "cfhcore:block/burner/fire_soul"
+      }
+    }
+  ]
+}

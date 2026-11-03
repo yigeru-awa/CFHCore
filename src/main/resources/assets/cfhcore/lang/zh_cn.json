@@ -40,5 +40,13 @@
   "cfhcore.menu.loading": "加载中…",
   "cfhcore.menu.delete": "删除",
   "cfhcore.menu.join": "加入",
-  "cfhcore.menu.back": "返回"
+  "cfhcore.menu.back": "返回",
+  "block.cfhcore.burner": "燃烧室",
+  "cfhcore.gui.goggles.burner.state": "燃烧状态",
+  "cfhcore.gui.goggles.burner.state.smouldering": "未加热",
+  "cfhcore.gui.goggles.burner.state.kindled": "加热",
+  "cfhcore.gui.goggles.burner.state.seething": "超级加热",
+  "cfhcore.gui.goggles.burner.remaining": "剩余可燃烧时间",
+  "cfhcore.gui.goggles.burner.items": "个物品",
+  "cfhcore.gui.goggles.burner.creative": "创造加热（不消耗燃料）"
 }

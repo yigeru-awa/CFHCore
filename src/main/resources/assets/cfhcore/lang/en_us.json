@@ -40,5 +40,13 @@
   "cfhcore.menu.loading": "Loading…",
   "cfhcore.menu.delete": "Delete",
   "cfhcore.menu.join": "Join",
-  "cfhcore.menu.back": "Back"
+  "cfhcore.menu.back": "Back",
+  "block.cfhcore.burner": "Burner",
+  "cfhcore.gui.goggles.burner.state": "Burn State",
+  "cfhcore.gui.goggles.burner.state.smouldering": "No Heating",
+  "cfhcore.gui.goggles.burner.state.kindled": "Heating",
+  "cfhcore.gui.goggles.burner.state.seething": "Super Heating",
+  "cfhcore.gui.goggles.burner.remaining": "Remaining Burn Time",
+  "cfhcore.gui.goggles.burner.items": "items",
+  "cfhcore.gui.goggles.burner.creative": "Creative heat (no fuel consumed)"
 }
