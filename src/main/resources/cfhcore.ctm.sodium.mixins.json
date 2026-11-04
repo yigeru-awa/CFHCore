@@ -1,0 +1,13 @@
+{
+  "required": false,
+  "package": "com.onehumanawa.cfhcore.foundation.ctm.mixin",
+  "plugin": "com.onehumanawa.cfhcore.foundation.ctm.mixin.CTMSodiumMixinPlugin",
+  "minVersion": "0.8",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "SodiumBlockRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

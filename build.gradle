@@ -90,7 +90,7 @@ dependencies {
     compileOnly fileTree(dir: "libs/xaero", include: ["*.jar"])
 
     // Sodium
-    implementation("curse.maven:sodium-394468:8756580")
+    compileOnly files("libs/sodium-neoforge-0.8.13.jar")
 }
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
     var replaceProperties = [minecraft_version      : minecraft_version,
