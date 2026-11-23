@@ -219,7 +219,9 @@ public final class MenuSlots {
 
    // the overhaul layout is the only requestable layout; effective() still degrades per slot
    public static Layout requested(String slotId) {
-      return Layout.OVERHAUL;
+      // an explicit per-slot override wins over the global preference
+      Optional<Layout> over = layoutOverride(slotId);
+      return over.isPresent() ? over.get() : Layout.OVERHAUL;
    }
 
    public static Layout effective(String slotId) {
