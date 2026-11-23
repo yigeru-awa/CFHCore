@@ -1,0 +1,163 @@
+package com.onehumanawa.cfhcore.content.gui.emi.registry;
+
+import com.google.common.collect.Lists;
+import com.onehumanawa.cfhcore.content.gui.emi.api.EmiDragDropHandler;
+import com.onehumanawa.cfhcore.content.gui.emi.api.EmiExclusionArea;
+import com.onehumanawa.cfhcore.content.gui.emi.api.EmiRegistry;
+import com.onehumanawa.cfhcore.content.gui.emi.api.EmiScreenBoundsProvider;
+import com.onehumanawa.cfhcore.content.gui.emi.api.EmiStackProvider;
+import com.onehumanawa.cfhcore.content.gui.emi.api.recipe.EmiRecipe;
+import com.onehumanawa.cfhcore.content.gui.emi.api.recipe.EmiRecipeCategory;
+import com.onehumanawa.cfhcore.content.gui.emi.api.recipe.EmiRecipeDecorator;
+import com.onehumanawa.cfhcore.content.gui.emi.api.recipe.handler.EmiRecipeHandler;
+import com.onehumanawa.cfhcore.content.gui.emi.api.stack.Comparison;
+import com.onehumanawa.cfhcore.content.gui.emi.api.stack.EmiIngredient;
+import com.onehumanawa.cfhcore.content.gui.emi.api.stack.EmiStack;
+import com.onehumanawa.cfhcore.content.gui.emi.api.stack.serializer.EmiIngredientSerializer;
+import com.onehumanawa.cfhcore.content.gui.emi.data.EmiAlias;
+import com.onehumanawa.cfhcore.content.gui.emi.runtime.EmiHidden;
+import com.onehumanawa.cfhcore.content.gui.emi.runtime.EmiReloadLog;
+import com.onehumanawa.cfhcore.content.gui.emi.runtime.ProxyRecipeManager;
+import com.onehumanawa.cfhcore.content.gui.emi.screen.EmiScreenBase;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.crafting.RecipeManager;
+
+public class EmiRegistryImpl implements EmiRegistry {
+	@Override
+	public <T extends Screen> void addScreenBoundsProvider(Class<T> clazz, EmiScreenBoundsProvider<T> provider) {
+		EmiScreenBase.addScreenBoundsProvider(clazz, provider);
+	}
+
+	@Override
+	public void addGenericScreenBoundsProvider(EmiScreenBoundsProvider<Screen> provider) {
+		EmiScreenBase.addGenericScreenBoundsProvider(provider);
+	}
+
+	@Override
+	public boolean isStackDisabled(EmiIngredient stack) {
+		return EmiHidden.isDisabled(stack);
+	}
+
+	@Override
+	public RecipeManager getRecipeManager() {
+		return ProxyRecipeManager.getRaw();
+	}
+
+	@Override
+	public void addCategory(EmiRecipeCategory category) {
+		EmiRecipes.addCategory(category);
+	}
+
+	@Override
+	public void addWorkstation(EmiRecipeCategory category, EmiIngredient workstation) {
+		EmiRecipes.addWorkstation(category, workstation);
+	}
+
+	@Override
+	public void addRecipe(EmiRecipe recipe) {
+		if (recipe.getInputs() == null) {
+			EmiReloadLog.warn("Recipe " + recipe.getId() + " provides null inputs and cannot be added");
+		} else if (recipe.getOutputs() == null) {
+			EmiReloadLog.warn("Recipe " + recipe.getId() + " provides null outputs and cannot be added");
+		} else {
+			EmiRecipes.addRecipe(recipe);
+		}
+	}
+
+	@Override
+	public void removeRecipes(Predicate<EmiRecipe> predicate) {
+		EmiRecipes.invalidators.add(predicate);
+	}
+
+	@Override
+	public void addDeferredRecipes(Consumer<Consumer<EmiRecipe>> consumer) {
+		EmiRecipes.lateRecipes.add(consumer);
+	}
+
+	@Override
+	public void addEmiStack(EmiStack stack) {
+		EmiStackList.stacks.add(stack);
+	}
+
+	@Override
+	public void addEmiStackAfter(EmiStack stack, Predicate<EmiStack> predicate) {
+		ListIterator<EmiStack> listIterator = EmiStackList.stacks.listIterator();
+
+		while (listIterator.hasNext()) {
+			EmiStack candidate = listIterator.next();
+			if (predicate.test(candidate)) {
+				listIterator.add(stack);
+				return;
+			}
+		}
+	}
+
+	@Override
+	public void removeEmiStacks(Predicate<EmiStack> predicate) {
+		EmiStackList.invalidators.add(predicate);
+	}
+
+	@Override
+	public <T extends EmiIngredient> void addIngredientSerializer(Class<T> clazz, EmiIngredientSerializer<T> serializer) {
+		EmiIngredientSerializers.BY_CLASS.put(clazz, serializer);
+		EmiIngredientSerializers.BY_TYPE.put(serializer.getType(), serializer);
+	}
+
+	@Override
+	public <T extends Screen> void addExclusionArea(Class<T> clazz, EmiExclusionArea<T> area) {
+		EmiExclusionAreas.fromClass.computeIfAbsent(clazz, c -> Lists.newArrayList()).add(area);
+	}
+
+	@Override
+	public void addGenericExclusionArea(EmiExclusionArea<Screen> area) {
+		EmiExclusionAreas.generic.add(area);
+	}
+
+	@Override
+	public <T extends Screen> void addDragDropHandler(Class<T> clazz, EmiDragDropHandler<T> handler) {
+		EmiDragDropHandlers.fromClass.computeIfAbsent(clazz, c -> Lists.newArrayList()).add(handler);
+	}
+
+	@Override
+	public void addGenericDragDropHandler(EmiDragDropHandler<Screen> handler) {
+		EmiDragDropHandlers.generic.add(handler);
+	}
+
+	@Override
+	public <T extends Screen> void addStackProvider(Class<T> clazz, EmiStackProvider<T> provider) {
+		EmiStackProviders.fromClass.computeIfAbsent(clazz, c -> Lists.newArrayList()).add(provider);
+	}
+
+	@Override
+	public void addGenericStackProvider(EmiStackProvider<Screen> provider) {
+		EmiStackProviders.generic.add(provider);
+	}
+
+	@Override
+	public <T extends AbstractContainerMenu> void addRecipeHandler(MenuType<T> type, EmiRecipeHandler<T> handler) {
+		EmiRecipeFiller.handlers.computeIfAbsent(type, c -> Lists.newArrayList()).add(handler);
+	}
+
+	@Override
+	public void setDefaultComparison(Object key, Function<Comparison, Comparison> comparison) {
+		EmiComparisonDefaults.comparisons.put(key, comparison.apply(EmiComparisonDefaults.get(key)));
+	}
+
+	@Override
+	public void addAlias(EmiIngredient stack, Component text) {
+		EmiStackList.registryAliases.add(new EmiAlias.Baked(List.of(stack), List.of(text)));
+	}
+
+	@Override
+	public void addRecipeDecorator(EmiRecipeDecorator decorator) {
+		EmiRecipes.decorators.add(decorator);
+	}
+}

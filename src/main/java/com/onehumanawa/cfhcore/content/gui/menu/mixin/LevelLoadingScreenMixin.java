@@ -41,7 +41,7 @@ public abstract class LevelLoadingScreenMixin extends Screen {
             this.triggerImmediateNarration(true);
          }
 
-         LoadingScreens.render(this, g, mouseX, mouseY, partialTick, Component.translatable("cfhgui.loading.world"), Component.translatable("cfhgui.loading.spawn"), (float)this.progressListener.getProgress() / 100.0F, this.progressListener, List.of());
+         LoadingScreens.render(this, g, mouseX, mouseY, partialTick, Component.translatable("cfhgui.loading.world"), Component.translatable("cfhgui.loading.spawn"), this.progressListener.getProgress() / 100.0F, this.progressListener, List.of());
       }
    }
 }

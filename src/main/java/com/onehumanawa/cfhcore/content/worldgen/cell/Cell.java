@@ -55,6 +55,10 @@ public class Cell {
     public float beachNoise;
     public RiverCarverSettings.RiverZone riverZone = RiverCarverSettings.RiverZone.None;
 
+    public float pressure;
+    public float radiation;
+    public float horizon;
+
     public Cell() {
         this.regionMoisture = 0.5F;
         this.regionTemperature = 0.5F;

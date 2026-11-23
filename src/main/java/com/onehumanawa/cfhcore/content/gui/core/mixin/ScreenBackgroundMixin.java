@@ -35,7 +35,7 @@ public abstract class ScreenBackgroundMixin {
 
    @Unique
    private boolean cfhgui$own() {
-      return (Object)this instanceof CFHGuiScreen;
+      return (Object)(Object)this instanceof CFHGuiScreen;
    }
 
    @Inject(
@@ -94,7 +94,7 @@ public abstract class ScreenBackgroundMixin {
       require = 0
    )
    private void cfhgui$panorama(GuiGraphics g, float partialTick, CallbackInfo ci) {
-      if (!((Object)this instanceof TitleScreen)) {
+      if (!((Object)(Object)this instanceof TitleScreen)) {
          if (MenuBackdrop.active() && MenuBackdrop.paint(g, this.width, this.height, partialTick)) {
             ci.cancel();
          } else if (!this.cfhgui$own() && Reskin.dark()) {

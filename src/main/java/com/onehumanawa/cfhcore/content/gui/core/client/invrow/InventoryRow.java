@@ -45,7 +45,7 @@ public final class InventoryRow extends CFHGuiWidget {
    private static final int TAB_H = 28;
    private static final int EDGE = 2;
    private static final String BETTER_INVENTORY = "dev.fallingcloud.betterinventory.";
-   private static final String SLATE_CREATIVE = "com.onehumanawa.cfhcore.content.gui.menu.client.creative.";
+   private static final String CFH_CREATIVE = "com.onehumanawa.cfhcore.content.gui.menu.client.creative.";
    private static final List<Entry> ENTRIES = new CopyOnWriteArrayList();
    private static boolean hooked;
    private final AbstractContainerScreen<?> screen;

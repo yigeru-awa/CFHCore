@@ -1,0 +1,8 @@
+package com.onehumanawa.cfhcore.content.gui.emi.api;
+
+import com.onehumanawa.cfhcore.content.gui.emi.api.stack.EmiStackInteraction;
+import net.minecraft.client.gui.screens.Screen;
+
+public interface EmiStackProvider<T extends Screen> {
+	EmiStackInteraction getStackAt(T var1, int var2, int var3);
+}

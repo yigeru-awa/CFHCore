@@ -19,7 +19,7 @@ import net.minecraft.util.Mth;
 
 final class TitleThings {
    private static final ResourceLocation CREATE_COG = ResourceLocation.fromNamespaceAndPath("create", "block/large_cogwheel");
-   private static final ResourceLocation SLATE_COG = CFHGuiMenu.id("stage/large_cogwheel");
+   private static final ResourceLocation CFH_COG = CFHGuiMenu.id("stage/large_cogwheel");
    private static final long PLAY_SEED = 20260929L;
    private static final float HEAD_TURN = 18.0F;
    private static final float HEAD_NOD = 7.0F;
@@ -103,7 +103,7 @@ final class TitleThings {
 
          };
       } else {
-         ModelNode cog = (ModelNode)s.add(create ? (new ModelNode(CREATE_COG)).fallback(SLATE_COG) : new ModelNode(SLATE_COG));
+         ModelNode cog = (ModelNode)s.add(create ? (new ModelNode(CREATE_COG)).fallback(CFH_COG) : new ModelNode(CFH_COG));
          cog.lamp(PlayBlock.LAMP, 0.34F, 1.0F);
          cog.pickable(false).hoverFeel(0.0F, 1.0F).attachTo(lean);
          if (locked) {

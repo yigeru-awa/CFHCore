@@ -108,7 +108,7 @@ final class FileSet extends TitleSet {
    private void floor() {
       Plot plot = new Plot(this.stage, -3, -1, -2, 3, -1, 2);
       plot.fill(-3, -1, -2, 3, -1, 2, (BlockState)Pick.of("polished_deepslate"));
-      plot.fill(-2, -1, -1, 2, -1, 1, (BlockState)Pick.of("deepslate_tiles"));
+      plot.fill(-2, -1, -1, 2, -1, 1, (BlockState)Pick.of("deepcfhgui_tiles"));
       plot.done(this.stage);
       ((FxNode)this.stage.add(FxNode.glow(16.0F, -13948377).fade(2.6F))).at(0.0F, -0.02F, 0.5F);
    }

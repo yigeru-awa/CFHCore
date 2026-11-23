@@ -1,0 +1,27 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.onehumanawa.cfhcore.content.gui.server.mixin.server",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "ChunkMapAccessor",
+    "CommandSourceStackAccessor",
+    "CommandSourceStackMixin",
+    "CommandsMixin",
+    "LevelTickersAccessor",
+    "ListPlayersCommandMixin",
+    "MinecraftServerMixin",
+    "PlayerDisplayNameMixin",
+    "PlayerListMixin",
+    "ServerGamePacketListenerImplMixin",
+    "ServerPlayerGameModeMixin",
+    "ServerPlayerMixin",
+    "SleepStatusMixin",
+    "StatsCounterAccessor",
+    "TrackedEntityInvoker"
+  ],
+  "client": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

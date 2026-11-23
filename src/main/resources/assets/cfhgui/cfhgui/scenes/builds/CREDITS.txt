@@ -1,4 +1,4 @@
-The builds in this folder are other people's work, shipped with Slate on their authors' terms (see docs/scene-credits.md
+The builds in this folder are other people's work, shipped with CFHGui on their authors' terms (see docs/scene-credits.md
 in Slate's repository for the full story). Each file is the part of the build the main menu's camera shows, cut from the
 author's download; blocks no one can see are filled with stone, and in Red rose city the builders' scaffolds floating in
 the sky are left out; nothing else is changed.

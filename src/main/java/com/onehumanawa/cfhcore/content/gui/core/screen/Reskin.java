@@ -137,7 +137,7 @@ public final class Reskin {
                   case "ALL_NON_CONTAINER":
                      var10000 = true;
                      break;
-                  case "VANILLA_AND_SLATE":
+                  case "VANILLA_AND_CFH":
                      var10000 = ScreenIds.isVanilla(s) || cfhguiOwn(s);
                      break;
                   default:

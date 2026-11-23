@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.onehumanawa.cfhcore.content.gui.server.mixin.client",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [],
+  "client": [
+    "ContainerScreenPlaceAccessor"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -355,7 +355,7 @@ public final class NeoForgeSpecDocument implements FileDocument {
          }
 
          if (sample instanceof Enum<?> en) {
-            for(Object c : (Enum[])en.getDeclaringClass().getEnumConstants()) {
+            for(Object c : en.getDeclaringClass().getEnumConstants()) {
                if (((Enum)c).name().equalsIgnoreCase(s.trim())) {
                   return c;
                }

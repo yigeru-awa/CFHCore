@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.onehumanawa.cfhcore.content.gui.teams.mixin.client",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [],
+  "client": [
+    "TeamsGuiMixin",
+    "TeamsKeyboardHandlerMixin",
+    "TeamsMouseHandlerMixin",
+    "TeamsScreenMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -25,6 +25,7 @@ import net.minecraft.world.level.levelgen.placement.RarityFilter;
 import com.onehumanawa.cfhcore.CFHCore;
 import com.onehumanawa.cfhcore.content.worldgen.data.preset.settings.MiscellaneousSettings;
 import com.onehumanawa.cfhcore.content.worldgen.data.preset.settings.Preset;
+import com.onehumanawa.cfhcore.content.worldgen.feature.placement.BlacklistDimensionFilter;
 import com.onehumanawa.cfhcore.content.worldgen.feature.placement.CFHPlacementModifiers;
 
 public class PresetPlacedFeatures {
@@ -89,7 +90,7 @@ public class PresetPlacedFeatures {
 		HolderGetter<ConfiguredFeature<?, ?>> features = ctx.lookup(Registries.CONFIGURED_FEATURE);
 		MiscellaneousSettings miscellaneous = preset.miscellaneous();
 
-		PlacementModifier blacklistOverworld = CFHPlacementModifiers.blacklistDimensions(LevelStem.OVERWORLD);
+		PlacementModifier blacklistOverworld = new BlacklistDimensionFilter(List.of(LevelStem.OVERWORLD));
 		
 		if(miscellaneous.erosionDecorator) {
 			PlacementUtils.register(ctx, ERODE, features.getOrThrow(PresetConfiguredFeatures.ERODE));

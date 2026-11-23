@@ -115,7 +115,7 @@ final class WorkshopSet extends TitleSet {
       BlockState brick = Pick.of("bricks");
       BlockState upper = Pick.of("stone_bricks");
       BlockState frame = this.pick("create:industrial_iron_block", "iron_block");
-      BlockState dark = Pick.of("deepslate_bricks");
+      BlockState dark = Pick.of("deepcfhgui_bricks");
       BlockState window = this.pick("create:framed_glass", "glass");
 
       for(int y = 0; y <= 5; ++y) {

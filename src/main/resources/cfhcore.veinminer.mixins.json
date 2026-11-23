@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.onehumanawa.cfhcore.content.gui.veinminer.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "ServerLevelMixin",
+    "ServerPlayerGameModeMixin"
+  ],
+  "client": [
+    "VeinMouseHandlerMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

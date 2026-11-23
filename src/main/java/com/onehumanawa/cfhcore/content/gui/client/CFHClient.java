@@ -11,7 +11,7 @@ import com.onehumanawa.cfhcore.content.gui.menu.CFHGuiMenu;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 
-// Client bootstrap for the CFHGui menu stack copied from Slate.
+// Client bootstrap for the CFHGui menu stack, ported from the upstream Slate sources.
 public final class CFHClient {
 
 	private CFHClient() {}

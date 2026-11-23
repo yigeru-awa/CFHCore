@@ -18,7 +18,7 @@ import net.minecraft.world.level.levelgen.placement.PlacementContext;
 import net.minecraft.world.level.levelgen.placement.PlacementFilter;
 import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
 
-class BlacklistDimensionFilter extends PlacementFilter {
+public class BlacklistDimensionFilter extends PlacementFilter {
 	public static final MapCodec<BlacklistDimensionFilter> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 		ResourceKey.codec(Registries.LEVEL_STEM).listOf().fieldOf("blacklist").forGetter((filter) -> filter.blacklist)
 	).apply(instance, BlacklistDimensionFilter::new));

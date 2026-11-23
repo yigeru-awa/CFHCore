@@ -38,7 +38,7 @@ public final class CFHGuiConfig implements CFHGuiModule {
    public static final String MOD_ID = "cfhgui_config";
    public static final Logger LOGGER = LoggerFactory.getLogger("CFHGui Config");
    public static final CFHGuiConfig MODULE = new CFHGuiConfig();
-   private static final List<String> PAGE_IDS = List.of("general", "gameplay", "gameplay/general", "gameplay/building", "video", "controls", "controls/keys", "audio", "multiplayer", "multiplayer/online", "multiplayer/chat", "multiplayer/skin", "interface", "interface/menus", "language_accessibility", "language_accessibility/language", "language_accessibility/accessibility", "customization", "customization/mods", "customization/packs", "customization/shaders", "advanced", "advanced/video", "advanced/controls", "advanced/multiplayer", "advanced/interface", "advanced/favourites", "advanced/presets", "advanced/files", "developer");
+   private static final List<String> PAGE_IDS = List.of("general", "gameplay", "gameplay/general", "video", "controls", "controls/keys", "audio", "multiplayer", "multiplayer/online", "multiplayer/chat", "multiplayer/skin", "interface", "interface/menus", "language_accessibility", "language_accessibility/language", "language_accessibility/accessibility", "customization", "customization/mods", "customization/packs", "customization/shaders", "advanced", "advanced/video", "advanced/controls", "advanced/multiplayer", "advanced/interface", "advanced/favourites", "advanced/presets", "advanced/files", "developer");
 
    private CFHGuiConfig() {
    }
@@ -81,7 +81,7 @@ public final class CFHGuiConfig implements CFHGuiModule {
       CFHGuiEvents.CLIENT_TICK_END.register(ApplyQueue::tick);
       installSwaps();
       LOGGER.info("[CFHGui Config] client init ({} curated page(s))", CuratedPages.load().size());
-      if (System.getenv("SLATE_CONFIG_SMOKE") != null || String.valueOf(System.getProperty("cfhgui.autoScreens")).contains("cfhgui_config:smoke")) {
+      if (System.getenv("CFH_CONFIG_SMOKE") != null || String.valueOf(System.getProperty("cfhgui.autoScreens")).contains("cfhgui_config:smoke")) {
          SmokeTest.install();
       }
 

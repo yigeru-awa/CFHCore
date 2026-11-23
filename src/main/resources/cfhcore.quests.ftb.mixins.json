@@ -1,0 +1,17 @@
+{
+  "required": false,
+  "minVersion": "0.8",
+  "package": "com.onehumanawa.cfhcore.content.gui.quests.mixin.ftb",
+  "compatibilityLevel": "JAVA_21",
+  "plugin": "com.onehumanawa.cfhcore.content.gui.quests.compat.FtbMixins",
+  "mixins": [
+    "FtbTeamDataMixin"
+  ],
+  "client": [
+    "FtbClientQuestFileMixin",
+    "FtbNetClientMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 0
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.onehumanawa.cfhcore.content.gui.quests.mixin.client",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [],
+  "client": [
+    "AdvancementsScreenAccessor",
+    "ClientAdvancementsAccessor",
+    "ClientAdvancementsMixin",
+    "ContainerScreenPlaceAccessor",
+    "ToastStackAccessor"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

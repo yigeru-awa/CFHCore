@@ -1,0 +1,28 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.onehumanawa.cfhcore.content.gui.teams.mixin.server",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "BlockItemMixin",
+    "BreakDoorGoalMixin",
+    "DispenserBlockMixin",
+    "EndermanLeaveBlockMixin",
+    "EndermanTakeBlockMixin",
+    "EntityDamageMixin",
+    "ExplosionMixin",
+    "FarmBlockMixin",
+    "FireBlockMixin",
+    "FlowingFluidMixin",
+    "ItemUseMixin",
+    "LevelDestroyBlockMixin",
+    "PistonBaseBlockMixin",
+    "RemoveBlockGoalMixin",
+    "ServerPlayerMixin",
+    "SteppedOnBlocksMixin"
+  ],
+  "client": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

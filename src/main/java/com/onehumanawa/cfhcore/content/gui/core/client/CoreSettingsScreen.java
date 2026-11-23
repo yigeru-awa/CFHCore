@@ -197,7 +197,7 @@ public final class CoreSettingsScreen extends CFHGuiScreen {
       y += inventory.card.getHeight() + 8;
       Section restyle = new Section(w, Component.translatable("cfhgui.settings.section.restyle"));
       restyle.row((new CFHGuiLabel(0, 0, restyle.rowW, Component.translatable("cfhgui.settings.restyle.hint"))).style(CFHGuiLabel.Style.MUTED).wrap(true));
-      restyle.row((new CFHGuiDropdown<String>(0, 0, restyle.rowW, List.of("VANILLA_AND_SLATE", "ALLOWLIST", "ALL_NON_CONTAINER", "NONE"), cfg.reskinScope, (s) -> Component.translatable("cfhgui.reskin." + s.toLowerCase(Locale.ROOT)), (s) -> {
+      restyle.row((new CFHGuiDropdown<String>(0, 0, restyle.rowW, List.of("VANILLA_AND_CFH", "ALLOWLIST", "ALL_NON_CONTAINER", "NONE"), cfg.reskinScope, (s) -> Component.translatable("cfhgui.reskin." + s.toLowerCase(Locale.ROOT)), (s) -> {
          this.save((x) -> x.reskinScope = s);
          Reskin.invalidate();
       })).label(Component.translatable("cfhgui.settings.reskin_scope")));

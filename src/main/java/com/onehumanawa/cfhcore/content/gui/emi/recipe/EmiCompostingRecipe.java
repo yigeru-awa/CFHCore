@@ -1,0 +1,75 @@
+package com.onehumanawa.cfhcore.content.gui.emi.recipe;
+
+import com.onehumanawa.cfhcore.content.gui.emi.EmiPort;
+import com.onehumanawa.cfhcore.content.gui.emi.EmiRenderHelper;
+import com.onehumanawa.cfhcore.content.gui.emi.api.recipe.EmiRecipe;
+import com.onehumanawa.cfhcore.content.gui.emi.api.recipe.EmiRecipeCategory;
+import com.onehumanawa.cfhcore.content.gui.emi.api.recipe.VanillaEmiRecipeCategories;
+import com.onehumanawa.cfhcore.content.gui.emi.api.render.EmiTexture;
+import com.onehumanawa.cfhcore.content.gui.emi.api.stack.EmiIngredient;
+import com.onehumanawa.cfhcore.content.gui.emi.api.stack.EmiStack;
+import com.onehumanawa.cfhcore.content.gui.emi.api.widget.TextWidget;
+import com.onehumanawa.cfhcore.content.gui.emi.api.widget.WidgetHolder;
+import java.util.List;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Items;
+import org.jetbrains.annotations.Nullable;
+
+public class EmiCompostingRecipe implements EmiRecipe {
+	private static final EmiStack BONE_MEAL = EmiStack.of(Items.BONE_MEAL);
+	private final EmiIngredient stack;
+	private final float chance;
+	private final ResourceLocation id;
+
+	public EmiCompostingRecipe(EmiIngredient stack, float chance, ResourceLocation id) {
+		this.stack = stack;
+		this.chance = chance;
+		this.id = id;
+	}
+
+	@Override
+	public EmiRecipeCategory getCategory() {
+		return VanillaEmiRecipeCategories.COMPOSTING;
+	}
+
+	@Nullable
+	@Override
+	public ResourceLocation getId() {
+		return this.id;
+	}
+
+	@Override
+	public List<EmiIngredient> getInputs() {
+		return List.of(this.stack);
+	}
+
+	@Override
+	public List<EmiStack> getOutputs() {
+		return List.of(BONE_MEAL);
+	}
+
+	@Override
+	public int getDisplayWidth() {
+		return 108;
+	}
+
+	@Override
+	public int getDisplayHeight() {
+		return 18;
+	}
+
+	@Override
+	public boolean supportsRecipeTree() {
+		return false;
+	}
+
+	@Override
+	public void addWidgets(WidgetHolder widgets) {
+		widgets.addSlot(this.stack, 0, 0);
+		widgets.addTexture(EmiTexture.EMPTY_ARROW, 46, 1);
+		widgets.addText(EmiPort.literal(EmiRenderHelper.TEXT_FORMAT.format((double)(this.chance * 100.0F)) + "%"), 32, 5, -1, true)
+			.horizontalAlign(TextWidget.Alignment.CENTER);
+		widgets.addText(EmiPort.literal("x7"), 74, 5, -1, true);
+		widgets.addSlot(BONE_MEAL, 90, 0).recipeContext(this);
+	}
+}

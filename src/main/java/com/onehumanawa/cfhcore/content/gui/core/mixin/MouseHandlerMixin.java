@@ -48,8 +48,8 @@ public abstract class MouseHandlerMixin {
    )
    private void cfhgui$onScroll(long window, double xoffset, double yoffset, CallbackInfo ci) {
       if (window == this.minecraft.getWindow().getWindow() && this.minecraft.screen != null && this.minecraft.getOverlay() == null) {
-         boolean discrete = (Boolean)(Object)this.minecraft.options.discreteMouseScroll().get();
-         double sens = (Double)(Object)this.minecraft.options.mouseWheelSensitivity().get();
+         boolean discrete = (Boolean)(Object)(Object)this.minecraft.options.discreteMouseScroll().get();
+         double sens = (Double)(Object)(Object)this.minecraft.options.mouseWheelSensitivity().get();
          double sx = (discrete ? Math.signum(xoffset) : xoffset) * sens;
          double sy = (discrete ? Math.signum(yoffset) : yoffset) * sens;
          if (ScreenInput.mouseScrolled(sx, sy)) {

@@ -32,7 +32,7 @@ public abstract class ScreenLayoutMixin {
       require = 0
    )
    private void cfhgui$beginFrame(GuiGraphics g, int mouseX, int mouseY, float partialTick, CallbackInfo ci) {
-      LayoutBackground.beginFrame((Screen)(Object)this);
+      LayoutBackground.beginFrame((Screen)(Object)(Object)this);
    }
 
    @ModifyArgs(
@@ -45,7 +45,7 @@ public abstract class ScreenLayoutMixin {
    )
    private void cfhgui$editorMouse(Args args) {
       EditorOverlay ed = LayoutEditor.overlay();
-      if (ed != null && ed.screen() == (Screen)(Object)this && ed.hidesScreenMouse()) {
+      if (ed != null && ed.screen() == (Screen)(Object)(Object)this && ed.hidesScreenMouse()) {
          args.set(1, -9999);
          args.set(2, -9999);
       }
@@ -74,7 +74,7 @@ public abstract class ScreenLayoutMixin {
       require = 0
    )
    private void cfhgui$directBackground(GuiGraphics g, int mouseX, int mouseY, float partialTick, CallbackInfo ci) {
-      if (LayoutBackground.render((Screen)(Object)this, g, partialTick, PANORAMA)) {
+      if (LayoutBackground.render((Screen)(Object)(Object)this, g, partialTick, PANORAMA)) {
          ci.cancel();
       }
 

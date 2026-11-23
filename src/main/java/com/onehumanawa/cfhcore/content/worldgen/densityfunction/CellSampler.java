@@ -214,6 +214,27 @@ public record CellSampler(Supplier<WorldLookup> deferredLookup, Field field) imp
 			public float read(Cell cell, Heightmap heightmap) {
 				return cell.sediment;
 			}
+		},
+		PRESSURE("pressure") {
+			
+			@Override
+			public float read(Cell cell, Heightmap heightmap) {
+				return cell.pressure;
+			}
+		},
+		RADIATION("radiation") {
+			
+			@Override
+			public float read(Cell cell, Heightmap heightmap) {
+				return cell.radiation;
+			}
+		},
+		HORIZON("horizon") {
+			
+			@Override
+			public float read(Cell cell, Heightmap heightmap) {
+				return cell.horizon;
+			}
 		};
 
 		public static final Codec<Field> CODEC = StringRepresentable.fromEnum(Field::values);

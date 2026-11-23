@@ -18,7 +18,7 @@ public abstract class AbstractDebugChartMixin {
       require = 0
    )
    private void cfhgui$chart(GuiGraphics graphics, int x, int width, Operation<Void> original) {
-      if (!DebugCharts.begin((AbstractDebugChart)(Object)this, graphics, x, width)) {
+      if (!DebugCharts.begin((AbstractDebugChart)(Object)(Object)this, graphics, x, width)) {
          original.call(new Object[]{graphics, x, width});
       } else {
          try {

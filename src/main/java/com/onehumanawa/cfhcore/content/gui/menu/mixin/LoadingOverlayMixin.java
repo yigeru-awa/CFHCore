@@ -45,7 +45,7 @@ public abstract class LoadingOverlayMixin {
       cancellable = true
    )
    private void cfhgui$factory(GuiGraphics graphics, int mouseX, int mouseY, float partialTick, CallbackInfo ci) {
-      if (((Object)this).getClass() == LoadingOverlay.class && OverhaulLoading.active()) {
+      if (((Object)(Object)this).getClass() == LoadingOverlay.class && OverhaulLoading.active()) {
          long now = Util.getMillis();
          if (this.fadeIn && this.fadeInStart == -1L) {
             this.fadeInStart = now;

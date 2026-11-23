@@ -77,7 +77,7 @@ public final class CoreBindings {
    private static List<Choice> scopes() {
       List<Choice> out = new ArrayList();
 
-      for(String s : List.of("VANILLA_AND_SLATE", "ALLOWLIST", "ALL_NON_CONTAINER", "NONE")) {
+      for(String s : List.of("VANILLA_AND_CFH", "ALLOWLIST", "ALL_NON_CONTAINER", "NONE")) {
          out.add(new Choice(s, Component.translatable("cfhgui.reskin." + s.toLowerCase(Locale.ROOT))));
       }
 

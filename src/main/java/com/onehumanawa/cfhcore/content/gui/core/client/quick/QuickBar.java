@@ -36,7 +36,7 @@ final class QuickBar extends CFHGuiWidget {
    private static final int LIFT = 6;
    private static final int TAB_H = 28;
    private static final int EDGE = 2;
-   private static final String SLATE_CREATIVE = "com.onehumanawa.cfhcore.content.gui.menu.client.creative.";
+   private static final String CFH_CREATIVE = "com.onehumanawa.cfhcore.content.gui.menu.client.creative.";
    private final AbstractContainerScreen<?> screen;
    private final ContainerScreenAccessor place;
    private final boolean tabsAbove;

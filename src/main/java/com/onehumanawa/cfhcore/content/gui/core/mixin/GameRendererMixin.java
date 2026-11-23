@@ -39,7 +39,7 @@ public abstract class GameRendererMixin {
    )
    private void cfhgui$afterLevelDrawn(DeltaTracker deltaTracker, CallbackInfo ci) {
       if (CFHGuiRenderEvents.hasAfterLevelListeners()) {
-         Camera camera = ((GameRenderer)(Object)this).getMainCamera();
+         Camera camera = ((GameRenderer)(Object)(Object)this).getMainCamera();
          Matrix4f view = (new Matrix4f()).rotation(camera.rotation().conjugate(new Quaternionf()));
          CFHGuiRenderEvents.fireAfterLevel(new CFHGuiRenderEvents.WorldRenderContext(new PoseStack(), view, new Matrix4f(RenderSystem.getProjectionMatrix()), camera, deltaTracker.getGameTimeDeltaPartialTick(false)));
       }

@@ -47,7 +47,7 @@ public abstract class PlayerTabOverlayMixin {
    )
    private void cfhgui$render(GuiGraphics g, int width, Scoreboard scoreboard, @Nullable Objective objective, CallbackInfo ci) {
       if (CFHGuiTabList.active()) {
-         if (CFHGuiTabList.render(g, (PlayerTabOverlay)(Object)this, this.getPlayerInfos(), this.header, this.footer, scoreboard, objective)) {
+         if (CFHGuiTabList.render(g, (PlayerTabOverlay)(Object)(Object)this, this.getPlayerInfos(), this.header, this.footer, scoreboard, objective)) {
             ci.cancel();
          }
 

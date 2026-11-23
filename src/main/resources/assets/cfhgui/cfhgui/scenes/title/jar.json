@@ -1,5 +1,5 @@
 {
-  "__comment": "WorkShop in a jar, by Joea42 (createmod.com): a Create factory of three floors, 32 x 32 x 32, open on every side. Not shipped: the build is its author's, createmod.com states no licence for it and asks that uploads not be passed on, so the player downloads it from its page; Slate picks the file up wherever it lands (the Downloads folder, config/slate/scenes, or dropped onto the window), under the site's name for it (workshop_jar_complete.nbt) or any other, a file under another name known by what is in it ('download': 'names', 'match'). Until then the scene shows its sky and the chests on their terrace, and a card under the picker asks for it. The build stands turned 45 degrees ('yaw'), its south-west corner to the camera and its floor four blocks under the chests' deepslate terrace ('at'), so the camera looks along two of its sides and up into its floors. Besides Create the build uses blocks of several of Create's add-ons (Create Deco's catwalks for its floors, Vibrant Vaults, Petrol's Parts and others): without them the scene stands in blocks of Create's and the game's own for the ones that show ('standins'), and leaves the rest out.",
+  "__comment": "WorkShop in a jar, by Joea42 (createmod.com): a Create factory of three floors, 32 x 32 x 32, open on every side. Not shipped: the build is its author's, createmod.com states no licence for it and asks that uploads not be passed on, so the player downloads it from its page; CFHGui picks the file up wherever it lands (the Downloads folder, config/slate/scenes, or dropped onto the window), under the site's name for it (workshop_jar_complete.nbt) or any other, a file under another name known by what is in it ('download': 'names', 'match'). Until then the scene shows its sky and the chests on their terrace, and a card under the picker asks for it. The build stands turned 45 degrees ('yaw'), its south-west corner to the camera and its floor four blocks under the chests' deepslate terrace ('at'), so the camera looks along two of its sides and up into its floors. Besides Create the build uses blocks of several of Create's add-ons (Create Deco's catwalks for its floors, Vibrant Vaults, Petrol's Parts and others): without them the scene stands in blocks of Create's and the game's own for the ones that show ('standins'), and leaves the rest out.",
   "background": { "top": "#0B1016", "bottom": "#2A2624" },
   "camera": {
     "fov": 36,
@@ -73,11 +73,11 @@
                                      "ars_nouveau:dim_boundary", "createdeco:copper_catwalk", "create_vibrant_vaults:vertical_item_vault"] } }
   },
   "title": { "pool": "#2EFFD8A8", "dust": "#40FFDCB0",
-             "blocks": [ { "from": [-4, -5, -2], "to": [4, -2, 3], "block": "minecraft:deepslate_bricks" },
-                         { "from": [-4, -1, -2], "to": [4, -1, 3], "block": "create:cut_deepslate_bricks" },
+             "blocks": [ { "from": [-4, -5, -2], "to": [4, -2, 3], "block": "minecraft:deepcfhgui_bricks" },
+                         { "from": [-4, -1, -2], "to": [4, -1, 3], "block": "create:cut_deepcfhgui_bricks" },
                          { "from": [-3, -1, -1], "to": [3, -1, 2], "block": "create:polished_cut_deepslate" },
-                         { "at": [-4, 0, -2], "block": "minecraft:deepslate_brick_wall" },
-                         { "at": [4, 0, -2], "block": "minecraft:deepslate_brick_wall" },
+                         { "at": [-4, 0, -2], "block": "minecraft:deepcfhgui_brick_wall" },
+                         { "at": [4, 0, -2], "block": "minecraft:deepcfhgui_brick_wall" },
                          { "at": [-4, 1, -2], "block": "minecraft:lantern" },
                          { "at": [4, 1, -2], "block": "minecraft:lantern" } ] }
 }

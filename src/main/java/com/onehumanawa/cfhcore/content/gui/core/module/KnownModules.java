@@ -11,7 +11,6 @@ public final class KnownModules {
    public static final String CONFIG = "cfhgui_config";
    public static final String MULTIPLAYER = "cfhgui_multiplayer";
    public static final String CHAT = "cfhgui_chat";
-   public static final String BUILDING = "cfhgui_building";
    public static final String PROFILE = "cfhgui_profile";
    public static final String TEAMS = "cfhgui_teams";
    public static final String QUESTS = "cfhgui_quests";
@@ -56,6 +55,6 @@ public final class KnownModules {
    }
 
    static {
-      ALL = List.of(entry("cfhgui", Icon.CFHGUI), entry("cfhgui", Icon.HOME), entry("cfhgui_config", Icon.SLIDERS), entry("cfhgui_multiplayer", Icon.FRIENDS), entry("cfhgui_chat", Icon.CHAT), entry("cfhgui_building", Icon.BLOCK), entry("cfhgui_profile", Icon.USER), entry("cfhgui_teams", Icon.TEAM), entry("cfhgui_quests", Icon.QUEST), entry("cfhgui_crafting", Icon.GRID), entry("cfhgui_server", Icon.SHIELD), entry("cfhgui_bridge", Icon.LINK), entry("cfhgui_veinminer", Icon.BOLT));
+      ALL = List.of(entry("cfhgui", Icon.CFHGUI), entry("cfhgui", Icon.HOME), entry("cfhgui_config", Icon.SLIDERS), entry("cfhgui_multiplayer", Icon.FRIENDS), entry("cfhgui_chat", Icon.CHAT), entry("cfhgui_profile", Icon.USER), entry("cfhgui_teams", Icon.TEAM), entry("cfhgui_quests", Icon.QUEST), entry("cfhgui_crafting", Icon.GRID), entry("cfhgui_server", Icon.SHIELD), entry("cfhgui_bridge", Icon.LINK), entry("cfhgui_veinminer", Icon.BOLT));
    }
 }

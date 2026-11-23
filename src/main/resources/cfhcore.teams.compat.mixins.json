@@ -1,0 +1,15 @@
+{
+  "required": false,
+  "minVersion": "0.8",
+  "package": "com.onehumanawa.cfhcore.content.gui.teams.mixin.compat",
+  "compatibilityLevel": "JAVA_21",
+  "plugin": "com.onehumanawa.cfhcore.content.gui.teams.compat.CompatMixins",
+  "mixins": [],
+  "client": [
+    "XaeroWorldMapHighlightersMixin",
+    "XaeroMinimapHighlightersMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 0
+  }
+}

@@ -35,7 +35,7 @@ public abstract class ScreenMixin implements LayoutApplier.ScreenAccess {
    protected abstract void rebuildWidgets();
 
    public <T extends GuiEventListener & Renderable & NarratableEntry> T cfhgui$add(T widget) {
-      return (T)(Object)this.addRenderableWidget(widget);
+      return (T)(Object)(Object)this.addRenderableWidget(widget);
    }
 
    public void cfhgui$remove(GuiEventListener widget) {
@@ -64,7 +64,7 @@ public abstract class ScreenMixin implements LayoutApplier.ScreenAccess {
          this.cfhgui$builtInResize = true;
       }
 
-      CFHGuiClient.onScreenInit((Screen)(Object)this);
+      CFHGuiClient.onScreenInit((Screen)(Object)(Object)this);
    }
 
    @Inject(
@@ -77,7 +77,7 @@ public abstract class ScreenMixin implements LayoutApplier.ScreenAccess {
             this.cfhgui$builtInResize = true;
          }
 
-         CFHGuiClient.onScreenInit((Screen)(Object)this);
+         CFHGuiClient.onScreenInit((Screen)(Object)(Object)this);
       }
    }
 
@@ -99,7 +99,7 @@ public abstract class ScreenMixin implements LayoutApplier.ScreenAccess {
    private void cfhgui$resizeTail(Minecraft mc, int w, int h, CallbackInfo ci) {
       this.cfhgui$inResize = false;
       if (!this.cfhgui$builtInResize) {
-         CFHGuiClient.onScreenRepositioned((Screen)(Object)this);
+         CFHGuiClient.onScreenRepositioned((Screen)(Object)(Object)this);
       }
 
    }
@@ -109,7 +109,7 @@ public abstract class ScreenMixin implements LayoutApplier.ScreenAccess {
       at = {@At("HEAD")}
    )
    private void cfhgui$renderStarts(GuiGraphics g, int mouseX, int mouseY, float partialTick, CallbackInfo ci) {
-      ContainerMotion.begin((Screen)(Object)this, g);
+      ContainerMotion.begin((Screen)(Object)(Object)this, g);
    }
 
    @Inject(
@@ -117,7 +117,7 @@ public abstract class ScreenMixin implements LayoutApplier.ScreenAccess {
       at = {@At("TAIL")}
    )
    private void cfhgui$rendered(GuiGraphics g, int mouseX, int mouseY, float partialTick, CallbackInfo ci) {
-      ContainerMotion.end((Screen)(Object)this, g);
-      CFHGuiClient.onScreenRendered((Screen)(Object)this, g, mouseX, mouseY, partialTick);
+      ContainerMotion.end((Screen)(Object)(Object)this, g);
+      CFHGuiClient.onScreenRendered((Screen)(Object)(Object)this, g, mouseX, mouseY, partialTick);
    }
 }

@@ -21,7 +21,7 @@ public abstract class GuiGraphicsMixin {
    )
    private void cfhgui$containerBlit(ResourceLocation atlas, int x, int y, int w, int h, float u, float v, int uw, int vh, int tw, int th, CallbackInfo ci) {
       BetterInventoryPalette.blit(atlas, u, v, uw, vh);
-      if (ContainerReskin.replaceBackground((GuiGraphics)(Object)this, atlas, x, y, w, h)) {
+      if (ContainerReskin.replaceBackground((GuiGraphics)(Object)(Object)this, atlas, x, y, w, h)) {
          ci.cancel();
       }
 
@@ -34,7 +34,7 @@ public abstract class GuiGraphicsMixin {
       require = 0
    )
    private void cfhgui$containerBlitZ(ResourceLocation atlas, int x, int y, int blitOffset, float u, float v, int w, int h, int tw, int th, CallbackInfo ci) {
-      if (ContainerReskin.replaceBackground((GuiGraphics)(Object)this, atlas, x, y, w, h)) {
+      if (ContainerReskin.replaceBackground((GuiGraphics)(Object)(Object)this, atlas, x, y, w, h)) {
          ci.cancel();
       }
 
@@ -47,7 +47,7 @@ public abstract class GuiGraphicsMixin {
       require = 0
    )
    private void cfhgui$containerSprite(ResourceLocation sprite, int x, int y, int blitOffset, int w, int h, CallbackInfo ci) {
-      if (ContainerReskin.replaceSprite((GuiGraphics)(Object)this, sprite, x, y, w, h)) {
+      if (ContainerReskin.replaceSprite((GuiGraphics)(Object)(Object)this, sprite, x, y, w, h)) {
          ci.cancel();
       }
 

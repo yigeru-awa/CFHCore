@@ -38,7 +38,7 @@ public abstract class ProgressScreenMixin extends Screen {
       if (LoadingScreens.active() && !this.stop) {
          ci.cancel();
          Component title = (Component)(this.header != null && !this.header.getString().isBlank() ? this.header : Component.translatable("cfhgui.loading.generic"));
-         LoadingScreens.render(this, g, mouseX, mouseY, partialTick, title, this.stage, this.progress > 0 ? (float)this.progress / 100.0F : -1.0F, (StoringChunkProgressListener)null, List.of());
+         LoadingScreens.render(this, g, mouseX, mouseY, partialTick, title, this.stage, this.progress > 0 ? (float)(Object)this.progress / 100.0F : -1.0F, (StoringChunkProgressListener)null, List.of());
       }
    }
 }

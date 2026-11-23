@@ -21,6 +21,6 @@ public abstract class CreativeScreenPagesMixin {
       require = 0
    )
    private int cfhgui_menu$noPageCount(GuiGraphics g, Font font, FormattedCharSequence text, int x, int y, int color, Operation<Integer> original) {
-      return (Object)this instanceof CFHGuiCreativeScreen ? 0 : (Integer)original.call(new Object[]{g, font, text, x, y, color});
+      return (Object)(Object)this instanceof CFHGuiCreativeScreen ? 0 : (Integer)original.call(new Object[]{g, font, text, x, y, color});
    }
 }

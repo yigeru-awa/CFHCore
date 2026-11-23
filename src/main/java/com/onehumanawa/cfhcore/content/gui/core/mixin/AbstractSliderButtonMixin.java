@@ -54,7 +54,7 @@ public abstract class AbstractSliderButtonMixin extends AbstractWidget {
             if (handle) {
                ReskinDraw.sliderHandle(g, x, y, w, h, hover, this.active);
             } else {
-               ReskinDraw.sliderTrack(g, x, y, w, h, (float)this.value, hover, this.active);
+               ReskinDraw.sliderTrack(g, x, y, w, h, (float)(Object)this.value, hover, this.active);
             }
 
          }

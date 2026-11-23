@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.onehumanawa.cfhcore.content.gui.quests.mixin.server",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "BreakBlockMixin",
+    "CraftedMixin",
+    "KillCreditMixin",
+    "PlaceBlockMixin"
+  ],
+  "client": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
