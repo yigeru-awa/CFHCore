@@ -1,0 +1,15 @@
+{
+  "cfhgui_recipeeditor.name": "Recipe Editor",
+  "cfhgui_recipeeditor.pitch": "Browse and edit JEI recipes from JSON",
+  "cfhgui_recipeeditor.screen.title": "Recipe Editor",
+  "cfhgui_recipeeditor.search.placeholder": "Search recipes...",
+  "cfhgui_recipeeditor.category.title": "Recipe Categories",
+  "cfhgui_recipeeditor.recipes.placeholder": "Select a category to view recipes",
+  "cfhgui_recipeeditor.config.title": "Recipe Editor Settings",
+  "cfhgui_recipeeditor.config.section.general": "General",
+  "cfhgui_recipeeditor.config.show_dev_features": "Show Developer Features",
+  "cfhgui_recipeeditor.config.show_dev_features.desc": "Enable experimental features for recipe development",
+  "cfhgui_recipeeditor.config.section.keybind": "Keybind",
+  "key.cfhgui_recipeeditor.open_editor": "Open Recipe Editor",
+  "key.categories.cfhgui_recipeeditor": "Recipe Editor"
+}

@@ -1,0 +1,15 @@
+{
+  "cfhgui_recipeeditor.name": "合成表编辑器",
+  "cfhgui_recipeeditor.pitch": "浏览并编辑 JEI 合成配方",
+  "cfhgui_recipeeditor.screen.title": "合成表编辑器",
+  "cfhgui_recipeeditor.search.placeholder": "搜索配方...",
+  "cfhgui_recipeeditor.category.title": "配方分类",
+  "cfhgui_recipeeditor.recipes.placeholder": "选择分类查看配方",
+  "cfhgui_recipeeditor.config.title": "合成表编辑器设置",
+  "cfhgui_recipeeditor.config.section.general": "常规",
+  "cfhgui_recipeeditor.config.show_dev_features": "显示开发者功能",
+  "cfhgui_recipeeditor.config.show_dev_features.desc": "启用配方开发的实验性功能",
+  "cfhgui_recipeeditor.config.section.keybind": "按键绑定",
+  "key.cfhgui_recipeeditor.open_editor": "打开合成表编辑器",
+  "key.categories.cfhgui_recipeeditor": "合成表编辑器"
+}

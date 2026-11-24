@@ -18,6 +18,7 @@ public final class KnownModules {
    public static final String SERVER = "cfhgui_server";
    public static final String BRIDGE = "cfhgui_bridge";
    public static final String VEINMINER = "cfhgui_veinminer";
+   public static final String RECIPE_EDITOR = "cfhgui_recipeeditor";
    private static final String URL = "https://github.com/falling-colud/CFHGui";
    private static final List<KnownModule> ALL;
 
@@ -55,6 +56,6 @@ public final class KnownModules {
    }
 
    static {
-      ALL = List.of(entry("cfhgui", Icon.CFHGUI), entry("cfhgui", Icon.HOME), entry("cfhgui_config", Icon.SLIDERS), entry("cfhgui_multiplayer", Icon.FRIENDS), entry("cfhgui_chat", Icon.CHAT), entry("cfhgui_profile", Icon.USER), entry("cfhgui_teams", Icon.TEAM), entry("cfhgui_quests", Icon.QUEST), entry("cfhgui_crafting", Icon.GRID), entry("cfhgui_server", Icon.SHIELD), entry("cfhgui_bridge", Icon.LINK), entry("cfhgui_veinminer", Icon.BOLT));
+      ALL = List.of(entry("cfhgui", Icon.CFHGUI), entry("cfhgui", Icon.HOME), entry("cfhgui_config", Icon.SLIDERS), entry("cfhgui_multiplayer", Icon.FRIENDS), entry("cfhgui_chat", Icon.CHAT), entry("cfhgui_profile", Icon.USER), entry("cfhgui_teams", Icon.TEAM), entry("cfhgui_quests", Icon.QUEST), entry("cfhgui_crafting", Icon.GRID), entry("cfhgui_server", Icon.SHIELD), entry("cfhgui_bridge", Icon.LINK), entry("cfhgui_veinminer", Icon.BOLT), entry("cfhgui_recipeeditor", Icon.GRID));
    }
 }
