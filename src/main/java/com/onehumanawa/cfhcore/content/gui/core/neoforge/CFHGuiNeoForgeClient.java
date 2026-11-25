@@ -11,6 +11,7 @@ import com.onehumanawa.cfhcore.content.gui.core.event.CFHGuiEvents;
 import com.onehumanawa.cfhcore.content.gui.core.event.CFHGuiKeys;
 import com.onehumanawa.cfhcore.content.gui.core.screen.ContainerMotion;
 import com.onehumanawa.cfhcore.foundation.recipeeditor.client.RecipeEditorClient;
+import com.onehumanawa.cfhcore.foundation.developertool.DeveloperTool;
 import java.util.Objects;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -36,6 +37,7 @@ public final class CFHGuiNeoForgeClient {
    public static void init(IEventBus modBus, ModContainer container) {
       NeoForgeStartup.init(modBus);
       CFHGuiClient.init();
+      DeveloperTool.init();
       modBus.addListener(RegisterKeyMappingsEvent.class, (e) -> {
          Objects.requireNonNull(e);
          CFHGuiKeys.install(e::register);
@@ -75,10 +77,19 @@ public final class CFHGuiNeoForgeClient {
          }
       });
       container.registerExtensionPoint(IConfigScreenFactory.class, (IConfigScreenFactory)(mod, parent) -> new CoreSettingsScreen(parent));
-      NeoForge.EVENT_BUS.addListener(ClientTickEvent.Post.class, (e) -> CFHGuiEvents.CLIENT_TICK_END.invoke(Runnable::run));
+      NeoForge.EVENT_BUS.addListener(ClientTickEvent.Post.class, (e) -> {
+         CFHGuiEvents.CLIENT_TICK_END.invoke(Runnable::run);
+         DeveloperTool.onClientTick();
+      });
       NeoForge.EVENT_BUS.addListener(RenderGuiEvent.Post.class, (e) -> CFHGuiClient.onHudRendered(e.getGuiGraphics(), e.getPartialTick().getGameTimeDeltaPartialTick(false)));
-      NeoForge.EVENT_BUS.addListener(ClientPlayerNetworkEvent.LoggingIn.class, (e) -> CFHGuiEvents.CLIENT_JOINED_SERVER.invoke(Runnable::run));
-      NeoForge.EVENT_BUS.addListener(ClientPlayerNetworkEvent.LoggingOut.class, (e) -> CFHGuiEvents.CLIENT_LEFT_SERVER.invoke(Runnable::run));
+      NeoForge.EVENT_BUS.addListener(ClientPlayerNetworkEvent.LoggingIn.class, (e) -> {
+         CFHGuiEvents.CLIENT_JOINED_SERVER.invoke(Runnable::run);
+         DeveloperTool.onJoinWorld();
+      });
+      NeoForge.EVENT_BUS.addListener(ClientPlayerNetworkEvent.LoggingOut.class, (e) -> {
+         CFHGuiEvents.CLIENT_LEFT_SERVER.invoke(Runnable::run);
+         DeveloperTool.onLeaveWorld();
+      });
       NeoForge.EVENT_BUS.addListener(InputEvent.Key.class, (e) -> {
          if (e.getAction() == 1 && Minecraft.getInstance().screen == null) {
             CFHGuiEvents.KEY_PRESSED.invokeUntilConsumed((l) -> l.onKey(e.getKey(), e.getScanCode(), e.getModifiers()));

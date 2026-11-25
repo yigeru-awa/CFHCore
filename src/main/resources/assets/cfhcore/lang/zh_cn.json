@@ -49,5 +49,15 @@
   "cfhcore.gui.goggles.burner.remaining": "剩余燃烧时间",
   "cfhcore.gui.goggles.burner.items": "个物品",
   "cfhcore.gui.goggles.burner.creative": "创造模式热源（不消耗燃料）",
-  "itemGroup.cfhcore.core": "CFH 核心"
+  "itemGroup.cfhcore.core": "CFH 核心",
+  "cfhcore.devconsole.title": "开发者控制台",
+  "cfhcore.devconsole.hint": "仅单人游戏可用。输入 Java 代码后按回车或点击运行执行。",
+  "cfhcore.devconsole.status": "WebServer：%s",
+  "cfhcore.devconsole.input": "Java 代码…",
+  "cfhcore.devconsole.run": "运行",
+  "cfhcore.devconsole.clear": "清空",
+  "cfhcore.devconsole.token": "新令牌",
+  "cfhcore.devconsole.web.start": "启动 Web",
+  "cfhcore.devconsole.web.stop": "停止 Web",
+  "cfhcore.devconsole.multiplayer": "开发者控制台仅在单人游戏中可用。"
 }

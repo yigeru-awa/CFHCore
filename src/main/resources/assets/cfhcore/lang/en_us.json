@@ -49,5 +49,15 @@
   "cfhcore.gui.goggles.burner.remaining": "Remaining Burn Time",
   "cfhcore.gui.goggles.burner.items": "items",
   "cfhcore.gui.goggles.burner.creative": "Creative heat (no fuel consumed)",
-  "itemGroup.cfhcore.core": "CFH Core"
+  "itemGroup.cfhcore.core": "CFH Core",
+  "cfhcore.devconsole.title": "Developer Console",
+  "cfhcore.devconsole.hint": "Singleplayer only. Enter Java code and press Enter/Run to execute.",
+  "cfhcore.devconsole.status": "WebServer: %s",
+  "cfhcore.devconsole.input": "Java code...",
+  "cfhcore.devconsole.run": "Run",
+  "cfhcore.devconsole.clear": "Clear",
+  "cfhcore.devconsole.token": "New Token",
+  "cfhcore.devconsole.web.start": "Start Web",
+  "cfhcore.devconsole.web.stop": "Stop Web",
+  "cfhcore.devconsole.multiplayer": "Developer console is only available in singleplayer."
 }
