@@ -20,7 +20,7 @@ public final class RecipeEditorNet {
 	}
 
 	public record RecipeEditorPayload(String action, String data) implements CustomPacketPayload {
-		public static final CustomPacketPayload.Type<RecipeEditorPayload> TYPE = new CustomPacketPayload.Type<>(CFHGuiRecipeEditor.id("recipe_editor"));
+		public static final CustomPacketPayload.Type<RecipeEditorPayload> TYPE = new CustomPacketPayload.Type<>(net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("cfhgui", "recipe_editor"));
 		public static final StreamCodec<RegistryFriendlyByteBuf, RecipeEditorPayload> CODEC = StreamCodec.composite(
 			ByteBufCodecs.STRING_UTF8, RecipeEditorPayload::action,
 			ByteBufCodecs.STRING_UTF8, RecipeEditorPayload::data,

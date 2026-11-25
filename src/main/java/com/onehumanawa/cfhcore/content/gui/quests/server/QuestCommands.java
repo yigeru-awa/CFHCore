@@ -26,6 +26,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.Optional;
+import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -500,6 +502,59 @@ public final class QuestCommands {
 		MutableComponent line = ServerText.msg("cfhgui_quests.command.selftest", "Self-test: %s passed, %s failed.", report.passed(), report.failures().size());
 		source.sendSuccess(() -> line.withStyle(report.failures().isEmpty() ? ChatFormatting.GREEN : ChatFormatting.RED), false);
 		return report.failures().isEmpty() ? 1 : 0;
+	}
+
+	public static Optional<LiteralArgumentBuilder<CommandSourceStack>> buildSubcommand(CommandBuildContext context) {
+		LiteralArgumentBuilder<CommandSourceStack> root = Commands.literal("quests")
+			.requires(QuestCommands::allowed)
+			.then(Commands.literal("reload").executes(c -> reload((CommandSourceStack)c.getSource())))
+			.then(
+				Commands.literal("reset")
+					.then(
+						Commands.argument("players", EntityArgument.players())
+							.then(Commands.literal("all").executes(c -> reset(c, "all")))
+							.then(Commands.literal("chapter")
+								.then(Commands.argument("chapter", StringArgumentType.word()).suggests(CHAPTERS).executes(c -> reset(c, "chapter:" + StringArgumentType.getString(c, "chapter")))))
+							.then(Commands.argument("quest", ResourceLocationArgument.id()).suggests(QUESTS).executes(c -> reset(c, key(c, "quest"))))
+					)
+			)
+			.then(
+				Commands.literal("complete")
+					.then(Commands.argument("players", EntityArgument.players())
+						.then(Commands.argument("quest", ResourceLocationArgument.id()).suggests(QUESTS).executes(QuestCommands::complete)))
+			)
+			.then(
+				Commands.literal("task")
+					.then(Commands.argument("players", EntityArgument.players())
+						.then(Commands.argument("quest", ResourceLocationArgument.id()).suggests(QUESTS)
+							.then(Commands.argument("task", StringArgumentType.greedyString()).suggests(TASKS).executes(QuestCommands::task))))
+			)
+			.then(
+				Commands.literal("open")
+					.then(Commands.argument("players", EntityArgument.players())
+						.then(Commands.argument("target", ResourceLocationArgument.id()).suggests(TARGETS).executes(c -> open(c, key(c, "target")))))
+			)
+			.then(
+				Commands.literal("import")
+					.then(Commands.literal("ftb")
+						.then(Commands.literal("install").executes(c -> installFtb((CommandSourceStack)c.getSource())))
+						.then(Commands.literal("progress").executes(c -> progressFtb((CommandSourceStack)c.getSource())))
+						.then(Commands.literal("status").executes(c -> statusFtb((CommandSourceStack)c.getSource())))
+					)
+					.then(Commands.argument("folder", StringArgumentType.greedyString()).requires(s -> s.hasPermission(4)).executes(c -> importFtb((CommandSourceStack)c.getSource(), StringArgumentType.getString(c, "folder"))))
+			)
+			.then(
+				Commands.literal("counter")
+					.then(Commands.argument("players", EntityArgument.players())
+						.then(Commands.argument("name", StringArgumentType.string())
+							.then(Commands.literal("add").then(Commands.argument("amount", LongArgumentType.longArg()).executes(c -> counter(c, LongArgumentType.getLong(c, "amount"), false, false))))
+						.then(Commands.literal("set").then(Commands.argument("amount", LongArgumentType.longArg(0L)).executes(c -> counter(c, LongArgumentType.getLong(c, "amount"), true, false))))
+						.executes(c -> counter(c, 0L, false, true)))
+			)
+			.then(Commands.literal("selftest").executes(c -> selftest((CommandSourceStack)c.getSource())))
+		);
+
+		return Optional.of(root);
 	}
 
 	private QuestCommands() {

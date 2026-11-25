@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
+import java.util.Optional;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
@@ -681,6 +682,194 @@ public final class ShopCommands {
 						.withClickEvent(new ClickEvent(Action.RUN_COMMAND, command))
 						.withHoverEvent(new HoverEvent(net.minecraft.network.chat.HoverEvent.Action.SHOW_TEXT, Component.literal(command)))
 			);
+	}
+
+	public static Optional<LiteralArgumentBuilder<CommandSourceStack>> buildSubcommand(CommandBuildContext context) {
+		LiteralArgumentBuilder<CommandSourceStack> money = moneyTree("money");
+		LiteralArgumentBuilder<CommandSourceStack> pay = payTree("pay");
+		LiteralArgumentBuilder<CommandSourceStack> root = Commands.literal("shops")
+			.requires(may(ShopNodes.USE))
+			.executes(c -> browse((CommandSourceStack)c.getSource()))
+			.then(
+				Commands.literal("view")
+					.then(
+						Commands.argument("shop", StringArgumentType.word())
+							.suggests(SHOPS)
+							.executes(c -> view((CommandSourceStack)c.getSource(), StringArgumentType.getString(c, "shop")))
+					)
+			)
+			.then(Commands.literal("buy").then(trade(true)))
+			.then(Commands.literal("sell").then(trade(false)))
+			.then(
+				Commands.literal("create").requires(may(ShopNodes.CREATE))
+					.then(
+						Commands.argument("name", StringArgumentType.greedyString())
+							.executes(c -> act(c, "create", (s, a) -> s.create(a, StringArgumentType.getString(c, "name"))))
+					)
+			)
+			.then(
+				Commands.literal("rename").requires(may(ShopNodes.CREATE))
+					.then(
+						Commands.argument("name", StringArgumentType.greedyString())
+							.executes(c -> own(c, "edit", (s, a, shop) -> s.edit(a, shop.id, StringArgumentType.getString(c, "name"), null, null)))
+					)
+			)
+			.then(
+				Commands.literal("describe").requires(may(ShopNodes.CREATE))
+					.then(
+						Commands.argument("text", StringArgumentType.greedyString())
+							.executes(c -> own(c, "edit", (s, a, shop) -> s.edit(a, shop.id, null, StringArgumentType.getString(c, "text"), null)))
+					)
+			)
+			.then(
+				Commands.literal("open").requires(may(ShopNodes.CREATE))
+					.executes(c -> own(c, "open", (s, a, shop) -> s.edit(a, shop.id, null, null, true)))
+			)
+			.then(
+				Commands.literal("close").requires(may(ShopNodes.CREATE))
+					.executes(c -> own(c, "close", (s, a, shop) -> s.edit(a, shop.id, null, null, false)))
+			)
+			.then(
+				Commands.literal("delete").requires(may(ShopNodes.CREATE))
+					.executes(c -> own(c, "delete", (s, a, shop) -> s.delete(a, shop.id)))
+			)
+			.then(
+				Commands.literal("offer").requires(may(ShopNodes.CREATE))
+					.then(
+						Commands.literal("add")
+							.then(
+								Commands.argument("price", LongArgumentType.longArg(0L, 1000000000L))
+									.executes(c -> own(c, "offer_add", (s, a, shop) -> s.offerAdd(a, shop.id, held(c), LongArgumentType.getLong(c, "price"), 0L)))
+							)
+							.then(
+								Commands.argument("sellPrice", LongArgumentType.longArg(0L, 1000000000L))
+									.executes(c -> own(c, "offer_add", (s, a, shop) -> s.offerAdd(a, shop.id, held(c), LongArgumentType.getLong(c, "price"), LongArgumentType.getLong(c, "sellPrice"))))
+							)
+					)
+					.then(
+						Commands.literal("price")
+							.then(
+								Commands.argument("offer", IntegerArgumentType.integer(1))
+									.suggests(OWN_OFFERS)
+									.then(
+										Commands.argument("price", LongArgumentType.longArg(0L, 1000000000L))
+											.executes(c -> own(c, "offer_edit", (s, a, shop) -> s.offerEdit(a, shop.id, IntegerArgumentType.getInteger(c, "offer"), LongArgumentType.getLong(c, "price"), 0L)))
+									)
+									.then(
+										Commands.argument("sellPrice", LongArgumentType.longArg(0L, 1000000000L))
+											.executes(c -> own(c, "offer_edit", (s, a, shop) -> s.offerEdit(a, shop.id, IntegerArgumentType.getInteger(c, "offer"), LongArgumentType.getLong(c, "price"), LongArgumentType.getLong(c, "sellPrice"))))
+									)
+							)
+					)
+					.then(
+						Commands.literal("remove")
+							.then(
+								Commands.argument("offer", IntegerArgumentType.integer(1))
+									.suggests(OWN_OFFERS)
+									.executes(c -> own(c, "offer_remove", (s, a, shop) -> s.offerRemove(a, shop.id, IntegerArgumentType.getInteger(c, "offer"))))
+							)
+					)
+			)
+			.then(
+				Commands.literal("stock").requires(may(ShopNodes.CREATE))
+					.executes(c -> stock((CommandSourceStack)c.getSource()))
+					.then(
+						Commands.literal("add")
+							.executes(c -> own(c, "stock_add", (s, a, shop) -> s.stockAdd(a, shop.id, 0)))
+							.then(
+								Commands.argument("offer", IntegerArgumentType.integer(1))
+									.suggests(OWN_OFFERS)
+									.executes(c -> own(c, "stock_add", (s, a, shop) -> s.stockAdd(a, shop.id, IntegerArgumentType.getInteger(c, "offer"))))
+							)
+					)
+					.then(
+						Commands.literal("take")
+							.then(
+								Commands.argument("offer", IntegerArgumentType.integer(1))
+									.suggests(OWN_OFFERS)
+									.executes(c -> own(c, "stock_take", (s, a, shop) -> s.stockTake(a, shop.id, IntegerArgumentType.getInteger(c, "offer"), 0L)))
+							)
+							.then(
+								Commands.argument("count", LongArgumentType.longArg(1L))
+									.executes(c -> own(c, "stock_take", (s, a, shop) -> s.stockTake(a, shop.id, IntegerArgumentType.getInteger(c, "offer"), LongArgumentType.getLong(c, "count"))))
+							)
+					)
+			)
+			.then(
+				Commands.literal("admin").requires(may(ShopNodes.ADMIN))
+					.executes(c -> admin((CommandSourceStack)c.getSource()))
+					.then(
+						Commands.literal("create")
+							.then(
+								Commands.argument("name", StringArgumentType.greedyString())
+									.executes(c -> act(c, "create", (s, a) -> s.adminCreate(a, StringArgumentType.getString(c, "name"))))
+							)
+					)
+					.then(
+						Commands.literal("delete")
+							.then(
+								Commands.argument("shop", StringArgumentType.word())
+									.suggests(SHOPS)
+									.executes(c -> act(c, "delete", (s, a) -> s.delete(a, StringArgumentType.getString(c, "shop"))))
+							)
+					)
+					.then(
+						Commands.literal("open")
+							.then(
+								Commands.argument("shop", StringArgumentType.word())
+									.suggests(SHOPS)
+									.executes(c -> act(c, "open", (s, a) -> s.edit(a, StringArgumentType.getString(c, "shop"), null, null, true)))
+							)
+					)
+					.then(
+						Commands.literal("close")
+							.then(
+								Commands.argument("shop", StringArgumentType.word())
+									.suggests(SHOPS)
+									.executes(c -> act(c, "close", (s, a) -> s.edit(a, StringArgumentType.getString(c, "shop"), null, null, false)))
+							)
+					)
+					.then(
+						Commands.literal("offer")
+							.then(
+								Commands.argument("shop", StringArgumentType.word())
+									.suggests(SHOPS)
+									.then(
+										Commands.literal("add")
+											.then(
+												Commands.argument("price", LongArgumentType.longArg(0L, 1000000000L))
+													.executes(c -> act(c, "offer_add", (s, a) -> s.offerAdd(a, StringArgumentType.getString(c, "shop"), held(c), LongArgumentType.getLong(c, "price"), 0L)))
+											)
+											.then(
+												Commands.argument("sellPrice", LongArgumentType.longArg(0L, 1000000000L))
+													.executes(c -> act(c, "offer_add", (s, a) -> s.offerAdd(a, StringArgumentType.getString(c, "shop"), held(c), LongArgumentType.getLong(c, "price"), LongArgumentType.getLong(c, "sellPrice"))))
+											)
+									)
+									.then(
+										Commands.literal("remove")
+											.then(
+												Commands.argument("offer", IntegerArgumentType.integer(1))
+													.executes(c -> act(c, "offer_remove", (s, a) -> s.offerRemove(a, StringArgumentType.getString(c, "shop"), IntegerArgumentType.getInteger(c, "offer"))))
+											)
+									)
+							)
+					)
+			)
+			.then(Commands.literal("reload").requires(may(ShopNodes.ADMIN)).executes(c -> {
+				OpResult r = ShopsRuntime.reload();
+				return report((CommandSourceStack)c.getSource(), "reload", r);
+			}))
+			.then(Commands.literal("selftest").requires(may(ShopNodes.SELFTEST)).executes(c -> selfTest((CommandSourceStack)c.getSource())))
+			.then(Commands.literal("version").executes(c -> {
+				String version = CFHGuiPlatform.get().modInfo("cfhcore").map(info -> info.version()).orElse("?");
+				((CommandSourceStack)c.getSource()).sendSuccess(() -> Msg.tr("cfhgui_shops.command.version", version), false);
+				return 1;
+			}));
+
+		root.then(money);
+		root.then(pay);
+
+		return Optional.of(root);
 	}
 
 	private ShopCommands() {

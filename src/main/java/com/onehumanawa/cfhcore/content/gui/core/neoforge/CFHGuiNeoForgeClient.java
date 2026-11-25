@@ -1,6 +1,8 @@
 package com.onehumanawa.cfhcore.content.gui.core.neoforge;
 
 import com.mojang.blaze3d.platform.InputConstants;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.onehumanawa.cfhcore.content.gui.core.CFHGui;
 import com.onehumanawa.cfhcore.content.gui.core.client.CoreSettingsScreen;
 import com.onehumanawa.cfhcore.content.gui.core.client.KeyBinds;
 import com.onehumanawa.cfhcore.content.gui.core.client.CFHGuiClient;
@@ -8,15 +10,19 @@ import com.onehumanawa.cfhcore.content.gui.core.client.render.CFHGuiRenderEvents
 import com.onehumanawa.cfhcore.content.gui.core.event.CFHGuiEvents;
 import com.onehumanawa.cfhcore.content.gui.core.event.CFHGuiKeys;
 import com.onehumanawa.cfhcore.content.gui.core.screen.ContainerMotion;
+import com.onehumanawa.cfhcore.foundation.recipeeditor.client.RecipeEditorClient;
 import java.util.Objects;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.InputEvent;
+import net.neoforged.neoforge.client.event.RegisterClientCommandsEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.RenderGuiEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
@@ -84,6 +90,21 @@ public final class CFHGuiNeoForgeClient {
          if (e.getStage() == Stage.AFTER_TRANSLUCENT_BLOCKS && CFHGuiRenderEvents.hasAfterTranslucentListeners()) {
             CFHGuiRenderEvents.fireAfterTranslucent(new CFHGuiRenderEvents.WorldRenderContext(e.getPoseStack(), e.getModelViewMatrix(), e.getProjectionMatrix(), e.getCamera(), e.getPartialTick().getGameTimeDeltaPartialTick(false)));
          }
+      });
+      
+      // Register client-side commands for /cfhcore gui open
+      NeoForge.EVENT_BUS.addListener(RegisterClientCommandsEvent.class, (e) -> {
+         CFHGui.LOGGER.info("[CFHGui] Registering client commands for /cfhcore");
+         e.getDispatcher().register(
+            (LiteralArgumentBuilder)Commands.literal("cfhcore")
+               .then(Commands.literal("gui")
+                  .then(Commands.literal("open").executes(c -> {
+                     CFHGui.LOGGER.info("[CFHGui] /cfhcore gui open executed");
+                     RecipeEditorClient.openEditor();
+                     return 1;
+                  }))
+               )
+         );
       });
    }
 

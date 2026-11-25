@@ -3,7 +3,7 @@ package com.onehumanawa.cfhcore.content.gui.server.neoforge;
 import com.onehumanawa.cfhcore.content.gui.core.module.Modules;
 import com.onehumanawa.cfhcore.content.gui.server.ServerHooks;
 import com.onehumanawa.cfhcore.content.gui.server.CFHGuiServer;
-import com.onehumanawa.cfhcore.content.gui.server.command.ServerCommands;
+import com.onehumanawa.cfhcore.content.gui.core.command.CoreCommands;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
@@ -21,7 +21,7 @@ import net.neoforged.neoforge.server.permission.events.PermissionGatherEvent.Nod
 public final class CFHGuiServerNeoForge {
 	public CFHGuiServerNeoForge(IEventBus modBus, ModContainer container) {
 		Modules.register(CFHGuiServer.MODULE);
-		NeoForge.EVENT_BUS.addListener(EventPriority.LOW, RegisterCommandsEvent.class, e -> ServerCommands.register(e.getDispatcher(), e.getBuildContext()));
+		NeoForge.EVENT_BUS.addListener(EventPriority.LOW, RegisterCommandsEvent.class, e -> CoreCommands.init(e.getDispatcher(), e.getBuildContext()));
 		NeoForge.EVENT_BUS.addListener(ServerChatEvent.class, e -> {
 			if (!ServerHooks.allowChat(e.getPlayer(), e.getRawText())) {
 				e.setCanceled(true);

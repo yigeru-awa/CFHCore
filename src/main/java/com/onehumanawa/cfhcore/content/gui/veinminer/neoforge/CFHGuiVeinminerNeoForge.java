@@ -10,14 +10,13 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.RegisterCommandsEvent;
 
 @Mod("cfhcore")
 public final class CFHGuiVeinminerNeoForge {
 	public CFHGuiVeinminerNeoForge(IEventBus modBus, ModContainer container) {
 		VeinPlanner.setHarvestCheck((player, state, level, pos) -> player.hasCorrectToolForDrops(state, level, pos));
 		Modules.register(CFHGuiVeinminer.MODULE);
-		NeoForge.EVENT_BUS.addListener(EventPriority.LOW, RegisterCommandsEvent.class, e -> VeinCommands.register(e.getDispatcher()));
+		// VeinCommands.register() is now called via CoreCommands.init() in CFHGuiServerNeoForge
 		if (FMLEnvironment.dist.isClient()) {
 			CFHGuiVeinminerNeoForgeClient.init(container);
 		}

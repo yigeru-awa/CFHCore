@@ -30,7 +30,7 @@ public final class AdvCommands {
 		"write_failed",
 		"The chapter could not be written to the book's folder.",
 		"no_tree",
-		"No advancement tree is named %s. \"/cfhquests convert list\" lists them.",
+		"No advancement tree is named %s. \"/cfhcore quests convert list\" lists them.",
 		"nothing_to_undo",
 		"There is no conversion to take back.",
 		"edited_since",
@@ -71,26 +71,32 @@ public final class AdvCommands {
 	};
 	private static final Set<String> OWN = Set.of("no_tree", "nothing_to_undo", "edited_since", "bad_id", "id_twice");
 
-	public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
+								public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
 		dispatcher.register(
-			(LiteralArgumentBuilder)Commands.literal("cfhquests")
+			(LiteralArgumentBuilder)Commands.literal("cfhcore")
 				.then(
-					((LiteralArgumentBuilder)((LiteralArgumentBuilder)((LiteralArgumentBuilder)((LiteralArgumentBuilder)Commands.literal("convert")
-										.requires(BookDoor::mayEdit))
+					((LiteralArgumentBuilder)((LiteralArgumentBuilder)((LiteralArgumentBuilder)((LiteralArgumentBuilder)Commands.literal("quests")
+							.requires(BookDoor::mayEdit))
+							.then(
+								Commands.literal("convert")
 									.then(
-										Commands.literal("advancements")
-											.then(
-												Commands.argument("what", StringArgumentType.greedyString())
-													.suggests(WHAT)
-													.executes(c -> convert((CommandSourceStack)c.getSource(), StringArgumentType.getString(c, "what")))
-											)
-									))
-								.then(Commands.literal("list").executes(c -> list((CommandSourceStack)c.getSource()))))
-							.then(Commands.literal("undo").executes(c -> undo((CommandSourceStack)c.getSource()))))
-						.then(Commands.literal("selftest").executes(c -> selftest((CommandSourceStack)c.getSource())))
-				)
-		);
+									Commands.literal("advancements")
+										.then(
+										Commands.argument("what", StringArgumentType.greedyString())
+											.suggests(WHAT)
+											.executes(c -> convert((CommandSourceStack)c.getSource(), StringArgumentType.getString(c, "what")))
+									)
+								)
+							)
+							.then(Commands.literal("list").executes(c -> list((CommandSourceStack)c.getSource())))
+							.then(Commands.literal("undo").executes(c -> undo((CommandSourceStack)c.getSource())))
+					)
+					)
+					)
+					).then(Commands.literal("selftest").executes(c -> selftest((CommandSourceStack)c.getSource())))
+			);
 	}
+	
 
 	private static MutableComponent msg(String key, String english, Object... args) {
 		return Component.translatableWithFallback("cfhgui_quests.adv.command." + key, english, args);

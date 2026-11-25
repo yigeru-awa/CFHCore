@@ -34,9 +34,7 @@ public final class RecipeEditorClient {
 
 	public static void openEditor() {
 		Minecraft mc = Minecraft.getInstance();
-		if (mc.screen == null) {
-			mc.setScreen(new RecipeEditorScreen(null));
-		}
+		mc.setScreen(new RecipeEditorScreen(mc.screen));
 	}
 
 	private RecipeEditorClient() {

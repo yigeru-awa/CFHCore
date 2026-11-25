@@ -11,14 +11,13 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.level.BlockEvent.EntityPlaceEvent;
 
 @Mod("cfhcore")
 public final class CFHGuiQuestsNeoForge {
 	public CFHGuiQuestsNeoForge(IEventBus modBus, ModContainer container) {
 		Modules.register(CFHGuiQuests.MODULE);
-		NeoForge.EVENT_BUS.addListener(RegisterCommandsEvent.class, e -> QuestCommands.register(e.getDispatcher()));
+		// QuestCommands.register() is now called via CoreCommands.init() in CFHGuiServerNeoForge
 		Carried.install(new NeoForgeCarried());
 		QuestEvents.placesByLoader(true);
 		NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, false, EntityPlaceEvent.class, e -> {

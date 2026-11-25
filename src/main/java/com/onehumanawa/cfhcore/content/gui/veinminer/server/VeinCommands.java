@@ -9,7 +9,9 @@ import com.onehumanawa.cfhcore.content.gui.veinminer.CFHGuiVeinminer;
 import com.onehumanawa.cfhcore.content.gui.veinminer.VeinShape;
 import com.onehumanawa.cfhcore.content.gui.veinminer.config.VeinServerConfig;
 import com.onehumanawa.cfhcore.content.gui.veinminer.vein.VeinRules;
+import net.minecraft.commands.CommandBuildContext;
 import java.util.Locale;
+import java.util.Optional;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -19,10 +21,14 @@ import net.minecraft.server.level.ServerPlayer;
 
 public final class VeinCommands {
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
-		LiteralCommandNode<CommandSourceStack> root = dispatcher.register(tree("cfhveinminer"));
+		LiteralCommandNode<CommandSourceStack> root = dispatcher.register(tree("veinminer"));
 		if (dispatcher.getRoot().getChild("veinminer") == null) {
 			dispatcher.register((LiteralArgumentBuilder)((LiteralArgumentBuilder)Commands.literal("veinminer").executes(VeinCommands::status)).redirect(root));
 		}
+	}
+
+	public static Optional<LiteralArgumentBuilder<CommandSourceStack>> buildSubcommand(CommandBuildContext context) {
+		return Optional.of(tree("veinminer"));
 	}
 
 	private static boolean admin(CommandSourceStack s) {

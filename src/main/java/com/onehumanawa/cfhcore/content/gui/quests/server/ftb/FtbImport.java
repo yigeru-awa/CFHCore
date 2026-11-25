@@ -985,7 +985,7 @@ public final class FtbImport {
 				t.count = Math.max(1L, Snbt.number(from, "max_progress", Snbt.number(from, "value", 1L)));
 				note(
 					this.needs,
-					"A custom task, which a script of the pack finished (here: finished by /cfhquests task or QuestsApi.progress under the name given)",
+					"A custom task, which a script of the pack finished (here: finished by /cfhcore quests task or QuestsApi.progress under the name given)",
 					where + ": " + t.value
 				);
 				break;
@@ -1000,7 +1000,7 @@ public final class FtbImport {
 					t.count = Math.max(1L, Snbt.number(from, "value", 1L));
 					note(
 						this.approx,
-						"A task of the type \"" + type + "\", which no mod here knows (here: a custom task, finished by /cfhquests task or by another mod)",
+						"A task of the type \"" + type + "\", which no mod here knows (here: a custom task, finished by /cfhcore quests task or by another mod)",
 						where + ": " + t.value
 					);
 				} else {

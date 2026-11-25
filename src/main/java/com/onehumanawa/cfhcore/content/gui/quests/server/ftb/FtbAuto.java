@@ -695,7 +695,7 @@ public final class FtbAuto {
 		);
 			case "beside" -> FtbAuto.Done.ok(
 			"cfhgui_quests.ftb.beside",
-			"An FTB Quests book was found and converted (%s chapters, %s quests), but this server has a quest book of its own, which was not touched. The conversion is in %s; \"/cfhquests import ftb install\" makes it the server's book.",
+			"An FTB Quests book was found and converted (%s chapters, %s quests), but this server has a quest book of its own, which was not touched. The conversion is in %s; \"/cfhcore quests import ftb install\" makes it the server's book.",
 			s.chapters,
 			s.quests,
 			shown(dir)

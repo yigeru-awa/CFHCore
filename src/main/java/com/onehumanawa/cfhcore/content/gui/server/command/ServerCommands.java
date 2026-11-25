@@ -15,6 +15,7 @@ import com.onehumanawa.cfhcore.content.gui.server.service.SelfTest;
 import com.onehumanawa.cfhcore.content.gui.server.service.ServerService;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -28,57 +29,49 @@ public final class ServerCommands {
 	private static final int HELP_PAGE = 9;
 
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext context) {
+		buildSubcommand(context).ifPresent(dispatcher::register);
+	}
+
+	public static Optional<LiteralArgumentBuilder<CommandSourceStack>> buildSubcommand(CommandBuildContext context) {
 		Cmd.HELP.clear();
 		Cmd.TAKEN.clear();
 		List<LiteralArgumentBuilder<CommandSourceStack>> commands = new ArrayList<>();
 		PlayerCommands.build(commands);
 		StaffCommands.build(commands);
-		LiteralArgumentBuilder<CommandSourceStack> root = (LiteralArgumentBuilder<CommandSourceStack>)((LiteralArgumentBuilder)((LiteralArgumentBuilder)((LiteralArgumentBuilder)((LiteralArgumentBuilder)Commands.literal(
-								"cfhserver"
-							)
-							.executes(c -> help((CommandSourceStack)c.getSource(), false, 1)))
-						.then(
-							((LiteralArgumentBuilder)((LiteralArgumentBuilder)Commands.literal("help").executes(c -> help((CommandSourceStack)c.getSource(), false, 1)))
-									.then(
-										Commands.argument("page", IntegerArgumentType.integer(1, 99))
-											.executes(c -> help((CommandSourceStack)c.getSource(), false, IntegerArgumentType.getInteger(c, "page")))
-									))
-								.then(
-									((LiteralArgumentBuilder)Commands.literal("staff").executes(c -> help((CommandSourceStack)c.getSource(), true, 1)))
-										.then(
-											Commands.argument("page", IntegerArgumentType.integer(1, 99))
-												.executes(c -> help((CommandSourceStack)c.getSource(), true, IntegerArgumentType.getInteger(c, "page")))
-										)
-								)
-						))
-					.then(Commands.literal("version").executes(c -> {
-						String version = CFHGuiPlatform.get().modInfo("cfhcore").map(info -> info.version()).orElse("?");
-						((CommandSourceStack)c.getSource()).sendSuccess(() -> Cmd.say("version", version, 1), false);
-						return 1;
-					})))
-				.then(
-					((LiteralArgumentBuilder)Commands.literal("reload").requires(Cmd.may(Nodes.ADMIN_RULES)))
-						.executes(c -> Cmd.act(c, (s, a) -> s.admin().rulesReload(a), r -> Cmd.say("reloaded")))
-				))
-			.then(
-				((LiteralArgumentBuilder)Commands.literal("selftest").requires(Cmd.may(Nodes.ADMIN_SELFTEST))).executes(c -> selfTest((CommandSourceStack)c.getSource()))
-			);
+		LiteralArgumentBuilder<CommandSourceStack> root = Commands.literal("server")
+			.executes(c -> help((CommandSourceStack)c.getSource(), false, 1));
+		root.then(Commands.literal("help")
+			.executes(c -> help((CommandSourceStack)c.getSource(), false, 1))
+			.then(Commands.argument("page", IntegerArgumentType.integer(1, 99))
+				.executes(c -> {
+					Integer page = IntegerArgumentType.getInteger(c, "page");
+					return help((CommandSourceStack)c.getSource(), false, page);
+				})));
+		root.then(Commands.literal("staff")
+			.executes(c -> help((CommandSourceStack)c.getSource(), true, 1))
+			.then(Commands.argument("page", IntegerArgumentType.integer(1, 99))
+				.executes(c -> {
+					Integer page = IntegerArgumentType.getInteger(c, "page");
+					return help((CommandSourceStack)c.getSource(), true, page);
+				})));
+		root.then(Commands.literal("version").executes(c -> {
+			String version = CFHGuiPlatform.get().modInfo("cfhcore").map(info -> info.version()).orElse("?");
+			((CommandSourceStack)c.getSource()).sendSuccess(() -> Cmd.say("version", version, 1), false);
+			return 1;
+		}));
+		root.then(Commands.literal("reload").requires(Cmd.may(Nodes.ADMIN_RULES)).executes(c -> Cmd.act(c, (s, a) -> s.admin().rulesReload(a), r -> Cmd.say("reloaded"))));
+		root.then(Commands.literal("selftest").requires(Cmd.may(Nodes.ADMIN_SELFTEST)).executes(c -> selfTest((CommandSourceStack)c.getSource())));
 
 		for (LiteralArgumentBuilder<CommandSourceStack> builder : commands) {
 			LiteralCommandNode<CommandSourceStack> node = builder.build();
 			root.then(node);
-			if (dispatcher.getRoot().getChild(node.getLiteral()) == null) {
-				dispatcher.getRoot().addChild(node);
-			} else {
-				Cmd.TAKEN.add(node.getLiteral());
-			}
 		}
 
-		dispatcher.register(root);
 		if (!Cmd.TAKEN.isEmpty()) {
 			CFHGuiServer.LOGGER
-				.info("[CFHGui Server] these words were taken by the game or another mod and are reached as /cfhserver <word>: {}", String.join(", ", Cmd.TAKEN));
+				.info("[CFHGui Server] these words were taken by the game or another mod and are reached as /cfhcore server <word>: {}", String.join(", ", Cmd.TAKEN));
 		}
+		return Optional.of(root);
 	}
 
 	private static int selfTest(CommandSourceStack source) {
@@ -118,7 +111,7 @@ public final class ServerCommands {
 		} else {
 			int pages = (names.size() + 9 - 1) / 9;
 			int shown = Math.max(1, Math.min(pages, page));
-			String word = staff ? "/cfhserver help staff " : "/cfhserver help ";
+			String word = staff ? "/cfhcore server help staff " : "/cfhcore server help ";
 			source.sendSuccess(() -> Cmd.head(Cmd.say(staff ? "help_header_staff" : "help_header", shown, pages)), false);
 
 			for (int i = (shown - 1) * 9; i < Math.min(names.size(), shown * 9); i++) {
@@ -136,7 +129,7 @@ public final class ServerCommands {
 			}
 
 			if (!staff && Cmd.may(Nodes.ADMIN_MENU).test(source)) {
-				foot.append(button("help_staff", "/cfhserver help staff"));
+				foot.append(button("help_staff", "/cfhcore server help staff"));
 			}
 
 			if (!foot.getSiblings().isEmpty()) {

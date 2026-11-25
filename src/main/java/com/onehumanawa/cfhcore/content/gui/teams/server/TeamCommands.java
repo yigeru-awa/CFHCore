@@ -25,11 +25,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import net.minecraft.ChatFormatting;
+import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
@@ -154,58 +156,24 @@ public final class TeamCommands {
 		}
 	};
 
-	public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
-		CommandNode<CommandSourceStack> vanilla = dispatcher.getRoot().getChild("team");
-		CommandDispatcher<CommandSourceStack> game = vanilla == null ? null : new CommandDispatcher();
-		if (game != null) {
-			game.getRoot().addChild(vanilla);
-		}
+	public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext context) {
+		buildSubcommand(context).ifPresent(dispatcher::register);
+	}
 
-		LiteralArgumentBuilder<CommandSourceStack> team = Commands.literal("team");
-		ours(team, game, vanilla);
-		if (vanilla != null) {
-			for (CommandNode<CommandSourceStack> child : vanilla.getChildren()) {
-				String name = child.getName();
-				if (!name.equals("join")) {
-					if (!name.equals("list") && !name.equals("leave")) {
-						team.then(operatorsOnly(child));
-					} else {
-						LiteralArgumentBuilder<CommandSourceStack> shared = Commands.literal(name);
+	public static Optional<LiteralArgumentBuilder<CommandSourceStack>> buildSubcommand(CommandBuildContext context) {
+		LiteralArgumentBuilder<CommandSourceStack> team = Commands.literal("teams");
+		ours(team, null, null);
 
-						for (CommandNode<CommandSourceStack> below : child.getChildren()) {
-							shared.then(operatorsOnly(below));
-						}
+		LiteralArgumentBuilder<CommandSourceStack> root = Commands.literal("cfhcore");
+		root.then(team);
+		root.then(Commands.literal("list").executes(c -> list((CommandSourceStack)c.getSource())));
+		root.then(((LiteralArgumentBuilder)Commands.literal("reload").requires(OPERATOR)).executes(c -> reload((CommandSourceStack)c.getSource())));
+		root.then(((LiteralArgumentBuilder)Commands.literal("selftest").requires(OPERATOR)).executes(c -> selfTest((CommandSourceStack)c.getSource())));
+		root.then(admin());
+		root.then(land());
+		root.then(expiry());
 
-						team.then(shared);
-					}
-				}
-			}
-
-			if (!detach(dispatcher.getRoot(), "team")) {
-				CFHGuiTeams.LOGGER.warn("[CFHGui Teams] the game's /team could not be opened to players; they can use /cfhteams team instead");
-			}
-		}
-
-		LiteralCommandNode<CommandSourceStack> node = dispatcher.register(team);
-		dispatcher.register(
-			(LiteralArgumentBuilder)Commands.literal("tc")
-				.then(
-					Commands.argument("message", StringArgumentType.greedyString())
-						.executes(c -> act(c, (s, a) -> s.chat(a, StringArgumentType.getString(c, "message")), r -> null))
-				)
-		);
-		dispatcher.register(
-			(LiteralArgumentBuilder)((LiteralArgumentBuilder)((LiteralArgumentBuilder)((LiteralArgumentBuilder)((LiteralArgumentBuilder)((LiteralArgumentBuilder)((LiteralArgumentBuilder)Commands.literal(
-											"cfhteams"
-										)
-										.then(Commands.literal("team").redirect(node)))
-									.then(Commands.literal("list").executes(c -> list((CommandSourceStack)c.getSource()))))
-								.then(((LiteralArgumentBuilder)Commands.literal("reload").requires(OPERATOR)).executes(c -> reload((CommandSourceStack)c.getSource()))))
-							.then(((LiteralArgumentBuilder)Commands.literal("selftest").requires(OPERATOR)).executes(c -> selfTest((CommandSourceStack)c.getSource()))))
-						.then(admin()))
-					.then(land()))
-				.then(expiry())
-		);
+		return Optional.of(root);
 	}
 
 	private static void ours(
